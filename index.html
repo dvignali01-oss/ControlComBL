@@ -1,88 +1,347 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>ControlComBL</title>
-<link rel="manifest" href="manifest.json">
+
 <style>
+
 body{
 background:#0f172a;
-color:white;
 font-family:Arial;
+color:white;
 margin:0;
-padding:20px;
 }
+
 header{
+background:#1e293b;
+padding:15px;
 display:flex;
 align-items:center;
 gap:10px;
-margin-bottom:30px;
 }
+
 .logo{
-width:40px;
-height:40px;
 background:#2563eb;
-border-radius:10px;
+width:35px;
+height:35px;
 display:flex;
 align-items:center;
 justify-content:center;
+border-radius:8px;
 font-weight:bold;
 }
-button{
-background:#2563eb;
-color:white;
-border:none;
-padding:12px;
-border-radius:8px;
-margin:5px 0;
-width:100%;
+
+nav{
+display:flex;
+gap:10px;
+padding:10px;
+background:#020617;
 }
+
+nav button{
+flex:1;
+padding:10px;
+background:#1e293b;
+border:none;
+color:white;
+border-radius:6px;
+}
+
+.container{
+padding:15px;
+}
+
 .card{
 background:#1e293b;
 padding:15px;
 border-radius:10px;
 margin-bottom:15px;
 }
-input{
+
+input,select{
 width:100%;
 padding:10px;
 margin-top:5px;
 margin-bottom:10px;
-border-radius:6px;
 border:none;
+border-radius:6px;
 }
+
+button{
+background:#2563eb;
+border:none;
+color:white;
+padding:10px;
+border-radius:6px;
+}
+
+.delete{
+background:#dc2626;
+margin-top:10px;
+}
+
+.cliente{
+background:#020617;
+padding:12px;
+border-radius:8px;
+margin-top:10px;
+}
+
+.status{
+font-size:12px;
+margin-top:5px;
+}
+
+.pendente{
+color:orange;
+}
+
+.instalado{
+color:lime;
+}
+
+.hidden{
+display:none;
+}
+
 </style>
+
 </head>
+
 <body>
 
 <header>
+
 <div class="logo">CB</div>
 <h2>ControlComBL</h2>
+
 </header>
 
+<nav>
+
+<button onclick="abrirTela('dashboard')">Dashboard</button>
+<button onclick="abrirTela('clientes')">Clientes</button>
+<button onclick="abrirTela('vendas')">Vendas</button>
+
+</nav>
+
+<div class="container">
+
+<div id="dashboard" class="tela">
+
 <div class="card">
-<h3>Cadastrar Cliente</h3>
-<input placeholder="Nome">
-<input placeholder="Telefone">
-<input placeholder="CEP">
-<input placeholder="Endereço">
-<button>Salvar Cliente</button>
+
+<h3>Dashboard</h3>
+
+Clientes: <span id="totalClientes">0</span><br>
+Vendas: <span id="totalVendas">0</span>
+
+</div>
+
+</div>
+
+<div id="clientes" class="tela hidden">
+
+<div class="card">
+
+<h3>Novo Cliente</h3>
+
+<input id="nome" placeholder="Nome">
+<input id="telefone" placeholder="Telefone">
+<input id="cep" placeholder="CEP">
+<input id="endereco" placeholder="Endereço">
+
+<button onclick="salvarCliente()">Salvar</button>
+
 </div>
 
 <div class="card">
-<h3>Venda</h3>
-<button>Internet</button>
-<button>Fixo</button>
-<button>Móvel</button>
-<button>TV</button>
+
+<h3>Lista de Clientes</h3>
+
+<input id="busca" placeholder="Buscar..." onkeyup="buscarCliente()">
+
+<div id="listaClientes"></div>
+
+</div>
+
+</div>
+
+<div id="vendas" class="tela hidden">
+
+<div class="card">
+
+<h3>Nova Venda</h3>
+
+<select id="clienteVenda"></select>
+
+<select id="produto">
+<option>Internet</option>
+<option>Móvel</option>
+<option>Fixo</option>
+<option>TV</option>
+</select>
+
+<select id="status">
+<option>Pendente</option>
+<option>Instalado</option>
+</select>
+
+<button onclick="salvarVenda()">Salvar Venda</button>
+
+</div>
+
+</div>
+
 </div>
 
 <script>
-if('serviceWorker' in navigator){
-navigator.serviceWorker.register('service-worker.js')
+
+let clientes = JSON.parse(localStorage.getItem("clientes")) || []
+let vendas = JSON.parse(localStorage.getItem("vendas")) || []
+
+function abrirTela(tela){
+
+document.querySelectorAll(".tela").forEach(t=>t.classList.add("hidden"))
+
+document.getElementById(tela).classList.remove("hidden")
+
 }
+
+function salvarCliente(){
+
+let cliente={
+id:Date.now(),
+nome:nome.value,
+telefone:telefone.value,
+cep:cep.value,
+endereco:endereco.value
+}
+
+clientes.push(cliente)
+
+localStorage.setItem("clientes",JSON.stringify(clientes))
+
+renderClientes()
+atualizarSelect()
+
+}
+
+function excluirCliente(id){
+
+clientes=clientes.filter(c=>c.id!==id)
+
+localStorage.setItem("clientes",JSON.stringify(clientes))
+
+renderClientes()
+atualizarSelect()
+
+}
+
+function salvarVenda(){
+
+let venda={
+id:Date.now(),
+clienteId:clienteVenda.value,
+produto:produto.value,
+status:status.value
+}
+
+vendas.push(venda)
+
+localStorage.setItem("vendas",JSON.stringify(vendas))
+
+renderDashboard()
+
+}
+
+function atualizarSelect(){
+
+clienteVenda.innerHTML=""
+
+clientes.forEach(c=>{
+
+let option=document.createElement("option")
+
+option.value=c.id
+option.text=c.nome
+
+clienteVenda.appendChild(option)
+
+})
+
+}
+
+function renderClientes(){
+
+listaClientes.innerHTML=""
+
+clientes.forEach(c=>{
+
+let vendasCliente=vendas.filter(v=>v.clienteId==c.id)
+
+let div=document.createElement("div")
+
+div.className="cliente"
+
+div.innerHTML=`
+
+<b>${c.nome}</b><br>
+
+Telefone: ${c.telefone}<br>
+
+Vendas: ${vendasCliente.length}
+
+<button class="delete" onclick="excluirCliente(${c.id})">Excluir</button>
+
+`
+
+listaClientes.appendChild(div)
+
+})
+
+renderDashboard()
+
+}
+
+function renderDashboard(){
+
+totalClientes.innerText=clientes.length
+totalVendas.innerText=vendas.length
+
+}
+
+function buscarCliente(){
+
+let termo=busca.value.toLowerCase()
+
+listaClientes.innerHTML=""
+
+clientes
+.filter(c=>c.nome.toLowerCase().includes(termo))
+.forEach(c=>{
+
+let div=document.createElement("div")
+
+div.className="cliente"
+
+div.innerHTML=`<b>${c.nome}</b>`
+
+listaClientes.appendChild(div)
+
+})
+
+}
+
+atualizarSelect()
+renderClientes()
+
 </script>
 
 </body>
+
 </html>

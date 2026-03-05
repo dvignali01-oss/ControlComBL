@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>ControlComBL</title>
 
@@ -11,48 +10,20 @@
 
 body{
 background:#0f172a;
+color:white;
 font-family:Arial;
-color:white;
 margin:0;
+padding:20px;
 }
 
-header{
-background:#1e293b;
-padding:15px;
-display:flex;
-align-items:center;
-gap:10px;
-}
-
-.logo{
-background:#2563eb;
-width:35px;
-height:35px;
-display:flex;
-align-items:center;
-justify-content:center;
-border-radius:8px;
-font-weight:bold;
-}
-
-nav{
-display:flex;
-gap:10px;
-padding:10px;
-background:#020617;
-}
-
-nav button{
-flex:1;
-padding:10px;
-background:#1e293b;
-border:none;
-color:white;
-border-radius:6px;
+h1{
+text-align:center;
+margin-bottom:30px;
 }
 
 .container{
-padding:15px;
+max-width:500px;
+margin:auto;
 }
 
 .card{
@@ -72,128 +43,83 @@ border-radius:6px;
 }
 
 button{
-background:#2563eb;
-border:none;
-color:white;
-padding:10px;
-border-radius:6px;
-}
-
-.delete{
-background:#dc2626;
-margin-top:10px;
-}
-
-.cliente{
-background:#020617;
+width:100%;
 padding:12px;
+border:none;
+border-radius:8px;
+background:#3b82f6;
+color:white;
+font-weight:bold;
+}
+
+.venda{
+background:#111827;
+padding:10px;
 border-radius:8px;
 margin-top:10px;
 }
 
-.status{
-font-size:12px;
-margin-top:5px;
-}
-
-.pendente{
-color:orange;
-}
-
-.instalado{
-color:lime;
-}
-
-.hidden{
-display:none;
+.excluir{
+background:#ef4444;
+margin-top:8px;
 }
 
 </style>
-
 </head>
 
 <body>
 
-<header>
-
-<div class="logo">CB</div>
-<h2>ControlComBL</h2>
-
-</header>
-
-<nav>
-
-<button onclick="abrirTela('dashboard')">Dashboard</button>
-<button onclick="abrirTela('clientes')">Clientes</button>
-<button onclick="abrirTela('vendas')">Vendas</button>
-
-</nav>
+<h1>ControlComBL</h1>
 
 <div class="container">
 
-<div id="dashboard" class="tela">
-
 <div class="card">
 
-<h3>Dashboard</h3>
-
-Clientes: <span id="totalClientes">0</span><br>
-Vendas: <span id="totalVendas">0</span>
-
-</div>
-
-</div>
-
-<div id="clientes" class="tela hidden">
-
-<div class="card">
-
-<h3>Novo Cliente</h3>
+<h3>Cadastro do Cliente</h3>
 
 <input id="nome" placeholder="Nome">
-<input id="telefone" placeholder="Telefone">
+
 <input id="cep" placeholder="CEP">
+
+<input id="telefone" placeholder="Telefone">
+
 <input id="endereco" placeholder="Endereço">
 
-<button onclick="salvarCliente()">Salvar</button>
+<h3>Produtos</h3>
 
-</div>
+<label>Internet quantidade</label>
+<input id="internetQtd" type="number">
 
-<div class="card">
+<label>Valor internet</label>
+<input id="internetValor" type="number">
 
-<h3>Lista de Clientes</h3>
+<label>Móvel quantidade</label>
+<input id="movelQtd" type="number">
 
-<input id="busca" placeholder="Buscar..." onkeyup="buscarCliente()">
+<label>Valor móvel</label>
+<input id="movelValor" type="number">
 
-<div id="listaClientes"></div>
+<label>TV quantidade</label>
+<input id="tvQtd" type="number">
 
-</div>
+<label>Valor TV</label>
+<input id="tvValor" type="number">
 
-</div>
-
-<div id="vendas" class="tela hidden">
-
-<div class="card">
-
-<h3>Nova Venda</h3>
-
-<select id="clienteVenda"></select>
-
-<select id="produto">
-<option>Internet</option>
-<option>Móvel</option>
-<option>Fixo</option>
-<option>TV</option>
-</select>
-
+<label>Status</label>
 <select id="status">
 <option>Pendente</option>
 <option>Instalado</option>
 </select>
 
-<button onclick="salvarVenda()">Salvar Venda</button>
+<button onclick="salvar()">Salvar Venda</button>
 
 </div>
+
+<div class="card">
+
+<h3>Dashboard</h3>
+
+<div id="lista"></div>
 
 </div>
 
@@ -201,147 +127,98 @@ Vendas: <span id="totalVendas">0</span>
 
 <script>
 
-let clientes = JSON.parse(localStorage.getItem("clientes")) || []
 let vendas = JSON.parse(localStorage.getItem("vendas")) || []
 
-function abrirTela(tela){
+function salvar(){
 
-document.querySelectorAll(".tela").forEach(t=>t.classList.add("hidden"))
+let nome = document.getElementById("nome").value
+let cep = document.getElementById("cep").value
+let telefone = document.getElementById("telefone").value
+let endereco = document.getElementById("endereco").value
 
-document.getElementById(tela).classList.remove("hidden")
+let internetQtd = Number(document.getElementById("internetQtd").value)
+let internetValor = Number(document.getElementById("internetValor").value)
 
-}
+let movelQtd = Number(document.getElementById("movelQtd").value)
+let movelValor = Number(document.getElementById("movelValor").value)
 
-function salvarCliente(){
+let tvQtd = Number(document.getElementById("tvQtd").value)
+let tvValor = Number(document.getElementById("tvValor").value)
 
-let cliente={
-id:Date.now(),
-nome:nome.value,
-telefone:telefone.value,
-cep:cep.value,
-endereco:endereco.value
-}
+let status = document.getElementById("status").value
 
-clientes.push(cliente)
+let total =
+(internetQtd * internetValor) +
+(movelQtd * movelValor) +
+(tvQtd * tvValor)
 
-localStorage.setItem("clientes",JSON.stringify(clientes))
-
-renderClientes()
-atualizarSelect()
-
-}
-
-function excluirCliente(id){
-
-clientes=clientes.filter(c=>c.id!==id)
-
-localStorage.setItem("clientes",JSON.stringify(clientes))
-
-renderClientes()
-atualizarSelect()
-
-}
-
-function salvarVenda(){
-
-let venda={
-id:Date.now(),
-clienteId:clienteVenda.value,
-produto:produto.value,
-status:status.value
+let venda = {
+nome,
+cep,
+telefone,
+endereco,
+internetQtd,
+movelQtd,
+tvQtd,
+total,
+status
 }
 
 vendas.push(venda)
 
 localStorage.setItem("vendas",JSON.stringify(vendas))
 
-renderDashboard()
+mostrar()
 
 }
 
-function atualizarSelect(){
+function excluir(i){
 
-clienteVenda.innerHTML=""
+vendas.splice(i,1)
 
-clientes.forEach(c=>{
+localStorage.setItem("vendas",JSON.stringify(vendas))
 
-let option=document.createElement("option")
-
-option.value=c.id
-option.text=c.nome
-
-clienteVenda.appendChild(option)
-
-})
+mostrar()
 
 }
 
-function renderClientes(){
+function mostrar(){
 
-listaClientes.innerHTML=""
+let lista = document.getElementById("lista")
 
-clientes.forEach(c=>{
+lista.innerHTML=""
 
-let vendasCliente=vendas.filter(v=>v.clienteId==c.id)
+vendas.forEach((v,i)=>{
 
-let div=document.createElement("div")
+lista.innerHTML += `
 
-div.className="cliente"
+<div class="venda">
 
-div.innerHTML=`
+<b>Cliente:</b> ${v.nome}<br>
 
-<b>${c.nome}</b><br>
+<b>Internet:</b> ${v.internetQtd}<br>
+<b>Móvel:</b> ${v.movelQtd}<br>
+<b>TV:</b> ${v.tvQtd}<br>
 
-Telefone: ${c.telefone}<br>
+<b>Valor venda:</b> R$ ${v.total}<br>
 
-Vendas: ${vendasCliente.length}
+<b>Status:</b> ${v.status}
 
-<button class="delete" onclick="excluirCliente(${c.id})">Excluir</button>
+<button class="excluir" onclick="excluir(${i})">
+Excluir
+</button>
+
+</div>
 
 `
 
-listaClientes.appendChild(div)
-
-})
-
-renderDashboard()
-
-}
-
-function renderDashboard(){
-
-totalClientes.innerText=clientes.length
-totalVendas.innerText=vendas.length
-
-}
-
-function buscarCliente(){
-
-let termo=busca.value.toLowerCase()
-
-listaClientes.innerHTML=""
-
-clientes
-.filter(c=>c.nome.toLowerCase().includes(termo))
-.forEach(c=>{
-
-let div=document.createElement("div")
-
-div.className="cliente"
-
-div.innerHTML=`<b>${c.nome}</b>`
-
-listaClientes.appendChild(div)
-
 })
 
 }
 
-atualizarSelect()
-renderClientes()
+mostrar()
 
 </script>
 
 </body>
-
 </html>

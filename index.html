@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ControlComBL</title>
+<link rel="manifest" href="manifest.json">
+<style>
+body{
+background:#0f172a;
+color:white;
+font-family:Arial;
+margin:0;
+padding:20px;
+}
+header{
+display:flex;
+align-items:center;
+gap:10px;
+margin-bottom:30px;
+}
+.logo{
+width:40px;
+height:40px;
+background:#2563eb;
+border-radius:10px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:bold;
+}
+button{
+background:#2563eb;
+color:white;
+border:none;
+padding:12px;
+border-radius:8px;
+margin:5px 0;
+width:100%;
+}
+.card{
+background:#1e293b;
+padding:15px;
+border-radius:10px;
+margin-bottom:15px;
+}
+input{
+width:100%;
+padding:10px;
+margin-top:5px;
+margin-bottom:10px;
+border-radius:6px;
+border:none;
+}
+</style>
+</head>
+<body>
+
+<header>
+<div class="logo">CB</div>
+<h2>ControlComBL</h2>
+</header>
+
+<div class="card">
+<h3>Cadastrar Cliente</h3>
+<input placeholder="Nome">
+<input placeholder="Telefone">
+<input placeholder="CEP">
+<input placeholder="Endereço">
+<button>Salvar Cliente</button>
+</div>
+
+<div class="card">
+<h3>Venda</h3>
+<button>Internet</button>
+<button>Fixo</button>
+<button>Móvel</button>
+<button>TV</button>
+</div>
+
+<script>
+if('serviceWorker' in navigator){
+navigator.serviceWorker.register('service-worker.js')
+}
+</script>
+
+</body>
+</html>

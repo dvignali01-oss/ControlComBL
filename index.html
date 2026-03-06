@@ -20,7 +20,7 @@ header{
 background:#020617;
 padding:15px;
 text-align:center;
-font-size:20px;
+font-size:22px;
 font-weight:bold;
 }
 
@@ -77,6 +77,19 @@ background:#ef4444;
 margin-top:5px;
 }
 
+.stats{
+display:flex;
+gap:10px;
+}
+
+.stat{
+flex:1;
+background:#020617;
+padding:15px;
+border-radius:8px;
+text-align:center;
+}
+
 .tela{
 display:none;
 }
@@ -117,9 +130,28 @@ Nova Venda
 
 <div id="dashboard" class="tela ativa">
 
+<div class="stats">
+
+<div class="stat">
+Clientes
+<h2 id="totalClientes">0</h2>
+</div>
+
+<div class="stat">
+Vendas
+<h2 id="totalVendas">0</h2>
+</div>
+
+<div class="stat">
+Total
+<h2 id="valorTotal">0</h2>
+</div>
+
+</div>
+
 <div class="card">
 
-<h3>Vendas</h3>
+<h3>Lista de Vendas</h3>
 
 <div id="listaVendas"></div>
 
@@ -146,6 +178,14 @@ Nova Venda
 <button onclick="salvarCliente()">
 Salvar Cliente
 </button>
+
+</div>
+
+<div class="card">
+
+<h3>Buscar Cliente</h3>
+
+<input id="buscarCliente" placeholder="Digite o nome" onkeyup="buscarCliente()">
 
 </div>
 
@@ -188,10 +228,8 @@ Salvar Cliente
 <input id="tvValor" type="number">
 
 <select id="status">
-
 <option>Pendente</option>
 <option>Instalado</option>
-
 </select>
 
 <button onclick="salvarVenda()">
@@ -212,7 +250,6 @@ let vendas = JSON.parse(localStorage.getItem("vendas")) || []
 function mostrarTela(id){
 
 document.querySelectorAll(".tela").forEach(t=>t.classList.remove("ativa"))
-
 document.getElementById(id).classList.add("ativa")
 
 }
@@ -233,6 +270,7 @@ clientes.push(cliente)
 localStorage.setItem("clientes",JSON.stringify(clientes))
 
 carregarClientes()
+atualizarDashboard()
 
 }
 
@@ -273,6 +311,37 @@ clientes.splice(i,1)
 localStorage.setItem("clientes",JSON.stringify(clientes))
 
 carregarClientes()
+atualizarDashboard()
+
+}
+
+function buscarCliente(){
+
+let busca = document.getElementById("buscarCliente").value.toLowerCase()
+
+let lista = document.getElementById("listaClientes")
+
+lista.innerHTML=""
+
+clientes
+.filter(c=>c.nome.toLowerCase().includes(busca))
+.forEach((c,i)=>{
+
+lista.innerHTML+=`
+
+<div class="venda">
+
+${c.nome}
+
+<button class="excluir" onclick="excluirCliente(${i})">
+Excluir
+</button>
+
+</div>
+
+`
+
+})
 
 }
 
@@ -312,6 +381,7 @@ vendas.push(venda)
 localStorage.setItem("vendas",JSON.stringify(vendas))
 
 mostrarVendas()
+atualizarDashboard()
 
 }
 
@@ -356,11 +426,25 @@ vendas.splice(i,1)
 localStorage.setItem("vendas",JSON.stringify(vendas))
 
 mostrarVendas()
+atualizarDashboard()
+
+}
+
+function atualizarDashboard(){
+
+document.getElementById("totalClientes").innerText = clientes.length
+
+document.getElementById("totalVendas").innerText = vendas.length
+
+let total = vendas.reduce((acc,v)=>acc+v.total,0)
+
+document.getElementById("valorTotal").innerText = "R$ "+total
 
 }
 
 carregarClientes()
 mostrarVendas()
+atualizarDashboard()
 
 </script>
 

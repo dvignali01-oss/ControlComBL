@@ -201,6 +201,9 @@ Salvar Cliente
 <label>Data da venda</label>
 <input id="dataVenda" type="date">
 
+<label>Data da instalação</label>
+<input id="dataInstalacao" type="date">
+
 <select id="status">
 <option>Pendente</option>
 <option>Instalado</option>
@@ -226,8 +229,7 @@ Salvar Venda
 <input id="percentual" type="number" value="10">
 
 <button onclick="calcularComissao()">
-Calcular
-</button>
+Calcular</button>
 
 <div id="resultadoComissao"></div>
 
@@ -324,7 +326,9 @@ let movelValor = Number(document.getElementById("movelValor").value)
 let tvQtd = Number(document.getElementById("tvQtd").value)
 let tvValor = Number(document.getElementById("tvValor").value)
 
-let data = document.getElementById("dataVenda").value
+let dataVenda = document.getElementById("dataVenda").value
+let dataInstalacao = document.getElementById("dataInstalacao").value
+
 let status = document.getElementById("status").value
 
 let total =
@@ -339,7 +343,8 @@ internetQtd,
 movelQtd,
 tvQtd,
 total,
-data,
+dataVenda,
+dataInstalacao,
 status
 
 }
@@ -365,13 +370,17 @@ lista.innerHTML+=`
 <div class="venda">
 
 <b>Cliente:</b> ${v.cliente}<br>
-<b>Data:</b> ${v.data}<br>
+
+<b>Venda:</b> ${v.dataVenda}<br>
+
+<b>Instalação:</b> ${v.dataInstalacao}<br>
 
 Internet: ${v.internetQtd}<br>
 Móvel: ${v.movelQtd}<br>
 TV: ${v.tvQtd}<br>
 
 <b>Valor:</b> R$ ${v.total}<br>
+
 <b>Status:</b> ${v.status}
 
 <button class="excluir" onclick="excluirVenda(${i})">
@@ -412,8 +421,12 @@ lista.innerHTML+=`
 
 <div class="venda">
 
-Data: ${v.data}<br>
+Venda: ${v.dataVenda}<br>
+
+Instalação: ${v.dataInstalacao}<br>
+
 Valor: R$ ${v.total}<br>
+
 Status: ${v.status}
 
 </div>
@@ -432,20 +445,60 @@ let total = vendas.reduce((acc,v)=>acc+v.total,0)
 
 let comissao = total*(percentual/100)
 
-document.getElementById("resultadoComissao").innerHTML=`
+document.getElementById("resultadoComissao").innerHTML=
 
-Total vendido: R$ ${total}<br><br>
+`Total vendido: R$ ${total}<br><br>
 
 Comissão (${percentual}%):
 
-<b>R$ ${comissao}</b>
+<b>R$ ${comissao}</b>`
 
-`
+}
+
+function pedirPermissaoNotificacao(){
+
+if("Notification" in window){
+
+if(Notification.permission !== "granted"){
+
+Notification.requestPermission()
+
+}
+
+}
+
+}
+
+function verificarInstalacoesHoje(){
+
+let hoje = new Date().toISOString().split("T")[0]
+
+let instalacoesHoje = vendas.filter(v => v.dataInstalacao === hoje)
+
+if(instalacoesHoje.length > 0){
+
+alert("⚠ Você tem " + instalacoesHoje.length + " instalação hoje!")
+
+}
+
+instalacoesHoje.forEach(v=>{
+
+if(Notification.permission === "granted"){
+
+new Notification("Instalação hoje!",{
+body:"Cliente: " + v.cliente
+})
+
+}
+
+})
 
 }
 
 carregarClientes()
 mostrarVendas()
+pedirPermissaoNotificacao()
+verificarInstalacoesHoje()
 
 </script>
 

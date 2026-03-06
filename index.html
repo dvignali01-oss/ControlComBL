@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -13,17 +14,32 @@ background:#0f172a;
 color:white;
 font-family:Arial;
 margin:0;
-padding:20px;
 }
 
-h1{
+header{
+background:#020617;
+padding:15px;
 text-align:center;
-margin-bottom:30px;
+font-size:20px;
+font-weight:bold;
+}
+
+nav{
+display:flex;
+justify-content:space-around;
+background:#1e293b;
+padding:10px;
+}
+
+nav button{
+background:none;
+border:none;
+color:white;
+font-size:14px;
 }
 
 .container{
-max-width:500px;
-margin:auto;
+padding:20px;
 }
 
 .card{
@@ -36,24 +52,21 @@ margin-bottom:15px;
 input,select{
 width:100%;
 padding:10px;
-margin-top:5px;
 margin-bottom:10px;
-border:none;
 border-radius:6px;
+border:none;
 }
 
 button{
-width:100%;
-padding:12px;
+padding:10px;
 border:none;
-border-radius:8px;
+border-radius:6px;
 background:#3b82f6;
 color:white;
-font-weight:bold;
 }
 
 .venda{
-background:#111827;
+background:#020617;
 padding:10px;
 border-radius:8px;
 margin-top:10px;
@@ -61,21 +74,66 @@ margin-top:10px;
 
 .excluir{
 background:#ef4444;
-margin-top:8px;
+margin-top:5px;
+}
+
+.tela{
+display:none;
+}
+
+.ativa{
+display:block;
 }
 
 </style>
+
 </head>
 
 <body>
 
-<h1>ControlComBL</h1>
+<header>
+ControlComBL
+</header>
+
+<nav>
+
+<button onclick="mostrarTela('dashboard')">
+Dashboard
+</button>
+
+<button onclick="mostrarTela('clientes')">
+Clientes
+</button>
+
+<button onclick="mostrarTela('vendas')">
+Nova Venda
+</button>
+
+</nav>
 
 <div class="container">
 
+<!-- DASHBOARD -->
+
+<div id="dashboard" class="tela ativa">
+
 <div class="card">
 
-<h3>Cadastro do Cliente</h3>
+<h3>Vendas</h3>
+
+<div id="listaVendas"></div>
+
+</div>
+
+</div>
+
+<!-- CLIENTES -->
+
+<div id="clientes" class="tela">
+
+<div class="card">
+
+<h3>Cadastrar Cliente</h3>
 
 <input id="nome" placeholder="Nome">
 
@@ -85,7 +143,31 @@ margin-top:8px;
 
 <input id="endereco" placeholder="Endereço">
 
-<h3>Produtos</h3>
+<button onclick="salvarCliente()">
+Salvar Cliente
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>Lista de Clientes</h3>
+
+<div id="listaClientes"></div>
+
+</div>
+
+</div>
+
+<!-- VENDAS -->
+
+<div id="vendas" class="tela">
+
+<div class="card">
+
+<h3>Nova Venda</h3>
+
+<select id="clienteVenda"></select>
 
 <label>Internet quantidade</label>
 <input id="internetQtd" type="number">
@@ -105,21 +187,18 @@ margin-top:8px;
 <label>Valor TV</label>
 <input id="tvValor" type="number">
 
-<label>Status</label>
 <select id="status">
+
 <option>Pendente</option>
 <option>Instalado</option>
+
 </select>
 
-<button onclick="salvar()">Salvar Venda</button>
+<button onclick="salvarVenda()">
+Salvar Venda
+</button>
 
 </div>
-
-<div class="card">
-
-<h3>Dashboard</h3>
-
-<div id="lista"></div>
 
 </div>
 
@@ -127,14 +206,79 @@ margin-top:8px;
 
 <script>
 
+let clientes = JSON.parse(localStorage.getItem("clientes")) || []
 let vendas = JSON.parse(localStorage.getItem("vendas")) || []
 
-function salvar(){
+function mostrarTela(id){
 
-let nome = document.getElementById("nome").value
-let cep = document.getElementById("cep").value
-let telefone = document.getElementById("telefone").value
-let endereco = document.getElementById("endereco").value
+document.querySelectorAll(".tela").forEach(t=>t.classList.remove("ativa"))
+
+document.getElementById(id).classList.add("ativa")
+
+}
+
+function salvarCliente(){
+
+let cliente = {
+
+nome:document.getElementById("nome").value,
+cep:document.getElementById("cep").value,
+telefone:document.getElementById("telefone").value,
+endereco:document.getElementById("endereco").value
+
+}
+
+clientes.push(cliente)
+
+localStorage.setItem("clientes",JSON.stringify(clientes))
+
+carregarClientes()
+
+}
+
+function carregarClientes(){
+
+let lista = document.getElementById("listaClientes")
+let select = document.getElementById("clienteVenda")
+
+lista.innerHTML=""
+select.innerHTML=""
+
+clientes.forEach((c,i)=>{
+
+lista.innerHTML+=`
+
+<div class="venda">
+
+${c.nome}
+
+<button class="excluir" onclick="excluirCliente(${i})">
+Excluir
+</button>
+
+</div>
+
+`
+
+select.innerHTML+=`<option>${c.nome}</option>`
+
+})
+
+}
+
+function excluirCliente(i){
+
+clientes.splice(i,1)
+
+localStorage.setItem("clientes",JSON.stringify(clientes))
+
+carregarClientes()
+
+}
+
+function salvarVenda(){
+
+let cliente = document.getElementById("clienteVenda").value
 
 let internetQtd = Number(document.getElementById("internetQtd").value)
 let internetValor = Number(document.getElementById("internetValor").value)
@@ -148,63 +292,52 @@ let tvValor = Number(document.getElementById("tvValor").value)
 let status = document.getElementById("status").value
 
 let total =
-(internetQtd * internetValor) +
-(movelQtd * movelValor) +
-(tvQtd * tvValor)
+(internetQtd*internetValor)+
+(movelQtd*movelValor)+
+(tvQtd*tvValor)
 
 let venda = {
-nome,
-cep,
-telefone,
-endereco,
+
+cliente,
 internetQtd,
 movelQtd,
 tvQtd,
 total,
 status
+
 }
 
 vendas.push(venda)
 
 localStorage.setItem("vendas",JSON.stringify(vendas))
 
-mostrar()
+mostrarVendas()
 
 }
 
-function excluir(i){
+function mostrarVendas(){
 
-vendas.splice(i,1)
-
-localStorage.setItem("vendas",JSON.stringify(vendas))
-
-mostrar()
-
-}
-
-function mostrar(){
-
-let lista = document.getElementById("lista")
+let lista = document.getElementById("listaVendas")
 
 lista.innerHTML=""
 
 vendas.forEach((v,i)=>{
 
-lista.innerHTML += `
+lista.innerHTML+=`
 
 <div class="venda">
 
-<b>Cliente:</b> ${v.nome}<br>
+<b>Cliente:</b> ${v.cliente}<br>
 
-<b>Internet:</b> ${v.internetQtd}<br>
-<b>Móvel:</b> ${v.movelQtd}<br>
-<b>TV:</b> ${v.tvQtd}<br>
+Internet: ${v.internetQtd}<br>
+Móvel: ${v.movelQtd}<br>
+TV: ${v.tvQtd}<br>
 
-<b>Valor venda:</b> R$ ${v.total}<br>
+<b>Valor:</b> R$ ${v.total}<br>
 
 <b>Status:</b> ${v.status}
 
-<button class="excluir" onclick="excluir(${i})">
+<button class="excluir" onclick="excluirVenda(${i})">
 Excluir
 </button>
 
@@ -216,7 +349,18 @@ Excluir
 
 }
 
-mostrar()
+function excluirVenda(i){
+
+vendas.splice(i,1)
+
+localStorage.setItem("vendas",JSON.stringify(vendas))
+
+mostrarVendas()
+
+}
+
+carregarClientes()
+mostrarVendas()
 
 </script>
 

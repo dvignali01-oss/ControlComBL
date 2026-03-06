@@ -77,19 +77,6 @@ background:#ef4444;
 margin-top:5px;
 }
 
-.stats{
-display:flex;
-gap:10px;
-}
-
-.stat{
-flex:1;
-background:#020617;
-padding:15px;
-border-radius:8px;
-text-align:center;
-}
-
 .tela{
 display:none;
 }
@@ -122,6 +109,10 @@ Clientes
 Nova Venda
 </button>
 
+<button onclick="mostrarTela('comissao')">
+Comissões
+</button>
+
 </nav>
 
 <div class="container">
@@ -130,28 +121,9 @@ Nova Venda
 
 <div id="dashboard" class="tela ativa">
 
-<div class="stats">
-
-<div class="stat">
-Clientes
-<h2 id="totalClientes">0</h2>
-</div>
-
-<div class="stat">
-Vendas
-<h2 id="totalVendas">0</h2>
-</div>
-
-<div class="stat">
-Total
-<h2 id="valorTotal">0</h2>
-</div>
-
-</div>
-
 <div class="card">
 
-<h3>Lista de Vendas</h3>
+<h3>Histórico de Vendas</h3>
 
 <div id="listaVendas"></div>
 
@@ -168,11 +140,8 @@ Total
 <h3>Cadastrar Cliente</h3>
 
 <input id="nome" placeholder="Nome">
-
 <input id="cep" placeholder="CEP">
-
 <input id="telefone" placeholder="Telefone">
-
 <input id="endereco" placeholder="Endereço">
 
 <button onclick="salvarCliente()">
@@ -183,17 +152,19 @@ Salvar Cliente
 
 <div class="card">
 
-<h3>Buscar Cliente</h3>
+<h3>Clientes</h3>
 
-<input id="buscarCliente" placeholder="Digite o nome" onkeyup="buscarCliente()">
+<div id="listaClientes"></div>
 
 </div>
 
 <div class="card">
 
-<h3>Lista de Clientes</h3>
+<h3>Histórico por Cliente</h3>
 
-<div id="listaClientes"></div>
+<select id="clienteHistorico" onchange="historicoCliente()"></select>
+
+<div id="historico"></div>
 
 </div>
 
@@ -227,6 +198,9 @@ Salvar Cliente
 <label>Valor TV</label>
 <input id="tvValor" type="number">
 
+<label>Data da venda</label>
+<input id="dataVenda" type="date">
+
 <select id="status">
 <option>Pendente</option>
 <option>Instalado</option>
@@ -235,6 +209,27 @@ Salvar Cliente
 <button onclick="salvarVenda()">
 Salvar Venda
 </button>
+
+</div>
+
+</div>
+
+<!-- COMISSÕES -->
+
+<div id="comissao" class="tela">
+
+<div class="card">
+
+<h3>Comissões</h3>
+
+<label>Percentual de comissão</label>
+<input id="percentual" type="number" value="10">
+
+<button onclick="calcularComissao()">
+Calcular
+</button>
+
+<div id="resultadoComissao"></div>
 
 </div>
 
@@ -270,17 +265,18 @@ clientes.push(cliente)
 localStorage.setItem("clientes",JSON.stringify(clientes))
 
 carregarClientes()
-atualizarDashboard()
 
 }
 
 function carregarClientes(){
 
 let lista = document.getElementById("listaClientes")
-let select = document.getElementById("clienteVenda")
+let selectVenda = document.getElementById("clienteVenda")
+let selectHistorico = document.getElementById("clienteHistorico")
 
 lista.innerHTML=""
-select.innerHTML=""
+selectVenda.innerHTML=""
+selectHistorico.innerHTML=""
 
 clientes.forEach((c,i)=>{
 
@@ -298,7 +294,8 @@ Excluir
 
 `
 
-select.innerHTML+=`<option>${c.nome}</option>`
+selectVenda.innerHTML+=`<option>${c.nome}</option>`
+selectHistorico.innerHTML+=`<option>${c.nome}</option>`
 
 })
 
@@ -311,37 +308,6 @@ clientes.splice(i,1)
 localStorage.setItem("clientes",JSON.stringify(clientes))
 
 carregarClientes()
-atualizarDashboard()
-
-}
-
-function buscarCliente(){
-
-let busca = document.getElementById("buscarCliente").value.toLowerCase()
-
-let lista = document.getElementById("listaClientes")
-
-lista.innerHTML=""
-
-clientes
-.filter(c=>c.nome.toLowerCase().includes(busca))
-.forEach((c,i)=>{
-
-lista.innerHTML+=`
-
-<div class="venda">
-
-${c.nome}
-
-<button class="excluir" onclick="excluirCliente(${i})">
-Excluir
-</button>
-
-</div>
-
-`
-
-})
 
 }
 
@@ -358,6 +324,7 @@ let movelValor = Number(document.getElementById("movelValor").value)
 let tvQtd = Number(document.getElementById("tvQtd").value)
 let tvValor = Number(document.getElementById("tvValor").value)
 
+let data = document.getElementById("dataVenda").value
 let status = document.getElementById("status").value
 
 let total =
@@ -372,6 +339,7 @@ internetQtd,
 movelQtd,
 tvQtd,
 total,
+data,
 status
 
 }
@@ -381,7 +349,6 @@ vendas.push(venda)
 localStorage.setItem("vendas",JSON.stringify(vendas))
 
 mostrarVendas()
-atualizarDashboard()
 
 }
 
@@ -398,13 +365,13 @@ lista.innerHTML+=`
 <div class="venda">
 
 <b>Cliente:</b> ${v.cliente}<br>
+<b>Data:</b> ${v.data}<br>
 
 Internet: ${v.internetQtd}<br>
 Móvel: ${v.movelQtd}<br>
 TV: ${v.tvQtd}<br>
 
 <b>Valor:</b> R$ ${v.total}<br>
-
 <b>Status:</b> ${v.status}
 
 <button class="excluir" onclick="excluirVenda(${i})">
@@ -426,25 +393,59 @@ vendas.splice(i,1)
 localStorage.setItem("vendas",JSON.stringify(vendas))
 
 mostrarVendas()
-atualizarDashboard()
 
 }
 
-function atualizarDashboard(){
+function historicoCliente(){
 
-document.getElementById("totalClientes").innerText = clientes.length
+let cliente = document.getElementById("clienteHistorico").value
 
-document.getElementById("totalVendas").innerText = vendas.length
+let lista = document.getElementById("historico")
+
+lista.innerHTML=""
+
+vendas
+.filter(v=>v.cliente===cliente)
+.forEach(v=>{
+
+lista.innerHTML+=`
+
+<div class="venda">
+
+Data: ${v.data}<br>
+Valor: R$ ${v.total}<br>
+Status: ${v.status}
+
+</div>
+
+`
+
+})
+
+}
+
+function calcularComissao(){
+
+let percentual = Number(document.getElementById("percentual").value)
 
 let total = vendas.reduce((acc,v)=>acc+v.total,0)
 
-document.getElementById("valorTotal").innerText = "R$ "+total
+let comissao = total*(percentual/100)
+
+document.getElementById("resultadoComissao").innerHTML=`
+
+Total vendido: R$ ${total}<br><br>
+
+Comissão (${percentual}%):
+
+<b>R$ ${comissao}</b>
+
+`
 
 }
 
 carregarClientes()
 mostrarVendas()
-atualizarDashboard()
 
 </script>
 

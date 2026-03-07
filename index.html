@@ -3,112 +3,99 @@
 <head>
 <meta charset="UTF-8">
 <title>ControlComBL</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
 
 body{
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
+font-family:Arial;
 background:#0f172a;
-color:#f1f5f9;
+color:white;
 margin:0;
 display:flex;
 justify-content:center;
 }
 
-.app{
-width:100%;
-max-width:430px;
+.container{
+width:390px;
 min-height:100vh;
 background:#020617;
+padding:20px;
 }
 
-header{
-padding:20px;
+h1{
 text-align:center;
 font-size:26px;
-font-weight:600;
-border-bottom:1px solid #1e293b;
+margin-bottom:20px;
 }
 
-.container{
-padding:20px;
-padding-bottom:100px;
+nav{
+display:flex;
+justify-content:space-between;
+margin-bottom:20px;
 }
 
-input,select,textarea{
-width:100%;
-padding:16px;
-margin-top:8px;
-margin-bottom:16px;
-border-radius:14px;
-border:none;
+nav button{
+flex:1;
+margin:5px;
+padding:14px;
+font-size:16px;
 background:#1e293b;
 color:white;
-font-size:18px;
-}
-
-button{
-background:#22c55e;
-color:white;
-padding:16px;
 border:none;
-border-radius:14px;
-cursor:pointer;
-font-size:18px;
-font-weight:600;
-width:100%;
+border-radius:10px;
 }
 
-.excluir{
-background:#ef4444;
+input,select{
+width:100%;
+padding:14px;
+margin:6px 0;
+border-radius:10px;
+border:none;
+font-size:16px;
+}
+
+button.salvar{
+width:100%;
+padding:16px;
+background:#22c55e;
+border:none;
+border-radius:10px;
+font-size:18px;
+color:white;
 margin-top:10px;
 }
 
 .card{
 background:#1e293b;
-padding:20px;
-margin-top:15px;
-border-radius:18px;
-box-shadow:0 6px 20px rgba(0,0,0,0.4);
+padding:15px;
+border-radius:12px;
+margin-bottom:10px;
 }
 
 .status{
-font-size:24px;
-margin-right:10px;
+width:12px;
+height:12px;
+border-radius:50%;
+display:inline-block;
+margin-right:6px;
 }
 
-.hidden{
-display:none;
-}
+.instalado{background:#22c55e}
+.pendente{background:#eab308}
+.nao{background:#ef4444}
 
-nav{
-position:fixed;
-bottom:0;
-width:100%;
-max-width:430px;
-background:#020617;
-display:flex;
-justify-content:space-around;
-padding:12px;
-border-top:1px solid #1e293b;
-}
-
-nav button{
-background:none;
+.excluir{
+background:#ef4444;
 border:none;
 color:white;
-font-size:26px;
+padding:8px;
+border-radius:6px;
+margin-top:5px;
 }
 
-.telaInicial{
-text-align:center;
-padding:40px 20px;
-}
-
-.logo{
-font-size:32px;
-font-weight:700;
+.busca{
+padding:12px;
+font-size:16px;
 margin-bottom:10px;
 }
 
@@ -117,91 +104,21 @@ margin-bottom:10px;
 
 <body>
 
-<div class="app">
-
-<header>ControlComBL</header>
-
 <div class="container">
 
-<div id="inicio" class="telaInicial">
-<div class="logo">ControlComBL</div>
-<button onclick="entrar()">Entrar no App</button>
-</div>
+<h1>ControlComBL</h1>
 
-<div id="dashboard" class="hidden">
-
-<h2>Vendas</h2>
-
-<input placeholder="Buscar cliente ou telefone" oninput="buscar(this.value)">
-
-<div id="listaVendas"></div>
-
-</div>
-
-<div id="clientes" class="hidden">
-
-<h2>Clientes</h2>
-
-<input id="cNome" placeholder="Nome">
-<input id="cTelefone" placeholder="Telefone">
-<input id="cCep" placeholder="CEP">
-<input id="cEndereco" placeholder="Endereço">
-
-<button onclick="salvarCliente()">Salvar Cliente</button>
-
-<div id="listaClientes"></div>
-
-</div>
-
-<div id="venda" class="hidden">
-
-<h2>Nova Venda</h2>
-
-<select id="clienteSelect"></select>
-
-<select id="produto">
-<option>Internet</option>
-<option>Móvel</option>
-<option>TV</option>
-</select>
-
-<input id="quantidade" type="number" placeholder="Quantidade">
-<input id="valor" type="number" placeholder="Valor">
-
-<label>Data da venda</label>
-<input id="dataVenda" type="date">
-
-<label>Data da instalação</label>
-<input id="dataInstalacao" type="date">
-
-<button onclick="salvarVenda()">Salvar Venda</button>
-
-</div>
-
-<div id="agenda" class="hidden">
-
-<h2>Agenda</h2>
-
-<input id="dataNota" type="date">
-
-<textarea id="notaTexto" placeholder="Anotação"></textarea>
-
-<button onclick="salvarNota()">Salvar</button>
-
-<div id="listaNotas"></div>
-
-</div>
-
-</div>
-
-<nav class="hidden" id="menu">
-
-<button onclick="mostrar('dashboard')">🏠</button>
-<button onclick="mostrar('clientes')">👤</button>
-<button onclick="mostrar('venda')">💰</button>
-<button onclick="mostrar('agenda')">📅</button>
-
+<nav>
+<button onclick="tela('dashboard')">Dashboard</button>
+<button onclick="tela('clientes')">Clientes</button>
+<button onclick="tela('venda')">Venda</button>
+<button onclick="tela('agenda')">Agenda</button>
 </nav>
+
+<div id="dashboard"></div>
+<div id="clientes" style="display:none"></div>
+<div id="venda" style="display:none"></div>
+<div id="agenda" style="display:none"></div>
 
 </div>
 
@@ -209,138 +126,204 @@ margin-bottom:10px;
 
 let clientes = JSON.parse(localStorage.getItem("clientes")) || []
 let vendas = JSON.parse(localStorage.getItem("vendas")) || []
-let notas = JSON.parse(localStorage.getItem("notas")) || []
+let agenda = JSON.parse(localStorage.getItem("agenda")) || []
 
-function entrar(){
-document.getElementById("inicio").classList.add("hidden")
-document.getElementById("dashboard").classList.remove("hidden")
-document.getElementById("menu").classList.remove("hidden")
-pedirPermissao()
-verificarInstalacoes()
+function tela(id){
+
+document.getElementById("dashboard").style.display="none"
+document.getElementById("clientes").style.display="none"
+document.getElementById("venda").style.display="none"
+document.getElementById("agenda").style.display="none"
+
+document.getElementById(id).style.display="block"
+
+render()
+
 }
 
-function mostrar(tela){
+function render(){
 
-document.getElementById("dashboard").classList.add("hidden")
-document.getElementById("clientes").classList.add("hidden")
-document.getElementById("venda").classList.add("hidden")
-document.getElementById("agenda").classList.add("hidden")
+renderClientes()
+renderVenda()
+renderDashboard()
+renderAgenda()
 
-document.getElementById(tela).classList.remove("hidden")
+}
+
+function normalizar(txt){
+return txt.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+}
+
+function renderClientes(){
+
+let html=`
+<h2>Cadastro Cliente</h2>
+
+<input id="nome" placeholder="Nome">
+<input id="telefone" placeholder="Telefone">
+<input id="cep" placeholder="CEP">
+<input id="endereco" placeholder="Endereço">
+
+<button class="salvar" onclick="salvarCliente()">Salvar</button>
+
+<input class="busca" placeholder="Buscar cliente..." onkeyup="buscarCliente(this.value)">
+<div id="listaClientes"></div>
+`
+
+document.getElementById("clientes").innerHTML=html
+
+listarClientes(clientes)
 
 }
 
 function salvarCliente(){
 
-let cliente={
-nome:cNome.value,
-telefone:cTelefone.value,
-cep:cCep.value,
-endereco:cEndereco.value
+let c={
+nome:nome.value,
+telefone:telefone.value,
+cep:cep.value,
+endereco:endereco.value
 }
 
-clientes.push(cliente)
+clientes.push(c)
 
 localStorage.setItem("clientes",JSON.stringify(clientes))
 
-carregarClientes()
+render()
 
 }
 
-function excluirCliente(i){
+function listarClientes(lista){
 
-clientes.splice(i,1)
+let html=""
 
-localStorage.setItem("clientes",JSON.stringify(clientes))
+lista.forEach((c,i)=>{
 
-carregarClientes()
-
-}
-
-function carregarClientes(){
-
-let lista=document.getElementById("listaClientes")
-let select=document.getElementById("clienteSelect")
-
-lista.innerHTML=""
-select.innerHTML=""
-
-clientes.forEach((c,i)=>{
-
-lista.innerHTML+=`
-
+html+=`
 <div class="card">
-
 <b>${c.nome}</b><br>
-${c.telefone}<br>
-${c.endereco}
+${c.telefone}
 
+<br>
 <button class="excluir" onclick="excluirCliente(${i})">Excluir</button>
-
 </div>
-
 `
 
-select.innerHTML+=`<option value="${i}">${c.nome}</option>`
-
 })
+
+document.getElementById("listaClientes").innerHTML=html
+
+}
+
+function buscarCliente(txt){
+
+let t=normalizar(txt)
+
+let filtrado=clientes.filter(c=>normalizar(c.nome).includes(t)||normalizar(c.telefone).includes(t))
+
+listarClientes(filtrado)
+
+}
+
+function excluirCliente(index){
+
+let nomeCliente=clientes[index].nome
+
+clientes.splice(index,1)
+
+vendas=vendas.filter(v=>v.cliente!=nomeCliente)
+
+localStorage.setItem("clientes",JSON.stringify(clientes))
+localStorage.setItem("vendas",JSON.stringify(vendas))
+
+render()
+
+}
+
+function renderVenda(){
+
+let html=`
+<h2>Nova Venda</h2>
+
+<select id="clienteSelect">
+${clientes.map(c=>`<option>${c.nome}</option>`)}
+</select>
+
+<select id="produto">
+<option>Internet</option>
+<option>Móvel</option>
+<option>TV</option>
+</select>
+
+<input id="quantidade" placeholder="Quantidade">
+
+<input id="valor" placeholder="Valor">
+
+<input type="date" id="dataVenda">
+
+<input type="date" id="dataInstalacao">
+
+<select id="status">
+<option value="pendente">Pendente</option>
+<option value="instalado">Instalado</option>
+<option value="nao">Não instalado</option>
+</select>
+
+<button class="salvar" onclick="salvarVenda()">Salvar Venda</button>
+`
+
+document.getElementById("venda").innerHTML=html
 
 }
 
 function salvarVenda(){
 
-let i=clienteSelect.value
+let v={
 
-let venda={
-cliente:clientes[i].nome,
-telefone:clientes[i].telefone,
+cliente:clienteSelect.value,
 produto:produto.value,
 quantidade:quantidade.value,
 valor:valor.value,
 dataVenda:dataVenda.value,
-dataInstalacao:dataInstalacao.value,
-status:"pendente"
+instalacao:dataInstalacao.value,
+status:status.value
+
 }
 
-vendas.push(venda)
+vendas.push(v)
 
 localStorage.setItem("vendas",JSON.stringify(vendas))
 
-mostrarVendas()
+render()
 
 }
 
-function corStatus(s){
+function renderDashboard(){
 
-if(s=="instalado") return "🟢"
-if(s=="nao") return "🔴"
-return "🟡"
+let html="<h2>Dashboard</h2>"
 
-}
+vendas.forEach((v,i)=>{
 
-function mostrarVendas(lista=vendas){
+let classe=v.status
 
-let div=document.getElementById("listaVendas")
-
-div.innerHTML=""
-
-lista.forEach((v,i)=>{
-
-div.innerHTML+=`
-
+html+=`
 <div class="card">
 
-<span class="status">${corStatus(v.status)}</span>
+<span class="status ${classe}"></span>
 
-<b>${v.cliente}</b><br>
+<b>${v.cliente}</b>
 
-${v.produto} x${v.quantidade}<br>
+<br>
 
-Valor: R$ ${v.valor}<br>
+${v.produto} - R$ ${v.valor}
 
-Instalação: ${v.dataInstalacao}<br>
+<br>
 
-<select onchange="mudarStatus(${i},this.value)">
+Instalação: ${v.instalacao}
+
+<br>
+
+<select onchange="alterarStatus(${i},this.value)">
 
 <option value="pendente" ${v.status=="pendente"?"selected":""}>Pendente</option>
 <option value="instalado" ${v.status=="instalado"?"selected":""}>Instalado</option>
@@ -349,127 +332,100 @@ Instalação: ${v.dataInstalacao}<br>
 </select>
 
 </div>
-
 `
 
 })
 
+document.getElementById("dashboard").innerHTML=html
+
 }
 
-function mudarStatus(i,s){
+function alterarStatus(i,s){
 
 vendas[i].status=s
 
 localStorage.setItem("vendas",JSON.stringify(vendas))
 
-mostrarVendas()
+renderDashboard()
 
 }
 
-function normalizar(t){
-return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")
-}
+function renderAgenda(){
 
-function buscar(t){
+let html=`
+<h2>Agenda</h2>
 
-let busca=normalizar(t)
+<input id="dataAgenda" type="date">
+<input id="textoAgenda" placeholder="Anotação">
 
-let filtrado=vendas.filter(v=>
+<button class="salvar" onclick="salvarAgenda()">Salvar</button>
 
-normalizar(v.cliente).includes(busca) ||
-normalizar(v.telefone).includes(busca)
+<div id="listaAgenda"></div>
+`
 
-)
+document.getElementById("agenda").innerHTML=html
 
-mostrarVendas(filtrado)
+let lista=""
 
-}
+agenda.forEach(a=>{
 
-function salvarNota(){
-
-let nota={
-data:dataNota.value,
-texto:notaTexto.value
-}
-
-notas.push(nota)
-
-localStorage.setItem("notas",JSON.stringify(notas))
-
-mostrarNotas()
-
-}
-
-function mostrarNotas(){
-
-let div=document.getElementById("listaNotas")
-
-div.innerHTML=""
-
-notas.forEach((n,i)=>{
-
-div.innerHTML+=`
-
+lista+=`
 <div class="card">
-
-<b>${n.data}</b><br>
-${n.texto}
-
-<button class="excluir" onclick="excluirNota(${i})">Excluir</button>
-
+<b>${a.data}</b><br>
+${a.texto}
 </div>
-
 `
 
 })
 
-}
-
-function excluirNota(i){
-
-notas.splice(i,1)
-
-localStorage.setItem("notas",JSON.stringify(notas))
-
-mostrarNotas()
+document.getElementById("listaAgenda").innerHTML=lista
 
 }
 
-function pedirPermissao(){
+function salvarAgenda(){
 
-if("Notification" in window){
-if(Notification.permission !== "granted"){
-Notification.requestPermission()
-}
-}
-
+let a={
+data:dataAgenda.value,
+texto:textoAgenda.value
 }
 
-function verificarInstalacoes(){
+agenda.push(a)
 
-let hoje = new Date().toISOString().split("T")[0]
+localStorage.setItem("agenda",JSON.stringify(agenda))
+
+renderAgenda()
+
+}
+
+function verificarNotificacao(){
+
+let hoje=new Date().toISOString().split("T")[0]
 
 vendas.forEach(v=>{
 
-if(v.dataInstalacao === hoje){
+if(v.instalacao==hoje){
 
-if(Notification.permission === "granted"){
-
-new Notification("Instalação hoje!",{
-body:"Cliente: "+v.cliente+" - "+v.produto
-})
-
-}
+alert("Instalação hoje para "+v.cliente)
 
 }
 
 })
 
+agenda.forEach(a=>{
+
+if(a.data==hoje){
+
+alert("Agenda: "+a.texto)
+
 }
 
-carregarClientes()
-mostrarVendas()
-mostrarNotas()
+})
+
+}
+
+setInterval(verificarNotificacao,60000)
+
+render()
 
 </script>
 

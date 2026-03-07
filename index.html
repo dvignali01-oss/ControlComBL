@@ -6,12 +6,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
+
 body{
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
 background:#0f172a;
 color:#f1f5f9;
 margin:0;
-font-size:18px;
+display:flex;
+justify-content:center;
+}
+
+.app{
+width:100%;
+max-width:430px;
+min-height:100vh;
+background:#020617;
 }
 
 header{
@@ -19,13 +28,11 @@ padding:20px;
 text-align:center;
 font-size:26px;
 font-weight:600;
-background:#020617;
+border-bottom:1px solid #1e293b;
 }
 
 .container{
 padding:20px;
-max-width:600px;
-margin:auto;
 padding-bottom:100px;
 }
 
@@ -70,13 +77,9 @@ border-radius:18px;
 box-shadow:0 6px 20px rgba(0,0,0,0.4);
 }
 
-.card b{
-font-size:20px;
-}
-
 .status{
-font-size:22px;
-margin-right:8px;
+font-size:24px;
+margin-right:10px;
 }
 
 .hidden{
@@ -86,8 +89,8 @@ display:none;
 nav{
 position:fixed;
 bottom:0;
-left:0;
 width:100%;
+max-width:430px;
 background:#020617;
 display:flex;
 justify-content:space-around;
@@ -99,20 +102,51 @@ nav button{
 background:none;
 border:none;
 color:white;
-font-size:16px;
-width:auto;
+font-size:24px;
 }
+
+.telaInicial{
+text-align:center;
+padding:40px 20px;
+}
+
+.logo{
+font-size:32px;
+font-weight:700;
+margin-bottom:10px;
+}
+
+.sub{
+color:#94a3b8;
+margin-bottom:30px;
+}
+
 </style>
 </head>
 
 <body>
 
+<div class="app">
+
 <header>ControlComBL</header>
 
 <div class="container">
 
+<!-- TELA INICIAL -->
+
+<div id="inicio" class="telaInicial">
+
+<div class="logo">ControlComBL</div>
+
+<div class="sub">Sistema de controle de vendas</div>
+
+<button onclick="entrar()">Entrar no App</button>
+
+</div>
+
 <!-- DASHBOARD -->
-<div id="dashboard">
+
+<div id="dashboard" class="hidden">
 
 <h2>Vendas</h2>
 
@@ -123,6 +157,7 @@ width:auto;
 </div>
 
 <!-- CLIENTES -->
+
 <div id="clientes" class="hidden">
 
 <h2>Clientes</h2>
@@ -139,6 +174,7 @@ width:auto;
 </div>
 
 <!-- NOVA VENDA -->
+
 <div id="venda" class="hidden">
 
 <h2>Nova Venda</h2>
@@ -165,13 +201,14 @@ width:auto;
 </div>
 
 <!-- AGENDA -->
+
 <div id="agenda" class="hidden">
 
 <h2>Agenda</h2>
 
 <input id="dataNota" type="date">
 
-<textarea id="notaTexto" placeholder="Anotação sobre cliente ou venda"></textarea>
+<textarea id="notaTexto" placeholder="Anotação"></textarea>
 
 <button onclick="salvarNota()">Salvar Anotação</button>
 
@@ -181,12 +218,16 @@ width:auto;
 
 </div>
 
-<nav>
+<nav class="hidden" id="menu">
+
 <button onclick="mostrar('dashboard')">🏠</button>
 <button onclick="mostrar('clientes')">👤</button>
 <button onclick="mostrar('venda')">💰</button>
 <button onclick="mostrar('agenda')">📅</button>
+
 </nav>
+
+</div>
 
 <script>
 
@@ -194,13 +235,25 @@ let clientes = JSON.parse(localStorage.getItem("clientes")) || []
 let vendas = JSON.parse(localStorage.getItem("vendas")) || []
 let notas = JSON.parse(localStorage.getItem("notas")) || []
 
+function entrar(){
+
+document.getElementById("inicio").classList.add("hidden")
+
+document.getElementById("dashboard").classList.remove("hidden")
+
+document.getElementById("menu").classList.remove("hidden")
+
+}
+
 function mostrar(tela){
+
 document.getElementById("dashboard").classList.add("hidden")
 document.getElementById("clientes").classList.add("hidden")
 document.getElementById("venda").classList.add("hidden")
 document.getElementById("agenda").classList.add("hidden")
 
 document.getElementById(tela).classList.remove("hidden")
+
 }
 
 function salvarCliente(){
@@ -302,9 +355,13 @@ Valor: R$ ${v.valor}<br>
 Instalação: ${v.dataInstalacao}<br>
 
 <select onchange="mudarStatus(${i},this.value)">
+
 <option value="pendente" ${v.status=="pendente"?"selected":""}>Pendente</option>
+
 <option value="instalado" ${v.status=="instalado"?"selected":""}>Instalado</option>
+
 <option value="nao" ${v.status=="nao"?"selected":""}>Não instalado</option>
+
 </select>
 
 </div>
@@ -316,13 +373,19 @@ Instalação: ${v.dataInstalacao}<br>
 }
 
 function mudarStatus(i,s){
+
 vendas[i].status=s
+
 localStorage.setItem("vendas",JSON.stringify(vendas))
+
 mostrarVendas()
+
 }
 
 function normalizar(t){
+
 return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+
 }
 
 function buscar(t){
@@ -330,8 +393,10 @@ function buscar(t){
 let busca=normalizar(t)
 
 let filtrado=vendas.filter(v=>
+
 normalizar(v.cliente).includes(busca) ||
 normalizar(v.telefone).includes(busca)
+
 )
 
 mostrarVendas(filtrado)

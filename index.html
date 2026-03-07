@@ -36,11 +36,6 @@ padding:20px;
 padding-bottom:100px;
 }
 
-h2{
-font-size:24px;
-margin-bottom:10px;
-}
-
 input,select,textarea{
 width:100%;
 padding:16px;
@@ -53,10 +48,6 @@ color:white;
 font-size:18px;
 }
 
-textarea{
-min-height:100px;
-}
-
 button{
 background:#22c55e;
 color:white;
@@ -67,6 +58,11 @@ cursor:pointer;
 font-size:18px;
 font-weight:600;
 width:100%;
+}
+
+.excluir{
+background:#ef4444;
+margin-top:10px;
 }
 
 .card{
@@ -102,7 +98,7 @@ nav button{
 background:none;
 border:none;
 color:white;
-font-size:24px;
+font-size:26px;
 }
 
 .telaInicial{
@@ -116,11 +112,6 @@ font-weight:700;
 margin-bottom:10px;
 }
 
-.sub{
-color:#94a3b8;
-margin-bottom:30px;
-}
-
 </style>
 </head>
 
@@ -132,19 +123,10 @@ margin-bottom:30px;
 
 <div class="container">
 
-<!-- TELA INICIAL -->
-
 <div id="inicio" class="telaInicial">
-
 <div class="logo">ControlComBL</div>
-
-<div class="sub">Sistema de controle de vendas</div>
-
 <button onclick="entrar()">Entrar no App</button>
-
 </div>
-
-<!-- DASHBOARD -->
 
 <div id="dashboard" class="hidden">
 
@@ -155,8 +137,6 @@ margin-bottom:30px;
 <div id="listaVendas"></div>
 
 </div>
-
-<!-- CLIENTES -->
 
 <div id="clientes" class="hidden">
 
@@ -172,8 +152,6 @@ margin-bottom:30px;
 <div id="listaClientes"></div>
 
 </div>
-
-<!-- NOVA VENDA -->
 
 <div id="venda" class="hidden">
 
@@ -200,8 +178,6 @@ margin-bottom:30px;
 
 </div>
 
-<!-- AGENDA -->
-
 <div id="agenda" class="hidden">
 
 <h2>Agenda</h2>
@@ -210,7 +186,7 @@ margin-bottom:30px;
 
 <textarea id="notaTexto" placeholder="Anotação"></textarea>
 
-<button onclick="salvarNota()">Salvar Anotação</button>
+<button onclick="salvarNota()">Salvar</button>
 
 <div id="listaNotas"></div>
 
@@ -236,13 +212,11 @@ let vendas = JSON.parse(localStorage.getItem("vendas")) || []
 let notas = JSON.parse(localStorage.getItem("notas")) || []
 
 function entrar(){
-
 document.getElementById("inicio").classList.add("hidden")
-
 document.getElementById("dashboard").classList.remove("hidden")
-
 document.getElementById("menu").classList.remove("hidden")
-
+pedirPermissao()
+verificarInstalacoes()
 }
 
 function mostrar(tela){
@@ -271,7 +245,15 @@ localStorage.setItem("clientes",JSON.stringify(clientes))
 
 carregarClientes()
 
-alert("Cliente cadastrado")
+}
+
+function excluirCliente(i){
+
+clientes.splice(i,1)
+
+localStorage.setItem("clientes",JSON.stringify(clientes))
+
+carregarClientes()
 
 }
 
@@ -288,9 +270,13 @@ clientes.forEach((c,i)=>{
 lista.innerHTML+=`
 
 <div class="card">
+
 <b>${c.nome}</b><br>
 ${c.telefone}<br>
 ${c.endereco}
+
+<button class="excluir" onclick="excluirCliente(${i})">Excluir</button>
+
 </div>
 
 `
@@ -322,14 +308,14 @@ localStorage.setItem("vendas",JSON.stringify(vendas))
 
 mostrarVendas()
 
-alert("Venda salva")
-
 }
 
 function corStatus(s){
+
 if(s=="instalado") return "🟢"
 if(s=="nao") return "🔴"
 return "🟡"
+
 }
 
 function mostrarVendas(lista=vendas){
@@ -357,9 +343,7 @@ Instalação: ${v.dataInstalacao}<br>
 <select onchange="mudarStatus(${i},this.value)">
 
 <option value="pendente" ${v.status=="pendente"?"selected":""}>Pendente</option>
-
 <option value="instalado" ${v.status=="instalado"?"selected":""}>Instalado</option>
-
 <option value="nao" ${v.status=="nao"?"selected":""}>Não instalado</option>
 
 </select>
@@ -383,9 +367,7 @@ mostrarVendas()
 }
 
 function normalizar(t){
-
 return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")
-
 }
 
 function buscar(t){
@@ -433,7 +415,7 @@ div.innerHTML+=`
 <b>${n.data}</b><br>
 ${n.texto}
 
-<button onclick="excluirNota(${i})">Excluir</button>
+<button class="excluir" onclick="excluirNota(${i})">Excluir</button>
 
 </div>
 
@@ -450,6 +432,38 @@ notas.splice(i,1)
 localStorage.setItem("notas",JSON.stringify(notas))
 
 mostrarNotas()
+
+}
+
+function pedirPermissao(){
+
+if("Notification" in window){
+if(Notification.permission !== "granted"){
+Notification.requestPermission()
+}
+}
+
+}
+
+function verificarInstalacoes(){
+
+let hoje = new Date().toISOString().split("T")[0]
+
+vendas.forEach(v=>{
+
+if(v.dataInstalacao === hoje){
+
+if(Notification.permission === "granted"){
+
+new Notification("Instalação hoje!",{
+body:"Cliente: "+v.cliente+" - "+v.produto
+})
+
+}
+
+}
+
+})
 
 }
 

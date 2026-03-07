@@ -3,8 +3,9 @@
 <head>
 
 <meta charset="UTF-8">
-<title>ControlComBL</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>ControlComBL</title>
 
 <style>
 
@@ -19,11 +20,9 @@ color:white;
 
 .app{
 width:100%;
-max-width:430px;
+max-width:420px;
 min-height:100vh;
 background:#020617;
-display:flex;
-flex-direction:column;
 }
 
 header{
@@ -35,54 +34,56 @@ border-bottom:1px solid #1e293b;
 }
 
 .container{
-padding:18px;
-padding-bottom:100px;
-}
-
-input,select{
-width:100%;
-padding:16px;
-border-radius:14px;
-border:none;
-background:#1e293b;
-color:white;
-font-size:17px;
-margin-bottom:12px;
+padding:20px;
 }
 
 button{
+width:100%;
 padding:16px;
+margin-bottom:10px;
 border:none;
 border-radius:14px;
-font-size:17px;
+font-size:18px;
 font-weight:600;
-cursor:pointer;
+}
+
+.menuBtn{
+background:#1e293b;
+color:white;
 }
 
 .salvar{
 background:#22c55e;
 color:white;
-width:100%;
 }
 
-.excluir{
-background:#ef4444;
+.voltar{
+background:#334155;
 color:white;
-margin-top:10px;
-width:100%;
+margin-bottom:20px;
 }
 
 .card{
 background:#1e293b;
 padding:18px;
-border-radius:18px;
-margin-bottom:14px;
-box-shadow:0 6px 16px rgba(0,0,0,0.4);
+border-radius:16px;
+margin-bottom:12px;
+}
+
+input,select{
+width:100%;
+padding:14px;
+border:none;
+border-radius:12px;
+margin-bottom:10px;
+background:#1e293b;
+color:white;
+font-size:16px;
 }
 
 .status{
-width:12px;
-height:12px;
+width:10px;
+height:10px;
 border-radius:50%;
 display:inline-block;
 margin-right:6px;
@@ -96,37 +97,11 @@ margin-right:6px;
 display:none;
 }
 
-nav{
-position:fixed;
-bottom:0;
-width:100%;
-max-width:430px;
-background:#020617;
-display:flex;
-justify-content:space-around;
-padding:12px 0;
-border-top:1px solid #1e293b;
-}
-
-nav button{
-background:none;
-color:white;
-font-size:24px;
-}
-
-.telaInicio{
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-height:70vh;
-text-align:center;
-}
-
 .logo{
-font-size:36px;
-font-weight:700;
-margin-bottom:20px;
+text-align:center;
+font-size:32px;
+margin-top:100px;
+margin-bottom:40px;
 }
 
 </style>
@@ -141,90 +116,120 @@ margin-bottom:20px;
 
 <div class="container">
 
-<div id="inicio" class="telaInicio">
+<!-- TELA INICIAL -->
+
+<div id="inicio">
 
 <div class="logo">ControlComBL</div>
 
-<button class="salvar" onclick="entrar()">Entrar no App</button>
+<button class="salvar" onclick="abrirMenu()">Entrar no App</button>
 
 </div>
 
+<!-- MENU -->
+
+<div id="menu" class="hidden">
+
+<button class="menuBtn" onclick="abrirTela('dashboard')">🏠 Dashboard</button>
+
+<button class="menuBtn" onclick="abrirTela('clientes')">👤 Clientes</button>
+
+<button class="menuBtn" onclick="abrirTela('venda')">💰 Nova Venda</button>
+
+<button class="menuBtn" onclick="abrirTela('agenda')">📅 Agenda</button>
+
+</div>
+
+<!-- DASHBOARD -->
+
 <div id="dashboard" class="hidden"></div>
+
+<!-- CLIENTES -->
 
 <div id="clientes" class="hidden"></div>
 
+<!-- VENDA -->
+
 <div id="venda" class="hidden"></div>
+
+<!-- AGENDA -->
 
 <div id="agenda" class="hidden"></div>
 
 </div>
 
-<nav id="menu" class="hidden">
-
-<button onclick="mostrar('dashboard')">🏠</button>
-<button onclick="mostrar('clientes')">👤</button>
-<button onclick="mostrar('venda')">💰</button>
-<button onclick="mostrar('agenda')">📅</button>
-
-</nav>
-
 </div>
 
 <script>
 
-let clientes = JSON.parse(localStorage.getItem("clientes")) || []
-let vendas = JSON.parse(localStorage.getItem("vendas")) || []
-let agenda = JSON.parse(localStorage.getItem("agenda")) || []
+let clientes=JSON.parse(localStorage.getItem("clientes"))||[]
+let vendas=JSON.parse(localStorage.getItem("vendas"))||[]
+let agenda=JSON.parse(localStorage.getItem("agenda"))||[]
 
-const clientesDiv = document.getElementById("clientes")
-const agendaDiv = document.getElementById("agenda")
+function abrirMenu(){
 
-function entrar(){
-
-document.getElementById("inicio").classList.add("hidden")
-document.getElementById("menu").classList.remove("hidden")
-
-pedirPermissao()
-
-mostrar("dashboard")
+inicio.classList.add("hidden")
+menu.classList.remove("hidden")
 
 }
 
-function mostrar(tela){
+function voltarMenu(){
 
 dashboard.classList.add("hidden")
 clientesDiv.classList.add("hidden")
 venda.classList.add("hidden")
 agendaDiv.classList.add("hidden")
 
-if(tela==="dashboard") dashboard.classList.remove("hidden")
-if(tela==="clientes") clientesDiv.classList.remove("hidden")
-if(tela==="venda") venda.classList.remove("hidden")
-if(tela==="agenda") agendaDiv.classList.remove("hidden")
-
-render()
+menu.classList.remove("hidden")
 
 }
 
-function render(){
+function abrirTela(t){
+
+menu.classList.add("hidden")
+
+if(t==="dashboard"){
 
 renderDashboard()
-renderClientes()
-renderVenda()
-renderAgenda()
+dashboard.classList.remove("hidden")
 
 }
+
+if(t==="clientes"){
+
+renderClientes()
+clientesDiv.classList.remove("hidden")
+
+}
+
+if(t==="venda"){
+
+renderVenda()
+venda.classList.remove("hidden")
+
+}
+
+if(t==="agenda"){
+
+renderAgenda()
+agendaDiv.classList.remove("hidden")
+
+}
+
+}
+
+const clientesDiv=document.getElementById("clientes")
+const agendaDiv=document.getElementById("agenda")
 
 function renderDashboard(){
 
-let html=`<h2>Dashboard</h2>
+let html=`<button class="voltar" onclick="voltarMenu()">⬅ Menu</button>
 
-<input placeholder="Buscar cliente" oninput="buscar(this.value)">
-`
+<h2>Dashboard</h2>`
 
 vendas.forEach((v,i)=>{
 
-let s=v.status || "pendente"
+let s=v.status||"pendente"
 
 html+=`
 
@@ -240,15 +245,15 @@ ${v.produto} - R$ ${v.valor}
 
 <br>
 
-Instalação: ${v.instalacao || "Não agendado"}
+Instalação: ${v.instalacao||"Não agendado"}
 
 <br>
 
 <select onchange="mudarStatus(${i},this.value)">
 
-<option value="pendente" ${s==="pendente"?"selected":""}>Pendente</option>
-<option value="instalado" ${s==="instalado"?"selected":""}>Instalado</option>
-<option value="nao" ${s==="nao"?"selected":""}>Não instalado</option>
+<option value="pendente" ${s=="pendente"?"selected":""}>Pendente</option>
+<option value="instalado" ${s=="instalado"?"selected":""}>Instalado</option>
+<option value="nao" ${s=="nao"?"selected":""}>Não instalado</option>
 
 </select>
 
@@ -257,7 +262,7 @@ Instalação: ${v.instalacao || "Não agendado"}
 
 })
 
-dashboard.innerHTML = html
+dashboard.innerHTML=html
 
 }
 
@@ -273,7 +278,9 @@ renderDashboard()
 
 function renderClientes(){
 
-let html=`<h2>Clientes</h2>
+let html=`<button class="voltar" onclick="voltarMenu()">⬅ Menu</button>
+
+<h2>Clientes</h2>
 
 <input id="nome" placeholder="Nome">
 <input id="telefone" placeholder="Telefone">
@@ -295,13 +302,14 @@ html+=`
 
 ${c.telefone}
 
-<button class="excluir" onclick="excluirCliente(${i})">Excluir</button>
+<button class="salvar" onclick="excluirCliente(${i})">Excluir</button>
 
 </div>
 `
+
 })
 
-clientesDiv.innerHTML = html
+clientesDiv.innerHTML=html
 
 }
 
@@ -326,50 +334,57 @@ renderClientes()
 
 function excluirCliente(i){
 
-let nome = clientes[i].nome
+let nome=clientes[i].nome
 
 clientes.splice(i,1)
 
-vendas = vendas.filter(v => v.cliente !== nome)
+vendas=vendas.filter(v=>v.cliente!==nome)
 
 localStorage.setItem("clientes",JSON.stringify(clientes))
 localStorage.setItem("vendas",JSON.stringify(vendas))
 
-render()
+renderClientes()
 
 }
 
 function renderVenda(){
 
-let html=`<h2>Nova Venda</h2>
+let html=`<button class="voltar" onclick="voltarMenu()">⬅ Menu</button>
+
+<h2>Nova Venda</h2>
 
 <select id="clienteSelect">
+
 ${clientes.map(c=>`<option>${c.nome}</option>`)}
+
 </select>
 
 <select id="produto">
+
 <option>Internet</option>
 <option>Móvel</option>
 <option>TV</option>
+
 </select>
 
 <input id="quantidade" placeholder="Quantidade">
 
 <input id="valor" placeholder="Valor">
 
-<label>Data instalação</label>
 <input type="date" id="dataInstalacao">
 
 <select id="status">
+
 <option value="pendente">Pendente</option>
 <option value="instalado">Instalado</option>
 <option value="nao">Não instalado</option>
+
 </select>
 
 <button class="salvar" onclick="salvarVenda()">Salvar Venda</button>
 `
 
-venda.innerHTML = html
+venda.innerHTML=html
 
 }
 
@@ -381,7 +396,7 @@ cliente:clienteSelect.value,
 produto:produto.value,
 quantidade:quantidade.value,
 valor:valor.value,
-instalacao:dataInstalacao.value || "",
+instalacao:dataInstalacao.value,
 status:status.value
 
 }
@@ -390,15 +405,18 @@ vendas.push(v)
 
 localStorage.setItem("vendas",JSON.stringify(vendas))
 
-renderDashboard()
+alert("Venda salva")
 
 }
 
 function renderAgenda(){
 
-let html=`<h2>Agenda</h2>
+let html=`<button class="voltar" onclick="voltarMenu()">⬅ Menu</button>
+
+<h2>Agenda</h2>
 
 <input type="date" id="dataAgenda">
+
 <input id="textoAgenda" placeholder="Anotação">
 
 <button class="salvar" onclick="salvarAgenda()">Salvar</button>
@@ -418,17 +436,20 @@ ${a.texto}
 
 </div>
 `
+
 })
 
-agendaDiv.innerHTML = html
+agendaDiv.innerHTML=html
 
 }
 
 function salvarAgenda(){
 
 let a={
+
 data:dataAgenda.value,
 texto:textoAgenda.value
+
 }
 
 agenda.push(a)
@@ -438,76 +459,6 @@ localStorage.setItem("agenda",JSON.stringify(agenda))
 renderAgenda()
 
 }
-
-function buscar(t){
-
-t = t.toLowerCase()
-
-let filtrado = vendas.filter(v => v.cliente.toLowerCase().includes(t))
-
-let html="<h2>Dashboard</h2>"
-
-filtrado.forEach(v=>{
-
-html+=`
-
-<div class="card">
-
-<b>${v.cliente}</b>
-
-<br>
-
-${v.produto} - R$ ${v.valor}
-
-</div>
-`
-})
-
-dashboard.innerHTML = html
-
-}
-
-function pedirPermissao(){
-
-if("Notification" in window){
-
-if(Notification.permission !== "granted"){
-
-Notification.requestPermission()
-
-}
-
-}
-
-}
-
-function verificarNotificacao(){
-
-let hoje=new Date().toISOString().split("T")[0]
-
-vendas.forEach(v=>{
-
-if(v.instalacao===hoje){
-
-if(Notification.permission==="granted"){
-
-new Notification("Instalação hoje",{
-
-body:"Cliente: "+v.cliente
-
-})
-
-}
-
-}
-
-})
-
-}
-
-setInterval(verificarNotificacao,60000)
-
-render()
 
 </script>
 

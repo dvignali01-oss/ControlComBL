@@ -3,97 +3,105 @@
 <head>
 <meta charset="UTF-8">
 <title>ControlComBL</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-
 body{
-font-family:Arial;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial;
 background:#0f172a;
-color:#e2e8f0;
+color:#f1f5f9;
 margin:0;
+font-size:18px;
 }
 
 header{
-background:#020617;
-padding:18px;
+padding:20px;
 text-align:center;
-font-size:22px;
-font-weight:bold;
-letter-spacing:1px;
-}
-
-nav{
-display:flex;
-justify-content:space-around;
-background:#1e293b;
-padding:10px;
-}
-
-nav button{
-background:#334155;
-border:none;
-color:white;
-padding:10px 15px;
-border-radius:6px;
-cursor:pointer;
-font-weight:bold;
+font-size:26px;
+font-weight:600;
+background:#020617;
 }
 
 .container{
 padding:20px;
-max-width:900px;
+max-width:600px;
 margin:auto;
+padding-bottom:100px;
+}
+
+h2{
+font-size:24px;
+margin-bottom:10px;
 }
 
 input,select,textarea{
-
 width:100%;
-padding:10px;
-margin-top:5px;
-margin-bottom:12px;
-border-radius:6px;
+padding:16px;
+margin-top:8px;
+margin-bottom:16px;
+border-radius:14px;
 border:none;
 background:#1e293b;
 color:white;
-
+font-size:18px;
 }
 
-button.salvar{
+textarea{
+min-height:100px;
+}
 
+button{
 background:#22c55e;
 color:white;
-padding:12px;
+padding:16px;
 border:none;
-border-radius:8px;
+border-radius:14px;
 cursor:pointer;
-font-weight:bold;
+font-size:18px;
+font-weight:600;
 width:100%;
-
 }
 
 .card{
-
 background:#1e293b;
-padding:15px;
-margin-top:12px;
-border-radius:10px;
-box-shadow:0 4px 10px rgba(0,0,0,0.3);
+padding:20px;
+margin-top:15px;
+border-radius:18px;
+box-shadow:0 6px 20px rgba(0,0,0,0.4);
+}
 
+.card b{
+font-size:20px;
+}
+
+.status{
+font-size:22px;
+margin-right:8px;
 }
 
 .hidden{
 display:none;
 }
 
-.status{
-font-size:20px;
-margin-right:6px;
+nav{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+background:#020617;
+display:flex;
+justify-content:space-around;
+padding:12px;
+border-top:1px solid #1e293b;
 }
 
-.titulo{
-margin-top:0;
+nav button{
+background:none;
+border:none;
+color:white;
+font-size:16px;
+width:auto;
 }
-
 </style>
 </head>
 
@@ -101,52 +109,36 @@ margin-top:0;
 
 <header>ControlComBL</header>
 
-<nav>
-
-<button onclick="mostrar('dashboard')">Dashboard</button>
-<button onclick="mostrar('clientes')">Clientes</button>
-<button onclick="mostrar('venda')">Nova Venda</button>
-<button onclick="mostrar('agenda')">Agenda</button>
-
-</nav>
-
 <div class="container">
 
 <!-- DASHBOARD -->
-
 <div id="dashboard">
 
-<h2 class="titulo">Vendas</h2>
+<h2>Vendas</h2>
 
-<input placeholder="Buscar cliente ou telefone"
-oninput="buscar(this.value)">
+<input placeholder="Buscar cliente ou telefone" oninput="buscar(this.value)">
 
 <div id="listaVendas"></div>
 
 </div>
 
 <!-- CLIENTES -->
-
 <div id="clientes" class="hidden">
 
-<h2>Cadastro de Clientes</h2>
+<h2>Clientes</h2>
 
 <input id="cNome" placeholder="Nome">
-
 <input id="cTelefone" placeholder="Telefone">
-
 <input id="cCep" placeholder="CEP">
-
 <input id="cEndereco" placeholder="Endereço">
 
-<button class="salvar" onclick="salvarCliente()">Salvar Cliente</button>
+<button onclick="salvarCliente()">Salvar Cliente</button>
 
 <div id="listaClientes"></div>
 
 </div>
 
 <!-- NOVA VENDA -->
-
 <div id="venda" class="hidden">
 
 <h2>Nova Venda</h2>
@@ -160,7 +152,6 @@ oninput="buscar(this.value)">
 </select>
 
 <input id="quantidade" type="number" placeholder="Quantidade">
-
 <input id="valor" type="number" placeholder="Valor">
 
 <label>Data da venda</label>
@@ -169,27 +160,33 @@ oninput="buscar(this.value)">
 <label>Data da instalação</label>
 <input id="dataInstalacao" type="date">
 
-<button class="salvar" onclick="salvarVenda()">Salvar Venda</button>
+<button onclick="salvarVenda()">Salvar Venda</button>
 
 </div>
 
 <!-- AGENDA -->
-
 <div id="agenda" class="hidden">
 
 <h2>Agenda</h2>
 
 <input id="dataNota" type="date">
 
-<textarea id="nota" placeholder="Anotação sobre vendas ou clientes"></textarea>
+<textarea id="notaTexto" placeholder="Anotação sobre cliente ou venda"></textarea>
 
-<button class="salvar" onclick="salvarNota()">Salvar Anotação</button>
+<button onclick="salvarNota()">Salvar Anotação</button>
 
 <div id="listaNotas"></div>
 
 </div>
 
 </div>
+
+<nav>
+<button onclick="mostrar('dashboard')">🏠</button>
+<button onclick="mostrar('clientes')">👤</button>
+<button onclick="mostrar('venda')">💰</button>
+<button onclick="mostrar('agenda')">📅</button>
+</nav>
 
 <script>
 
@@ -198,25 +195,21 @@ let vendas = JSON.parse(localStorage.getItem("vendas")) || []
 let notas = JSON.parse(localStorage.getItem("notas")) || []
 
 function mostrar(tela){
-
 document.getElementById("dashboard").classList.add("hidden")
 document.getElementById("clientes").classList.add("hidden")
 document.getElementById("venda").classList.add("hidden")
 document.getElementById("agenda").classList.add("hidden")
 
 document.getElementById(tela).classList.remove("hidden")
-
 }
 
 function salvarCliente(){
 
 let cliente={
-
 nome:cNome.value,
 telefone:cTelefone.value,
 cep:cCep.value,
 endereco:cEndereco.value
-
 }
 
 clientes.push(cliente)
@@ -232,7 +225,6 @@ alert("Cliente cadastrado")
 function carregarClientes(){
 
 let lista=document.getElementById("listaClientes")
-
 let select=document.getElementById("clienteSelect")
 
 lista.innerHTML=""
@@ -243,13 +235,9 @@ clientes.forEach((c,i)=>{
 lista.innerHTML+=`
 
 <div class="card">
-
 <b>${c.nome}</b><br>
-
 ${c.telefone}<br>
-
 ${c.endereco}
-
 </div>
 
 `
@@ -265,7 +253,6 @@ function salvarVenda(){
 let i=clienteSelect.value
 
 let venda={
-
 cliente:clientes[i].nome,
 telefone:clientes[i].telefone,
 produto:produto.value,
@@ -274,7 +261,6 @@ valor:valor.value,
 dataVenda:dataVenda.value,
 dataInstalacao:dataInstalacao.value,
 status:"pendente"
-
 }
 
 vendas.push(venda)
@@ -288,11 +274,9 @@ alert("Venda salva")
 }
 
 function corStatus(s){
-
 if(s=="instalado") return "🟢"
 if(s=="nao") return "🔴"
 return "🟡"
-
 }
 
 function mostrarVendas(lista=vendas){
@@ -318,13 +302,9 @@ Valor: R$ ${v.valor}<br>
 Instalação: ${v.dataInstalacao}<br>
 
 <select onchange="mudarStatus(${i},this.value)">
-
 <option value="pendente" ${v.status=="pendente"?"selected":""}>Pendente</option>
-
 <option value="instalado" ${v.status=="instalado"?"selected":""}>Instalado</option>
-
 <option value="nao" ${v.status=="nao"?"selected":""}>Não instalado</option>
-
 </select>
 
 </div>
@@ -336,19 +316,13 @@ Instalação: ${v.dataInstalacao}<br>
 }
 
 function mudarStatus(i,s){
-
 vendas[i].status=s
-
 localStorage.setItem("vendas",JSON.stringify(vendas))
-
 mostrarVendas()
-
 }
 
 function normalizar(t){
-
 return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")
-
 }
 
 function buscar(t){
@@ -356,11 +330,8 @@ function buscar(t){
 let busca=normalizar(t)
 
 let filtrado=vendas.filter(v=>
-
 normalizar(v.cliente).includes(busca) ||
-
 normalizar(v.telefone).includes(busca)
-
 )
 
 mostrarVendas(filtrado)
@@ -370,10 +341,8 @@ mostrarVendas(filtrado)
 function salvarNota(){
 
 let nota={
-
 data:dataNota.value,
-texto:nota.value
-
+texto:notaTexto.value
 }
 
 notas.push(nota)
@@ -397,8 +366,7 @@ div.innerHTML+=`
 <div class="card">
 
 <b>${n.data}</b><br>
-
-${n.texto}<br>
+${n.texto}
 
 <button onclick="excluirNota(${i})">Excluir</button>
 

@@ -1,25 +1,23 @@
 
+
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>ControlComBL</title>
 
 <style>
 
 body{
+font-family:Arial;
 background:#0f172a;
 color:white;
-font-family:Arial;
 margin:0;
 }
 
 header{
 background:#020617;
-padding:15px;
+padding:20px;
 text-align:center;
 font-size:22px;
 font-weight:bold;
@@ -36,168 +34,96 @@ nav button{
 background:none;
 border:none;
 color:white;
-font-size:14px;
+font-size:16px;
+cursor:pointer;
 }
 
 .container{
 padding:20px;
 }
 
-.card{
-background:#1e293b;
-padding:15px;
-border-radius:10px;
-margin-bottom:15px;
-}
-
-input,select{
+input,select,textarea{
 width:100%;
 padding:10px;
+margin-top:5px;
 margin-bottom:10px;
 border-radius:6px;
 border:none;
 }
 
-button{
+button.salvar{
+background:#22c55e;
+color:white;
 padding:10px;
 border:none;
 border-radius:6px;
-background:#3b82f6;
-color:white;
+cursor:pointer;
 }
 
-.venda{
-background:#020617;
-padding:10px;
-border-radius:8px;
+.card{
+background:#1e293b;
+padding:15px;
 margin-top:10px;
+border-radius:10px;
 }
 
-.excluir{
-background:#ef4444;
-margin-top:5px;
+.status{
+font-size:18px;
+margin-right:5px;
 }
 
-.tela{
+.hidden{
 display:none;
 }
 
-.ativa{
-display:block;
-}
-
 </style>
-
 </head>
 
 <body>
 
-<header>
-ControlComBL
-</header>
+<header>ControlComBL</header>
 
 <nav>
-
-<button onclick="mostrarTela('dashboard')">
-Dashboard
-</button>
-
-<button onclick="mostrarTela('clientes')">
-Clientes
-</button>
-
-<button onclick="mostrarTela('vendas')">
-Nova Venda
-</button>
-
-<button onclick="mostrarTela('comissao')">
-Comissões
-</button>
-
+<button onclick="mostrar('dashboard')">Dashboard</button>
+<button onclick="mostrar('nova')">Nova Venda</button>
+<button onclick="mostrar('clientes')">Clientes</button>
+<button onclick="mostrar('agenda')">Agenda</button>
 </nav>
 
 <div class="container">
 
-<!-- DASHBOARD -->
+<div id="dashboard">
 
-<div id="dashboard" class="tela ativa">
+<h2>Vendas</h2>
 
-<div class="card">
-
-<h3>Histórico de Vendas</h3>
+<input placeholder="Buscar cliente ou telefone"
+oninput="buscar(this.value)">
 
 <div id="listaVendas"></div>
 
 </div>
 
-</div>
+<div id="nova" class="hidden">
 
-<!-- CLIENTES -->
-
-<div id="clientes" class="tela">
-
-<div class="card">
-
-<h3>Cadastrar Cliente</h3>
+<h2>Nova Venda</h2>
 
 <input id="nome" placeholder="Nome">
-<input id="cep" placeholder="CEP">
+
 <input id="telefone" placeholder="Telefone">
+
+<input id="cep" placeholder="CEP">
+
 <input id="endereco" placeholder="Endereço">
 
-<button onclick="salvarCliente()">
-Salvar Cliente
-</button>
+<select id="produto">
+<option>Internet</option>
+<option>Móvel</option>
+<option>TV</option>
+</select>
 
-</div>
+<input id="quantidade" type="number" placeholder="Quantidade">
 
-<div class="card">
-
-<h3>Clientes</h3>
-
-<div id="listaClientes"></div>
-
-</div>
-
-<div class="card">
-
-<h3>Histórico por Cliente</h3>
-
-<select id="clienteHistorico" onchange="historicoCliente()"></select>
-
-<div id="historico"></div>
-
-</div>
-
-</div>
-
-<!-- VENDAS -->
-
-<div id="vendas" class="tela">
-
-<div class="card">
-
-<h3>Nova Venda</h3>
-
-<select id="clienteVenda"></select>
-
-<label>Internet quantidade</label>
-<input id="internetQtd" type="number">
-
-<label>Valor internet</label>
-<input id="internetValor" type="number">
-
-<label>Móvel quantidade</label>
-<input id="movelQtd" type="number">
-
-<label>Valor móvel</label>
-<input id="movelValor" type="number">
-
-<label>TV quantidade</label>
-<input id="tvQtd" type="number">
-
-<label>Valor TV</label>
-<input id="tvValor" type="number">
+<input id="valor" type="number" placeholder="Valor">
 
 <label>Data da venda</label>
 <input id="dataVenda" type="date">
@@ -205,36 +131,29 @@ Salvar Cliente
 <label>Data da instalação</label>
 <input id="dataInstalacao" type="date">
 
-<select id="status">
-<option>Pendente</option>
-<option>Instalado</option>
-</select>
-
-<button onclick="salvarVenda()">
-Salvar Venda
-</button>
+<button class="salvar" onclick="salvarVenda()">Salvar Venda</button>
 
 </div>
 
-</div>
+<div id="clientes" class="hidden">
 
-<!-- COMISSÕES -->
+<h2>Clientes</h2>
 
-<div id="comissao" class="tela">
-
-<div class="card">
-
-<h3>Comissões</h3>
-
-<label>Percentual de comissão</label>
-<input id="percentual" type="number" value="10">
-
-<button onclick="calcularComissao()">
-Calcular</button>
-
-<div id="resultadoComissao"></div>
+<div id="listaClientes"></div>
 
 </div>
+
+<div id="agenda" class="hidden">
+
+<h2>Agenda do vendedor</h2>
+
+<input id="dataNota" type="date">
+
+<textarea id="nota" placeholder="Anotação"></textarea>
+
+<button class="salvar" onclick="salvarNota()">Salvar anotação</button>
+
+<div id="listaNotas"></div>
 
 </div>
 
@@ -242,111 +161,34 @@ Calcular</button>
 
 <script>
 
-let clientes = JSON.parse(localStorage.getItem("clientes")) || []
 let vendas = JSON.parse(localStorage.getItem("vendas")) || []
+let notas = JSON.parse(localStorage.getItem("notas")) || []
 
-function mostrarTela(id){
+function mostrar(tela){
 
-document.querySelectorAll(".tela").forEach(t=>t.classList.remove("ativa"))
-document.getElementById(id).classList.add("ativa")
+document.getElementById("dashboard").classList.add("hidden")
+document.getElementById("nova").classList.add("hidden")
+document.getElementById("clientes").classList.add("hidden")
+document.getElementById("agenda").classList.add("hidden")
 
-}
-
-function salvarCliente(){
-
-let cliente = {
-
-nome:document.getElementById("nome").value,
-cep:document.getElementById("cep").value,
-telefone:document.getElementById("telefone").value,
-endereco:document.getElementById("endereco").value
-
-}
-
-clientes.push(cliente)
-
-localStorage.setItem("clientes",JSON.stringify(clientes))
-
-carregarClientes()
-
-}
-
-function carregarClientes(){
-
-let lista = document.getElementById("listaClientes")
-let selectVenda = document.getElementById("clienteVenda")
-let selectHistorico = document.getElementById("clienteHistorico")
-
-lista.innerHTML=""
-selectVenda.innerHTML=""
-selectHistorico.innerHTML=""
-
-clientes.forEach((c,i)=>{
-
-lista.innerHTML+=`
-
-<div class="venda">
-
-${c.nome}
-
-<button class="excluir" onclick="excluirCliente(${i})">
-Excluir
-</button>
-
-</div>
-
-`
-
-selectVenda.innerHTML+=`<option>${c.nome}</option>`
-selectHistorico.innerHTML+=`<option>${c.nome}</option>`
-
-})
-
-}
-
-function excluirCliente(i){
-
-clientes.splice(i,1)
-
-localStorage.setItem("clientes",JSON.stringify(clientes))
-
-carregarClientes()
+document.getElementById(tela).classList.remove("hidden")
 
 }
 
 function salvarVenda(){
 
-let cliente = document.getElementById("clienteVenda").value
-
-let internetQtd = Number(document.getElementById("internetQtd").value)
-let internetValor = Number(document.getElementById("internetValor").value)
-
-let movelQtd = Number(document.getElementById("movelQtd").value)
-let movelValor = Number(document.getElementById("movelValor").value)
-
-let tvQtd = Number(document.getElementById("tvQtd").value)
-let tvValor = Number(document.getElementById("tvValor").value)
-
-let dataVenda = document.getElementById("dataVenda").value
-let dataInstalacao = document.getElementById("dataInstalacao").value
-
-let status = document.getElementById("status").value
-
-let total =
-(internetQtd*internetValor)+
-(movelQtd*movelValor)+
-(tvQtd*tvValor)
-
 let venda = {
 
-cliente,
-internetQtd,
-movelQtd,
-tvQtd,
-total,
-dataVenda,
-dataInstalacao,
-status
+nome:document.getElementById("nome").value,
+telefone:document.getElementById("telefone").value,
+cep:document.getElementById("cep").value,
+endereco:document.getElementById("endereco").value,
+produto:document.getElementById("produto").value,
+quantidade:document.getElementById("quantidade").value,
+valor:document.getElementById("valor").value,
+dataVenda:document.getElementById("dataVenda").value,
+dataInstalacao:document.getElementById("dataInstalacao").value,
+status:"pendente"
 
 }
 
@@ -356,37 +198,49 @@ localStorage.setItem("vendas",JSON.stringify(vendas))
 
 mostrarVendas()
 
+alert("Venda salva")
+
 }
 
-function mostrarVendas(){
+function corStatus(status){
 
-let lista = document.getElementById("listaVendas")
+if(status==="instalado") return "🟢"
+if(status==="nao") return "🔴"
+return "🟡"
 
-lista.innerHTML=""
+}
 
-vendas.forEach((v,i)=>{
+function mostrarVendas(lista=vendas){
 
-lista.innerHTML+=`
+let div = document.getElementById("listaVendas")
 
-<div class="venda">
+div.innerHTML=""
 
-<b>Cliente:</b> ${v.cliente}<br>
+lista.forEach((v,i)=>{
 
-<b>Venda:</b> ${v.dataVenda}<br>
+div.innerHTML+=`
 
-<b>Instalação:</b> ${v.dataInstalacao}<br>
+<div class="card">
 
-Internet: ${v.internetQtd}<br>
-Móvel: ${v.movelQtd}<br>
-TV: ${v.tvQtd}<br>
+<span class="status">${corStatus(v.status)}</span>
 
-<b>Valor:</b> R$ ${v.total}<br>
+<b>${v.nome}</b><br>
 
-<b>Status:</b> ${v.status}
+${v.produto} x${v.quantidade}<br>
 
-<button class="excluir" onclick="excluirVenda(${i})">
-Excluir
-</button>
+Valor: R$ ${v.valor}<br>
+
+Instalação: ${v.dataInstalacao}<br>
+
+<select onchange="mudarStatus(${i},this.value)">
+
+<option value="pendente" ${v.status=="pendente"?"selected":""}>Pendente</option>
+
+<option value="instalado" ${v.status=="instalado"?"selected":""}>Instalado</option>
+
+<option value="nao" ${v.status=="nao"?"selected":""}>Não instalado</option>
+
+</select>
 
 </div>
 
@@ -396,9 +250,9 @@ Excluir
 
 }
 
-function excluirVenda(i){
+function mudarStatus(i,status){
 
-vendas.splice(i,1)
+vendas[i].status=status
 
 localStorage.setItem("vendas",JSON.stringify(vendas))
 
@@ -406,29 +260,62 @@ mostrarVendas()
 
 }
 
-function historicoCliente(){
+function normalizar(t){
 
-let cliente = document.getElementById("clienteHistorico").value
+return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")
 
-let lista = document.getElementById("historico")
+}
 
-lista.innerHTML=""
+function buscar(texto){
 
-vendas
-.filter(v=>v.cliente===cliente)
-.forEach(v=>{
+let busca = normalizar(texto)
 
-lista.innerHTML+=`
+let filtrado = vendas.filter(v=>
 
-<div class="venda">
+normalizar(v.nome).includes(busca) ||
 
-Venda: ${v.dataVenda}<br>
+normalizar(v.telefone).includes(busca)
 
-Instalação: ${v.dataInstalacao}<br>
+)
 
-Valor: R$ ${v.total}<br>
+mostrarVendas(filtrado)
 
-Status: ${v.status}
+}
+
+function salvarNota(){
+
+let nota={
+
+data:document.getElementById("dataNota").value,
+texto:document.getElementById("nota").value
+
+}
+
+notas.push(nota)
+
+localStorage.setItem("notas",JSON.stringify(notas))
+
+mostrarNotas()
+
+}
+
+function mostrarNotas(){
+
+let div=document.getElementById("listaNotas")
+
+div.innerHTML=""
+
+notas.forEach((n,i)=>{
+
+div.innerHTML+=`
+
+<div class="card">
+
+<b>${n.data}</b><br>
+
+${n.texto}<br>
+
+<button onclick="excluirNota(${i})">Excluir</button>
 
 </div>
 
@@ -438,68 +325,18 @@ Status: ${v.status}
 
 }
 
-function calcularComissao(){
+function excluirNota(i){
 
-let percentual = Number(document.getElementById("percentual").value)
+notas.splice(i,1)
 
-let total = vendas.reduce((acc,v)=>acc+v.total,0)
+localStorage.setItem("notas",JSON.stringify(notas))
 
-let comissao = total*(percentual/100)
-
-document.getElementById("resultadoComissao").innerHTML=
-
-`Total vendido: R$ ${total}<br><br>
-
-Comissão (${percentual}%):
-
-<b>R$ ${comissao}</b>`
+mostrarNotas()
 
 }
 
-function pedirPermissaoNotificacao(){
-
-if("Notification" in window){
-
-if(Notification.permission !== "granted"){
-
-Notification.requestPermission()
-
-}
-
-}
-
-}
-
-function verificarInstalacoesHoje(){
-
-let hoje = new Date().toISOString().split("T")[0]
-
-let instalacoesHoje = vendas.filter(v => v.dataInstalacao === hoje)
-
-if(instalacoesHoje.length > 0){
-
-alert("⚠ Você tem " + instalacoesHoje.length + " instalação hoje!")
-
-}
-
-instalacoesHoje.forEach(v=>{
-
-if(Notification.permission === "granted"){
-
-new Notification("Instalação hoje!",{
-body:"Cliente: " + v.cliente
-})
-
-}
-
-})
-
-}
-
-carregarClientes()
 mostrarVendas()
-pedirPermissaoNotificacao()
-verificarInstalacoesHoje()
+mostrarNotas()
 
 </script>
 

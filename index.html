@@ -1,37 +1,482 @@
-<div id="telaComissao" class="tela">
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<h2>💰 Comissões</h2>
+<title>ControlComBL</title>
+
+<style>
+
+body{
+font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+background:#f2f2f7;
+margin:0;
+}
+
+.tela{
+display:none;
+padding:20px;
+max-width:500px;
+margin:auto;
+}
+
+.ativa{
+display:block;
+}
+
+h1,h2{
+text-align:center;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:14px;
+margin-bottom:15px;
+box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+input,select{
+width:100%;
+padding:12px;
+margin-top:10px;
+border-radius:10px;
+border:1px solid #ccc;
+font-size:16px;
+}
+
+button{
+width:100%;
+padding:14px;
+border:none;
+border-radius:12px;
+background:#007aff;
+color:white;
+font-size:18px;
+margin-top:10px;
+}
+
+.menu button{
+font-size:20px;
+padding:18px;
+}
+
+.listaCliente{
+padding:12px;
+border-bottom:1px solid #eee;
+}
+
+.status{
+width:14px;
+height:14px;
+border-radius:50%;
+display:inline-block;
+margin-right:8px;
+}
+
+.instalado{background:#34c759;}
+.pendente{background:#ffcc00;}
+.nao{background:#ff3b30;}
+
+.barra{
+width:100%;
+height:20px;
+background:#ddd;
+border-radius:10px;
+overflow:hidden;
+}
+
+#progresso{
+height:20px;
+background:#34c759;
+width:0%;
+}
+
+.popup{
+position:fixed;
+bottom:30px;
+left:50%;
+transform:translateX(-50%);
+background:#34c759;
+color:white;
+padding:15px 25px;
+border-radius:10px;
+display:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="popup" id="popup"></div>
+
+<!-- MENU -->
+<div id="menu" class="tela ativa">
+
+<h1>ControlComBL</h1>
+
+<div class="menu">
+
+<button onclick="abrirTela('dashboard')">📊 Dashboard</button>
+
+<button onclick="abrirTela('cadastro')">👤 Cadastrar Cliente</button>
+
+<button onclick="abrirTela('clientes')">📋 Clientes</button>
+
+<button onclick="abrirTela('comissao')">💰 Comissões</button>
+
+</div>
+
+</div>
+
+<!-- DASHBOARD -->
+
+<div id="dashboard" class="tela">
+
+<h2>Dashboard</h2>
+
+<div class="card" id="infoDash"></div>
+
+<button onclick="abrirTela('menu')">⬅ Voltar</button>
+
+</div>
+
+<!-- CADASTRO -->
+
+<div id="cadastro" class="tela">
+
+<h2>Novo Cliente</h2>
 
 <div class="card">
-<h3>Resumo</h3>
-<p>Instalações: <span id="totalInstaladas"></span></p>
-<p>Comissão total: R$ <span id="valorComissao"></span></p>
+
+<input id="nome" placeholder="Nome">
+
+<input id="telefone" placeholder="Telefone">
+
+<input id="valor" placeholder="Valor da venda">
+
+<select id="status">
+<option value="pendente">Pendente</option>
+<option value="instalado">Instalado</option>
+<option value="nao">Não instalado</option>
+</select>
+
+<button onclick="salvarCliente()">Salvar</button>
+
+</div>
+
+<button onclick="abrirTela('menu')">⬅ Voltar</button>
+
+</div>
+
+<!-- CLIENTES -->
+
+<div id="clientes" class="tela">
+
+<h2>Clientes</h2>
+
+<input id="busca" placeholder="Buscar cliente" onkeyup="buscar()">
+
+<div class="card" id="listaClientes"></div>
+
+<button onclick="abrirTela('menu')">⬅ Voltar</button>
+
+</div>
+
+<!-- COMISSÃO -->
+
+<div id="comissao" class="tela">
+
+<h2>Comissões</h2>
+
+<div class="card">
+
+Instalações: <span id="instaladas"></span><br>
+Comissão total: R$ <span id="totalComissao"></span>
+
 </div>
 
 <div class="card">
-<h3>🎯 Meta</h3>
-<p><span id="instaladasMeta"></span> / <span id="metaMes"></span></p>
+
+<h3>Meta</h3>
+
+<span id="metaTexto"></span>
 
 <div class="barra">
-<div id="progressoMeta"></div>
+<div id="progresso"></div>
 </div>
 
 </div>
 
 <div class="card">
-<h3>📋 Vendas que geraram comissão</h3>
+
+<h3>Detalhe das vendas</h3>
+
 <div id="listaComissao"></div>
+
 </div>
 
 <div class="card">
-<h3>🧮 Simulador de comissão</h3>
 
-<input type="number" id="valorSimulador" placeholder="Valor da venda">
+<h3>Simulador</h3>
 
-<button onclick="simularComissao()">Simular</button>
+<input id="valorSim" placeholder="Valor da venda">
 
-<div id="resultadoSimulador"></div>
+<button onclick="simular()">Simular</button>
+
+<div id="resultadoSim"></div>
 
 </div>
 
+<button onclick="abrirTela('menu')">⬅ Voltar</button>
+
 </div>
+
+<script>
+
+let clientes=[]
+
+function abrirTela(id){
+
+document.querySelectorAll(".tela").forEach(t=>t.classList.remove("ativa"))
+
+document.getElementById(id).classList.add("ativa")
+
+if(id=="clientes")renderClientes()
+if(id=="dashboard")renderDash()
+if(id=="comissao")renderComissao()
+
+}
+
+function salvarCliente(){
+
+let c={
+nome:nome.value,
+telefone:telefone.value,
+valor:parseFloat(valor.value),
+status:status.value
+}
+
+clientes.push(c)
+
+mostrarPopup("Cliente cadastrado")
+
+nome.value=""
+telefone.value=""
+valor.value=""
+
+}
+
+function renderClientes(){
+
+let html=""
+
+clientes.forEach((c,i)=>{
+
+html+=`
+
+<div class="listaCliente">
+
+<span class="status ${c.status}"></span>
+
+<b>${c.nome}</b><br>
+
+📞 ${c.telefone}<br>
+
+💰 ${c.valor}
+
+<br>
+
+<select onchange="mudarStatus(${i},this.value)">
+
+<option ${c.status=="pendente"?"selected":""} value="pendente">Pendente</option>
+<option ${c.status=="instalado"?"selected":""} value="instalado">Instalado</option>
+<option ${c.status=="nao"?"selected":""} value="nao">Não instalado</option>
+
+</select>
+
+<button onclick="excluir(${i})">Excluir</button>
+
+</div>
+
+`
+
+})
+
+listaClientes.innerHTML=html
+
+}
+
+function mudarStatus(i,s){
+
+clientes[i].status=s
+
+renderClientes()
+
+}
+
+function excluir(i){
+
+clientes.splice(i,1)
+
+renderClientes()
+
+}
+
+function normalizar(t){
+
+return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+
+}
+
+function buscar(){
+
+let termo=normalizar(busca.value)
+
+let lista=clientes.filter(c=>
+normalizar(c.nome).includes(termo) ||
+normalizar(c.telefone).includes(termo)
+)
+
+let html=""
+
+lista.forEach(c=>{
+
+html+=`<div class="listaCliente">
+
+<span class="status ${c.status}"></span>
+
+<b>${c.nome}</b><br>
+
+${c.telefone}
+
+</div>`
+
+})
+
+listaClientes.innerHTML=html
+
+}
+
+function renderDash(){
+
+let total=clientes.length
+
+let instalados=clientes.filter(c=>c.status=="instalado").length
+
+infoDash.innerHTML=`
+
+Clientes: ${total}<br>
+
+Instalados: ${instalados}
+
+`
+
+}
+
+function tabela(inst){
+
+if(inst>=15)return[20,28.8,45,67.5,93.75]
+if(inst>=12)return[15,21.6,33.75,50.63,70.31]
+if(inst>=10)return[12,17.28,27,40.5,56.25]
+if(inst>=8)return[8,11.52,18,27,37.5]
+
+return[0,0,0,0,0]
+
+}
+
+function faixa(v){
+
+if(v<=90)return 0
+if(v<120)return 1
+if(v<150)return 2
+if(v<180)return 3
+if(v<200)return 4
+return 5
+
+}
+
+function renderComissao(){
+
+let instaladas=clientes.filter(c=>c.status=="instalado")
+
+let qtd=instaladas.length
+
+instaladasSpan=qtd
+
+instaladas.innerText=qtd
+
+let tab=tabela(qtd)
+
+let total=0
+
+let html=""
+
+instaladas.forEach(c=>{
+
+let f=faixa(c.valor)
+
+let com=f==0?4:tab[f-1]
+
+total+=com
+
+html+=`
+
+${c.nome} - R$${c.valor} → R$${com.toFixed(2)}<br>
+
+`
+
+})
+
+totalComissao.innerText=total.toFixed(2)
+
+listaComissao.innerHTML=html
+
+let meta=15
+
+metaTexto.innerText=qtd+" / "+meta
+
+progresso.style.width=(qtd/meta*100)+"%"
+
+}
+
+function simular(){
+
+let v=parseFloat(valorSim.value)
+
+let niveis=[8,10,12,15]
+
+let r=""
+
+niveis.forEach(n=>{
+
+let tab=tabela(n)
+
+let f=faixa(v)
+
+let com=f==0?4:tab[f-1]
+
+r+=`Com ${n} instalações: R$${com.toFixed(2)}<br>`
+
+})
+
+resultadoSim.innerHTML=r
+
+}
+
+function mostrarPopup(msg){
+
+popup.innerText=msg
+
+popup.style.display="block"
+
+setTimeout(()=>popup.style.display="none",3000)
+
+}
+
+</script>
+
+</body>
+</html>

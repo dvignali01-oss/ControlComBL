@@ -8,9 +8,22 @@
 
 <style>
 
+:root{
+--bg:#f2f2f7;
+--card:#ffffff;
+--text:#000;
+}
+
+.dark{
+--bg:#1c1c1e;
+--card:#2c2c2e;
+--text:#fff;
+}
+
 body{
-font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-background:#f2f2f7;
+font-family:-apple-system,BlinkMacSystemFont;
+background:var(--bg);
+color:var(--text);
 margin:0;
 }
 
@@ -25,46 +38,41 @@ margin:auto;
 display:block;
 }
 
-h1,h2{
-text-align:center;
-}
-
 .card{
-background:white;
+background:var(--card);
 padding:20px;
 border-radius:14px;
 margin-bottom:15px;
-box-shadow:0 4px 12px rgba(0,0,0,0.08);
+box-shadow:0 3px 10px rgba(0,0,0,0.15);
 }
 
-input,select{
-width:100%;
-padding:12px;
-margin-top:10px;
-border-radius:10px;
-border:1px solid #ccc;
-font-size:16px;
+h1,h2{
+text-align:center;
 }
 
 button{
 width:100%;
 padding:14px;
+margin-top:10px;
 border:none;
 border-radius:12px;
+font-size:17px;
 background:#007aff;
 color:white;
-font-size:18px;
-margin-top:10px;
+}
+
+input,select{
+width:100%;
+padding:12px;
+margin-top:8px;
+border-radius:10px;
+border:1px solid #ccc;
+font-size:16px;
 }
 
 .menu button{
 font-size:20px;
 padding:18px;
-}
-
-.listaCliente{
-padding:12px;
-border-bottom:1px solid #eee;
 }
 
 .status{
@@ -82,7 +90,7 @@ margin-right:8px;
 .barra{
 width:100%;
 height:20px;
-background:#ddd;
+background:#ccc;
 border-radius:10px;
 overflow:hidden;
 }
@@ -95,12 +103,12 @@ width:0%;
 
 .popup{
 position:fixed;
-bottom:30px;
+bottom:20px;
 left:50%;
 transform:translateX(-50%);
 background:#34c759;
 color:white;
-padding:15px 25px;
+padding:14px 20px;
 border-radius:10px;
 display:none;
 }
@@ -110,22 +118,27 @@ display:none;
 
 <body>
 
-<div class="popup" id="popup"></div>
+<div id="popup" class="popup"></div>
 
 <!-- MENU -->
+
 <div id="menu" class="tela ativa">
 
 <h1>ControlComBL</h1>
 
 <div class="menu">
 
-<button onclick="abrirTela('dashboard')">📊 Dashboard</button>
+<button onclick="abrir('dashboard')">📊 Dashboard</button>
 
-<button onclick="abrirTela('cadastro')">👤 Cadastrar Cliente</button>
+<button onclick="abrir('cadastro')">👤 Cadastrar Cliente</button>
 
-<button onclick="abrirTela('clientes')">📋 Clientes</button>
+<button onclick="abrir('clientes')">📋 Clientes</button>
 
-<button onclick="abrirTela('comissao')">💰 Comissões</button>
+<button onclick="abrir('vendas')">💳 Vendas</button>
+
+<button onclick="abrir('comissao')">💰 Comissões</button>
+
+<button onclick="alternarTema()">🌙 Tema Escuro</button>
 
 </div>
 
@@ -137,9 +150,9 @@ display:none;
 
 <h2>Dashboard</h2>
 
-<div class="card" id="infoDash"></div>
+<div class="card" id="dash"></div>
 
-<button onclick="abrirTela('menu')">⬅ Voltar</button>
+<button onclick="abrir('menu')">⬅ Voltar</button>
 
 </div>
 
@@ -158,16 +171,18 @@ display:none;
 <input id="valor" placeholder="Valor da venda">
 
 <select id="status">
+
 <option value="pendente">Pendente</option>
 <option value="instalado">Instalado</option>
 <option value="nao">Não instalado</option>
+
 </select>
 
-<button onclick="salvarCliente()">Salvar</button>
+<button onclick="salvar()">Salvar</button>
 
 </div>
 
-<button onclick="abrirTela('menu')">⬅ Voltar</button>
+<button onclick="abrir('menu')">⬅ Voltar</button>
 
 </div>
 
@@ -177,11 +192,23 @@ display:none;
 
 <h2>Clientes</h2>
 
-<input id="busca" placeholder="Buscar cliente" onkeyup="buscar()">
+<input id="busca" placeholder="Buscar" onkeyup="buscar()">
 
-<div class="card" id="listaClientes"></div>
+<div class="card" id="lista"></div>
 
-<button onclick="abrirTela('menu')">⬅ Voltar</button>
+<button onclick="abrir('menu')">⬅ Voltar</button>
+
+</div>
+
+<!-- VENDAS -->
+
+<div id="vendas" class="tela">
+
+<h2>Vendas</h2>
+
+<div class="card" id="listaVendas"></div>
+
+<button onclick="abrir('menu')">⬅ Voltar</button>
 
 </div>
 
@@ -193,16 +220,16 @@ display:none;
 
 <div class="card">
 
-Instalações: <span id="instaladas"></span><br>
-Comissão total: R$ <span id="totalComissao"></span>
+Instalações: <span id="inst"></span><br>
+Comissão total: R$ <span id="total"></span>
 
 </div>
 
 <div class="card">
 
-<h3>Meta</h3>
+Meta do mês
 
-<span id="metaTexto"></span>
+<div id="meta"></div>
 
 <div class="barra">
 <div id="progresso"></div>
@@ -212,9 +239,9 @@ Comissão total: R$ <span id="totalComissao"></span>
 
 <div class="card">
 
-<h3>Detalhe das vendas</h3>
+<h3>Detalhes</h3>
 
-<div id="listaComissao"></div>
+<div id="detalhes"></div>
 
 </div>
 
@@ -226,11 +253,11 @@ Comissão total: R$ <span id="totalComissao"></span>
 
 <button onclick="simular()">Simular</button>
 
-<div id="resultadoSim"></div>
+<div id="sim"></div>
 
 </div>
 
-<button onclick="abrirTela('menu')">⬅ Voltar</button>
+<button onclick="abrir('menu')">⬅ Voltar</button>
 
 </div>
 
@@ -238,30 +265,31 @@ Comissão total: R$ <span id="totalComissao"></span>
 
 let clientes=[]
 
-function abrirTela(id){
+function abrir(t){
 
-document.querySelectorAll(".tela").forEach(t=>t.classList.remove("ativa"))
+document.querySelectorAll(".tela").forEach(e=>e.classList.remove("ativa"))
 
-document.getElementById(id).classList.add("ativa")
+document.getElementById(t).classList.add("ativa")
 
-if(id=="clientes")renderClientes()
-if(id=="dashboard")renderDash()
-if(id=="comissao")renderComissao()
+if(t=="clientes")renderClientes()
+if(t=="dashboard")renderDash()
+if(t=="vendas")renderVendas()
+if(t=="comissao")renderComissao()
 
 }
 
-function salvarCliente(){
+function salvar(){
 
-let c={
+clientes.push({
+
 nome:nome.value,
 telefone:telefone.value,
 valor:parseFloat(valor.value),
 status:status.value
-}
 
-clientes.push(c)
+})
 
-mostrarPopup("Cliente cadastrado")
+popupMsg("Cliente salvo")
 
 nome.value=""
 telefone.value=""
@@ -277,19 +305,17 @@ clientes.forEach((c,i)=>{
 
 html+=`
 
-<div class="listaCliente">
+<div>
 
 <span class="status ${c.status}"></span>
 
 <b>${c.nome}</b><br>
 
-📞 ${c.telefone}<br>
+${c.telefone}<br>
 
-💰 ${c.valor}
+R$ ${c.valor}
 
-<br>
-
-<select onchange="mudarStatus(${i},this.value)">
+<select onchange="mudar(${i},this.value)">
 
 <option ${c.status=="pendente"?"selected":""} value="pendente">Pendente</option>
 <option ${c.status=="instalado"?"selected":""} value="instalado">Instalado</option>
@@ -297,7 +323,9 @@ html+=`
 
 </select>
 
-<button onclick="excluir(${i})">Excluir</button>
+<button onclick="del(${i})">Excluir</button>
+
+<hr>
 
 </div>
 
@@ -305,11 +333,11 @@ html+=`
 
 })
 
-listaClientes.innerHTML=html
+lista.innerHTML=html
 
 }
 
-function mudarStatus(i,s){
+function mudar(i,s){
 
 clientes[i].status=s
 
@@ -317,11 +345,34 @@ renderClientes()
 
 }
 
-function excluir(i){
+function del(i){
 
 clientes.splice(i,1)
 
 renderClientes()
+
+}
+
+function buscar(){
+
+let t=normalizar(busca.value)
+
+let listaFiltrada=clientes.filter(c=>
+
+normalizar(c.nome).includes(t) ||
+normalizar(c.telefone).includes(t)
+
+)
+
+let html=""
+
+listaFiltrada.forEach(c=>{
+
+html+=`<div>${c.nome}</div>`
+
+})
+
+lista.innerHTML=html
 
 }
 
@@ -331,59 +382,36 @@ return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")
 
 }
 
-function buscar(){
-
-let termo=normalizar(busca.value)
-
-let lista=clientes.filter(c=>
-normalizar(c.nome).includes(termo) ||
-normalizar(c.telefone).includes(termo)
-)
-
-let html=""
-
-lista.forEach(c=>{
-
-html+=`<div class="listaCliente">
-
-<span class="status ${c.status}"></span>
-
-<b>${c.nome}</b><br>
-
-${c.telefone}
-
-</div>`
-
-})
-
-listaClientes.innerHTML=html
-
-}
-
 function renderDash(){
 
 let total=clientes.length
 
-let instalados=clientes.filter(c=>c.status=="instalado").length
+let inst=clientes.filter(c=>c.status=="instalado").length
 
-infoDash.innerHTML=`
+dash.innerHTML=`
 
 Clientes: ${total}<br>
-
-Instalados: ${instalados}
+Instalados: ${inst}
 
 `
 
 }
 
-function tabela(inst){
+function renderVendas(){
 
-if(inst>=15)return[20,28.8,45,67.5,93.75]
-if(inst>=12)return[15,21.6,33.75,50.63,70.31]
-if(inst>=10)return[12,17.28,27,40.5,56.25]
-if(inst>=8)return[8,11.52,18,27,37.5]
+let html=""
 
-return[0,0,0,0,0]
+clientes.forEach(c=>{
+
+html+=`
+
+${c.nome} - R$ ${c.valor}<br>
+
+`
+
+})
+
+listaVendas.innerHTML=html
 
 }
 
@@ -398,19 +426,28 @@ return 5
 
 }
 
+function tabela(i){
+
+if(i>=15)return[20,28.8,45,67.5,93.75]
+if(i>=12)return[15,21.6,33.75,50.63,70.31]
+if(i>=10)return[12,17.28,27,40.5,56.25]
+if(i>=8)return[8,11.52,18,27,37.5]
+
+return[0,0,0,0,0]
+
+}
+
 function renderComissao(){
 
 let instaladas=clientes.filter(c=>c.status=="instalado")
 
-let qtd=instaladas.length
+let q=instaladas.length
 
-instaladasSpan=qtd
+inst.innerText=q
 
-instaladas.innerText=qtd
+let tab=tabela(q)
 
-let tab=tabela(qtd)
-
-let total=0
+let totalCom=0
 
 let html=""
 
@@ -420,25 +457,21 @@ let f=faixa(c.valor)
 
 let com=f==0?4:tab[f-1]
 
-total+=com
+totalCom+=com
 
-html+=`
-
-${c.nome} - R$${c.valor} → R$${com.toFixed(2)}<br>
-
-`
+html+=`${c.nome} - R$${c.valor} → R$${com.toFixed(2)}<br>`
 
 })
 
-totalComissao.innerText=total.toFixed(2)
+total.innerText=totalCom.toFixed(2)
 
-listaComissao.innerHTML=html
+detalhes.innerHTML=html
 
 let meta=15
 
-metaTexto.innerText=qtd+" / "+meta
+meta.innerText=q+" / "+meta
 
-progresso.style.width=(qtd/meta*100)+"%"
+progresso.style.width=(q/meta*100)+"%"
 
 }
 
@@ -462,17 +495,23 @@ r+=`Com ${n} instalações: R$${com.toFixed(2)}<br>`
 
 })
 
-resultadoSim.innerHTML=r
+sim.innerHTML=r
 
 }
 
-function mostrarPopup(msg){
+function popupMsg(msg){
 
 popup.innerText=msg
 
 popup.style.display="block"
 
-setTimeout(()=>popup.style.display="none",3000)
+setTimeout(()=>popup.style.display="none",2500)
+
+}
+
+function alternarTema(){
+
+document.body.classList.toggle("dark")
 
 }
 

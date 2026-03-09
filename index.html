@@ -3,21 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>ControlComBL</title>
+<title>ControlComBL PRO</title>
 
 <style>
 
 body{
 margin:0;
 font-family:-apple-system,BlinkMacSystemFont;
-background:#1c1c1e;
-color:#fff;
+background:#121212;
+color:white;
 }
 
 .tela{
 display:none;
 padding:20px;
+padding-bottom:90px;
 max-width:500px;
 margin:auto;
 }
@@ -27,25 +27,15 @@ display:block;
 }
 
 .card{
-background:#2c2c2e;
+background:#1e1e1e;
 padding:20px;
-border-radius:14px;
+border-radius:16px;
 margin-bottom:15px;
+box-shadow:0 5px 15px rgba(0,0,0,0.4);
 }
 
 h1,h2{
-text-align:center;
-}
-
-button{
-width:100%;
-padding:14px;
-margin-top:10px;
-border:none;
-border-radius:12px;
-font-size:17px;
-background:#0a84ff;
-color:white;
+margin-top:0;
 }
 
 input,select{
@@ -55,20 +45,51 @@ margin-top:10px;
 border-radius:10px;
 border:none;
 font-size:16px;
+background:#2a2a2a;
+color:white;
 }
 
-.produtoLinha{
-border-top:1px solid #444;
+button{
+width:100%;
+padding:14px;
 margin-top:10px;
-padding-top:10px;
+border:none;
+border-radius:12px;
+font-size:16px;
+background:#4f8cff;
+color:white;
+}
+
+.menu{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+background:#1e1e1e;
+display:flex;
+justify-content:space-around;
+padding:10px 0;
+border-top:1px solid #333;
+}
+
+.menu button{
+background:none;
+font-size:14px;
+}
+
+.produto{
+background:#2a2a2a;
+padding:10px;
+border-radius:10px;
+margin-top:10px;
 }
 
 .status{
-width:14px;
-height:14px;
+width:12px;
+height:12px;
 border-radius:50%;
 display:inline-block;
-margin-right:8px;
+margin-right:6px;
 }
 
 .instalado{background:#30d158;}
@@ -76,28 +97,16 @@ margin-right:8px;
 .nao{background:#ff453a;}
 
 .barra{
-width:100%;
-height:18px;
-background:#444;
+height:16px;
+background:#333;
 border-radius:10px;
 overflow:hidden;
 }
 
 #progresso{
-height:18px;
+height:16px;
 background:#30d158;
 width:0%;
-}
-
-.popup{
-position:fixed;
-bottom:20px;
-left:50%;
-transform:translateX(-50%);
-background:#30d158;
-padding:12px 20px;
-border-radius:10px;
-display:none;
 }
 
 </style>
@@ -105,75 +114,52 @@ display:none;
 
 <body>
 
-<div id="popup" class="popup"></div>
-
-<!-- ENTRADA -->
-
-<div id="entrada" class="tela ativa">
-
-<h1>ControlComBL</h1>
-
-<div class="card">
-
-<button onclick="abrir('menu')">
-Entrar
-</button>
-
-</div>
-
-</div>
-
-<!-- MENU -->
-
-<div id="menu" class="tela">
-
-<h2>Menu</h2>
-
-<div class="card">
-
-<button onclick="abrir('dashboard')">📊 Dashboard</button>
-
-<button onclick="abrir('cadastro')">👤 Cadastrar Cliente</button>
-
-<button onclick="abrir('clientes')">📋 Clientes</button>
-
-<button onclick="abrir('comissao')">💰 Comissões</button>
-
-</div>
-
-<button onclick="abrir('entrada')">⬅ Sair</button>
-
-</div>
-
 <!-- DASHBOARD -->
 
-<div id="dashboard" class="tela">
+<div id="dashboard" class="tela ativa">
 
 <h2>Dashboard</h2>
 
-<div class="card" id="dash"></div>
-
-<button onclick="abrir('menu')">⬅ Menu</button>
+<div class="card" id="stats"></div>
 
 </div>
 
-<!-- CADASTRO -->
+<!-- NOVO CLIENTE -->
 
-<div id="cadastro" class="tela">
+<div id="novo" class="tela">
 
 <h2>Novo Cliente</h2>
 
 <div class="card">
 
-<input id="nome" placeholder="Nome">
+<input id="nome" placeholder="Nome do cliente">
 
 <input id="telefone" placeholder="Telefone">
 
+</div>
+
+<div class="card">
+
 <h3>Produtos</h3>
 
-<div id="produtos"></div>
+<div id="listaProdutos"></div>
 
-<button onclick="addProduto()">+ Adicionar produto</button>
+<select id="tipoProduto">
+<option>Internet</option>
+<option>TV</option>
+<option>Móvel</option>
+<option>Fixo</option>
+</select>
+
+<input id="quantidade" type="number" placeholder="Quantidade">
+
+<input id="valor" type="number" placeholder="Valor unitário">
+
+<button onclick="addProduto()">Adicionar produto</button>
+
+</div>
+
+<div class="card">
 
 <select id="status">
 <option value="pendente">Pendente</option>
@@ -181,11 +167,9 @@ Entrar
 <option value="nao">Não instalado</option>
 </select>
 
-<button onclick="salvar()">Salvar Cliente</button>
+<button onclick="salvarCliente()">Salvar cliente</button>
 
 </div>
-
-<button onclick="abrir('menu')">⬅ Menu</button>
 
 </div>
 
@@ -197,13 +181,11 @@ Entrar
 
 <input id="busca" placeholder="Buscar cliente" onkeyup="buscar()">
 
-<div class="card" id="listaClientes"></div>
-
-<button onclick="abrir('menu')">⬅ Menu</button>
+<div id="listaClientes"></div>
 
 </div>
 
-<!-- COMISSÃO -->
+<!-- COMISSÕES -->
 
 <div id="comissao" class="tela">
 
@@ -212,7 +194,7 @@ Entrar
 <div class="card">
 
 Instalações: <span id="inst"></span><br>
-Comissão total: R$ <span id="total"></span>
+Comissão total: R$ <span id="totalCom"></span>
 
 </div>
 
@@ -228,105 +210,111 @@ Meta mensal
 
 </div>
 
-<div class="card">
-
-<h3>Detalhes</h3>
-
-<div id="detalhes"></div>
-
 </div>
 
-<button onclick="abrir('menu')">⬅ Menu</button>
+<!-- MENU INFERIOR -->
+
+<div class="menu">
+
+<button onclick="abrir('dashboard')">📊</button>
+<button onclick="abrir('novo')">➕</button>
+<button onclick="abrir('clientes')">👥</button>
+<button onclick="abrir('comissao')">💰</button>
 
 </div>
 
 <script>
 
-let clientes = JSON.parse(localStorage.getItem("clientes")) || []
+let clientes=JSON.parse(localStorage.getItem("clientes"))||[]
+
+let produtosTemp=[]
 
 function salvarLocal(){
+
 localStorage.setItem("clientes",JSON.stringify(clientes))
+
 }
 
 function abrir(id){
 
 document.querySelectorAll(".tela").forEach(t=>t.classList.remove("ativa"))
+
 document.getElementById(id).classList.add("ativa")
 
-if(id==="clientes")renderClientes()
 if(id==="dashboard")renderDash()
+
+if(id==="clientes")renderClientes()
+
 if(id==="comissao")renderComissao()
 
 }
 
 function addProduto(){
 
-let div=document.createElement("div")
-div.className="produtoLinha"
+let tipo=tipoProduto.value
+let q=parseFloat(quantidade.value)
+let v=parseFloat(valor.value)
 
-div.innerHTML=`
+if(!q||!v)return
 
-<select class="produto">
-<option>Internet</option>
-<option>TV</option>
-<option>Móvel</option>
-<option>Fixo</option>
-</select>
+produtosTemp.push({
 
-<input class="quantidade" type="number" placeholder="Quantidade">
+tipo:tipo,
+q:q,
+v:v
 
-<input class="valor" type="number" placeholder="Valor unitário">
+})
+
+renderProdutos()
+
+quantidade.value=""
+valor.value=""
+
+}
+
+function renderProdutos(){
+
+let html=""
+
+produtosTemp.forEach(p=>{
+
+html+=`
+
+<div class="produto">
+
+${p.tipo} | ${p.q} x ${p.v}
+
+</div>
 
 `
 
-document.getElementById("produtos").appendChild(div)
+})
+
+listaProdutos.innerHTML=html
 
 }
 
-function salvar(){
-
-let nome=document.getElementById("nome").value
-let telefone=document.getElementById("telefone").value
-let status=document.getElementById("status").value
-
-let produtos=[]
-
-document.querySelectorAll(".produtoLinha").forEach(p=>{
-
-let tipo=p.querySelector(".produto").value
-let q=parseFloat(p.querySelector(".quantidade").value)
-let v=parseFloat(p.querySelector(".valor").value)
-
-if(q && v){
-
-produtos.push({
-
-tipo:tipo,
-quantidade:q,
-valor:v
-
-})
-
-}
-
-})
+function salvarCliente(){
 
 clientes.push({
 
-nome:nome,
-telefone:telefone,
-status:status,
-produtos:produtos
+nome:nome.value,
+telefone:telefone.value,
+status:status.value,
+produtos:produtosTemp
 
 })
 
+produtosTemp=[]
+
+nome.value=""
+telefone.value=""
+
+renderProdutos()
+
 salvarLocal()
 
-mostrarPopup("Cliente cadastrado")
-
-document.getElementById("nome").value=""
-document.getElementById("telefone").value=""
-document.getElementById("produtos").innerHTML=""
+alert("Cliente salvo")
 
 }
 
@@ -336,11 +324,37 @@ let total=0
 
 produtos.forEach(p=>{
 
-total+=p.quantidade*p.valor
+total+=p.q*p.v
 
 })
 
 return total
+
+}
+
+function renderDash(){
+
+let totalClientes=clientes.length
+
+let instalados=clientes.filter(c=>c.status==="instalado").length
+
+let totalVendas=0
+
+clientes.forEach(c=>{
+
+totalVendas+=totalVenda(c.produtos)
+
+})
+
+stats.innerHTML=`
+
+Clientes: ${totalClientes}<br>
+
+Instalações: ${instalados}<br>
+
+Total vendido: R$ ${totalVendas.toFixed(2)}
+
+`
 
 }
 
@@ -354,7 +368,7 @@ let total=totalVenda(c.produtos)
 
 html+=`
 
-<div>
+<div class="card">
 
 <span class="status ${c.status}"></span>
 
@@ -362,19 +376,9 @@ html+=`
 
 📞 ${c.telefone}<br>
 
-💰 Total venda: R$ ${total.toFixed(2)}
-
-<select onchange="mudarStatus(${i},this.value)">
-
-<option ${c.status==="pendente"?"selected":""} value="pendente">Pendente</option>
-<option ${c.status==="instalado"?"selected":""} value="instalado">Instalado</option>
-<option ${c.status==="nao"?"selected":""} value="nao">Não instalado</option>
-
-</select>
+💰 R$ ${total.toFixed(2)}
 
 <button onclick="excluir(${i})">Excluir</button>
-
-<hr>
 
 </div>
 
@@ -386,18 +390,12 @@ listaClientes.innerHTML=html
 
 }
 
-function mudarStatus(i,s){
-
-clientes[i].status=s
-salvarLocal()
-renderClientes()
-
-}
-
 function excluir(i){
 
 clientes.splice(i,1)
+
 salvarLocal()
+
 renderClientes()
 
 }
@@ -407,42 +405,20 @@ function buscar(){
 let termo=busca.value.toLowerCase()
 
 let filtrados=clientes.filter(c=>
+
 c.nome.toLowerCase().includes(termo)
+
 )
 
 let html=""
 
 filtrados.forEach(c=>{
 
-html+=`<div>${c.nome}</div>`
+html+=`<div class="card">${c.nome}</div>`
 
 })
 
 listaClientes.innerHTML=html
-
-}
-
-function renderDash(){
-
-let totalClientes=clientes.length
-
-let instalados=clientes.filter(c=>c.status==="instalado").length
-
-let totalVendido=0
-
-clientes.forEach(c=>{
-
-totalVendido+=totalVenda(c.produtos)
-
-})
-
-dash.innerHTML=`
-
-Clientes cadastrados: ${totalClientes}<br>
-Instalações: ${instalados}<br>
-Total vendido: R$ ${totalVendido.toFixed(2)}
-
-`
 
 }
 
@@ -452,49 +428,29 @@ let instaladas=clientes.filter(c=>c.status==="instalado")
 
 let qtd=instaladas.length
 
-document.getElementById("inst").innerText=qtd
+inst.innerText=qtd
 
-let totalCom=0
-let html=""
+let total=0
 
 instaladas.forEach(c=>{
 
 let venda=totalVenda(c.produtos)
 
-let com=venda*0.05
-
-totalCom+=com
-
-html+=`${c.nome} → venda R$${venda.toFixed(2)} comissão R$${com.toFixed(2)}<br>`
+total+=venda*0.05
 
 })
 
-document.getElementById("total").innerText=totalCom.toFixed(2)
-
-document.getElementById("detalhes").innerHTML=html
+totalCom.innerText=total.toFixed(2)
 
 let metaValor=15
 
-document.getElementById("meta").innerText=qtd+" / "+metaValor
+meta.innerText=qtd+" / "+metaValor
 
-document.getElementById("progresso").style.width=(qtd/metaValor*100)+"%"
-
-}
-
-function mostrarPopup(msg){
-
-let p=document.getElementById("popup")
-
-p.innerText=msg
-p.style.display="block"
-
-setTimeout(()=>{
-
-p.style.display="none"
-
-},2000)
+progresso.style.width=(qtd/metaValor*100)+"%"
 
 }
+
+renderDash()
 
 </script>
 

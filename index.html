@@ -32,60 +32,49 @@
             padding-bottom: 30px;
         }
 
-        /* Header & Logo */
         .header { padding: 30px 20px 20px; text-align: center; background: linear-gradient(180deg, rgba(139, 92, 246, 0.15) 0%, var(--bg) 100%); }
         .logo-container { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 5px; }
         .logo-icon { background: linear-gradient(135deg, var(--primary), #d946ef); padding: 10px; border-radius: 14px; display: flex; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4); }
 
-        /* Telas */
         .tela { display: none; padding: 0 20px; max-width: 600px; margin: auto; animation: fadeIn 0.3s ease; }
         .ativa { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Cards & Grids */
         .card { background: var(--card); border: 1px solid var(--border); padding: 20px; border-radius: 20px; margin-bottom: 15px; box-shadow: 0 4px 20px -5px rgba(0,0,0,0.3); }
         .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
         
-        .stat-card { background: var(--card); border: 1px solid var(--border); padding: 16px; border-radius: 16px; transition: transform 0.2s, border-color 0.2s; }
+        .stat-card { background: var(--card); border: 1px solid var(--border); padding: 16px; border-radius: 16px; transition: 0.2s; }
         button.stat-card:active { transform: scale(0.96); border-color: var(--primary); }
         .stat-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500;}
         .stat-value { font-size: 22px; font-weight: 700; margin-top: 6px; display: block; }
 
-        /* Inputs & Buttons */
         .input-group { margin-bottom: 18px; }
         label { display: block; font-size: 14px; margin-bottom: 8px; color: var(--text-muted); font-weight: 500;}
         input, select { width: 100%; background: var(--input-bg); border: 1px solid var(--border); padding: 14px; border-radius: 12px; color: #fff; font-size: 15px; outline: none; transition: 0.2s; }
         input[type="date"] { color-scheme: dark; }
-        input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2); }
 
         .btn { width: 100%; padding: 16px; border: none; border-radius: 14px; font-size: 16px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; }
         .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3); }
-        .btn-primary:active { background: var(--primary-hover); transform: scale(0.98); }
         .btn-secondary { background: var(--border); color: white; margin-top: 10px; }
-        .btn-secondary:active { background: #475569; transform: scale(0.98); }
 
-        /* Produtos */
         .prod-row { display: grid; grid-template-columns: 90px 70px 1fr; gap: 8px; align-items: center; background: rgba(0,0,0,0.15); padding: 10px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 8px; }
         .prod-info { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--text); }
         .prod-row input { padding: 12px 8px; text-align: center; font-size: 14px;}
         .prod-badge { display: inline-flex; align-items: center; gap: 4px; background: var(--border); padding: 4px 8px; border-radius: 8px; font-size: 11px; margin-right: 5px; margin-top: 8px; color: var(--text-muted); }
 
-        /* Status & Badges */
         .status-badge { font-size: 11px; padding: 4px 10px; border-radius: 20px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
         .badge-instalado { background: rgba(16, 185, 129, 0.15); color: var(--success); }
         .badge-pendente { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
         .badge-nao { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
 
-        /* Progresso */
         .progress-container { background: var(--border); height: 12px; border-radius: 10px; margin: 10px 0 20px; overflow: hidden; }
         .progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), #d946ef); width: 0%; transition: 0.8s ease-out; }
         .progress-bar-money { background: linear-gradient(90deg, var(--success), #34d399); }
 
-        /* Lembrete Banner */
         .banner-lembrete { background: rgba(245, 158, 11, 0.15); border: 1px solid var(--warning); border-radius: 16px; padding: 16px; margin-bottom: 20px; display: none; align-items: center; gap: 15px; animation: fadeIn 0.5s ease; cursor: pointer;}
         .banner-lembrete p { margin: 0; color: var(--warning); font-size: 14px; font-weight: 600; line-height: 1.4;}
 
-        #toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: var(--success); color: white; padding: 14px 28px; border-radius: 30px; font-weight: 600; display: none; z-index: 1000; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.4); animation: fadeIn 0.3s ease; }
+        #toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: var(--success); color: white; padding: 14px 28px; border-radius: 30px; font-weight: 600; display: none; z-index: 1000; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.4); }
     </style>
 </head>
 <body>
@@ -102,156 +91,93 @@
 
 <div id="entrada" class="tela ativa">
     <div class="card" style="text-align: center; margin-top: 40px; padding: 40px 20px;">
-        <i data-lucide="shield-check" size="56" color="var(--primary)" style="margin-bottom: 20px; filter: drop-shadow(0 0 10px rgba(139,92,246,0.5));"></i>
-        <h2 style="margin-bottom: 10px;">Bem-vindo de volta</h2>
-        <p style="color:var(--text-muted); margin-bottom: 30px; line-height: 1.5;">Gerencie suas vendas, metas e comissões com precisão profissional.</p>
-        <button class="btn btn-primary" onclick="abrir('menu')">
-            Acessar Painel <i data-lucide="arrow-right" size="18"></i>
-        </button>
+        <i data-lucide="shield-check" size="56" color="var(--primary)" style="margin-bottom: 20px;"></i>
+        <h2 style="margin-bottom: 10px;">Bem-vindo</h2>
+        <button class="btn btn-primary" onclick="abrir('menu')">Acessar Painel <i data-lucide="arrow-right" size="18"></i></button>
     </div>
 </div>
 
 <div id="menu" class="tela">
-    
     <div id="alertaAgendamento" class="banner-lembrete" onclick="abrir('clientes')">
         <i data-lucide="bell-ring" size="28" color="var(--warning)"></i>
-        <p id="textoAgendamento">Você tem instalações marcadas para hoje!</p>
+        <p id="textoAgendamento"></p>
     </div>
 
     <div class="stat-grid">
-        <button class="stat-card" onclick="abrir('dashboard')" style="text-align:left; cursor:pointer; border: none; outline:none; width: 100%;">
-            <i data-lucide="pie-chart" color="var(--primary)"></i>
-            <span class="stat-value" style="font-size:16px; margin-top:10px; color: var(--text)">Dashboard</span>
-        </button>
-        <button class="stat-card" onclick="abrir('cadastro')" style="text-align:left; cursor:pointer; border: none; outline:none; width: 100%;">
-            <i data-lucide="user-plus" color="var(--success)"></i>
-            <span class="stat-value" style="font-size:16px; margin-top:10px; color: var(--text)">Nova Venda</span>
-        </button>
-        <button class="stat-card" onclick="abrir('clientes')" style="text-align:left; cursor:pointer; border: none; outline:none; width: 100%;">
-            <i data-lucide="users" color="var(--warning)"></i>
-            <span class="stat-value" style="font-size:16px; margin-top:10px; color: var(--text)">Carteira</span>
-        </button>
-        <button class="stat-card" onclick="abrir('comissao')" style="text-align:left; cursor:pointer; border: none; outline:none; width: 100%;">
-            <i data-lucide="target" color="#d946ef"></i>
-            <span class="stat-value" style="font-size:16px; margin-top:10px; color: var(--text)">Metas & Ganhos</span>
-        </button>
+        <button class="stat-card" onclick="abrir('dashboard')"><i data-lucide="pie-chart" color="var(--primary)"></i><span class="stat-value" style="font-size:16px;">Dashboard</span></button>
+        <button class="stat-card" onclick="abrir('cadastro')"><i data-lucide="user-plus" color="var(--success)"></i><span class="stat-value" style="font-size:16px;">Nova Venda</span></button>
+        <button class="stat-card" onclick="abrir('clientes')"><i data-lucide="users" color="var(--warning)"></i><span class="stat-value" style="font-size:16px;">Carteira</span></button>
+        <button class="stat-card" onclick="abrir('comissao')"><i data-lucide="target" color="#d946ef"></i><span class="stat-value" style="font-size:16px;">Metas & Ganhos</span></button>
     </div>
-    <button class="btn btn-secondary" onclick="abrir('entrada')">Sair do sistema</button>
+    <button class="btn btn-secondary" onclick="abrir('entrada')">Sair</button>
 </div>
 
 <div id="dashboard" class="tela">
-    <h2 style="text-align:left">Indicadores</h2>
+    <h2>Indicadores</h2>
     <div class="stat-grid">
-        <div class="stat-card">
-            <span class="stat-label">Total Vendas</span>
-            <span id="dash-total" class="stat-value">0</span>
-        </div>
-        <div class="stat-card">
-            <span class="stat-label">Instalados</span>
-            <span id="dash-inst" class="stat-value" style="color:var(--success)">0</span>
-        </div>
-        <div class="stat-card">
-            <span class="stat-label">Ticket Médio</span>
-            <span id="dash-ticket" class="stat-value">R$ 0</span>
-        </div>
-        <div class="stat-card">
-            <span class="stat-label">Conversão</span>
-            <span id="dash-conv" class="stat-value">0%</span>
-        </div>
+        <div class="stat-card"><span class="stat-label">Vendas</span><span id="dash-total" class="stat-value">0</span></div>
+        <div class="stat-card"><span class="stat-label">Instalados</span><span id="dash-inst" class="stat-value" style="color:var(--success)">0</span></div>
     </div>
     <div class="card" style="border-left: 4px solid var(--primary);">
         <span class="stat-label">Previsão de Recebimento</span>
         <span id="dash-previsao" class="stat-value" style="color:var(--primary); font-size: 32px;">R$ 0.00</span>
     </div>
-    <button class="btn btn-secondary" onclick="abrir('menu')">Voltar ao Menu</button>
+    <button class="btn btn-secondary" onclick="abrir('menu')">Voltar</button>
 </div>
 
 <div id="cadastro" class="tela">
     <h2>Nova Venda</h2>
     <div class="card">
-        <div class="input-group">
-            <label>Nome do Cliente</label>
-            <input id="nome" placeholder="Ex: João Silva">
-        </div>
-        <div class="input-group">
-            <label>WhatsApp / Telefone</label>
-            <input id="telefone" type="tel" placeholder="(00) 00000-0000">
-        </div>
+        <div class="input-group"><label>Cliente</label><input id="nome" placeholder="Nome"></div>
+        <div class="input-group"><label>WhatsApp</label><input id="telefone" type="tel" placeholder="(00) 00000-0000"></div>
         
         <div class="input-group">
-            <label style="margin-bottom: 12px;">Produtos Adicionados</label>
-            <div class="prod-row"><div class="prod-info"><i data-lucide="tv" size="16" color="#a1a1aa"></i> TV</div><input type="number" id="tvQtd" placeholder="Qtd" min="0" oninput="calcularTotalVenda()"><input type="number" id="tvVal" placeholder="R$ Unit." min="0" step="0.01" oninput="calcularTotalVenda()"></div>
-            <div class="prod-row"><div class="prod-info"><i data-lucide="wifi" size="16" color="#a1a1aa"></i> Internet</div><input type="number" id="intQtd" placeholder="Qtd" min="0" oninput="calcularTotalVenda()"><input type="number" id="intVal" placeholder="R$ Unit." min="0" step="0.01" oninput="calcularTotalVenda()"></div>
-            <div class="prod-row"><div class="prod-info"><i data-lucide="smartphone" size="16" color="#a1a1aa"></i> Móvel</div><input type="number" id="movQtd" placeholder="Qtd" min="0" oninput="calcularTotalVenda()"><input type="number" id="movVal" placeholder="R$ Unit." min="0" step="0.01" oninput="calcularTotalVenda()"></div>
-            <div class="prod-row"><div class="prod-info"><i data-lucide="phone" size="16" color="#a1a1aa"></i> Fixo</div><input type="number" id="fixQtd" placeholder="Qtd" min="0" oninput="calcularTotalVenda()"><input type="number" id="fixVal" placeholder="R$ Unit." min="0" step="0.01" oninput="calcularTotalVenda()"></div>
-            
-            <div style="margin-top:20px; text-align:right; font-size:18px; font-weight:700; background: rgba(139, 92, 246, 0.1); padding: 15px; border-radius: 12px; border: 1px dashed var(--primary);">
-                Total da Venda: <span id="vendaTotalText" style="color:var(--primary)">R$ 0.00</span>
-            </div>
+            <label>Produtos</label>
+            <div class="prod-row"><div class="prod-info">TV</div><input type="number" id="tvQtd" placeholder="Qtd" oninput="calcularTotalVenda()"><input type="number" id="tvVal" placeholder="R$ Unit." oninput="calcularTotalVenda()"></div>
+            <div class="prod-row"><div class="prod-info">Net</div><input type="number" id="intQtd" placeholder="Qtd" oninput="calcularTotalVenda()"><input type="number" id="intVal" placeholder="R$ Unit." oninput="calcularTotalVenda()"></div>
+            <div class="prod-row"><div class="prod-info">Móvel</div><input type="number" id="movQtd" placeholder="Qtd" oninput="calcularTotalVenda()"><input type="number" id="movVal" placeholder="R$ Unit." oninput="calcularTotalVenda()"></div>
+            <div class="prod-row"><div class="prod-info">Fixo</div><input type="number" id="fixQtd" placeholder="Qtd" oninput="calcularTotalVenda()"><input type="number" id="fixVal" placeholder="R$ Unit." oninput="calcularTotalVenda()"></div>
+            <div style="margin-top:10px; text-align:right; font-weight:700;">Total: <span id="vendaTotalText" style="color:var(--primary)">R$ 0.00</span></div>
         </div>
 
-        <div class="input-group">
-            <label>Data de Instalação (Agendamento)</label>
-            <input type="date" id="dataInstalacao">
-        </div>
-
-        <div class="input-group">
-            <label>Status Inicial</label>
-            <select id="status">
-                <option value="pendente">Pendente</option>
-                <option value="instalado">Instalado</option>
-                <option value="nao">Não instalado</option>
-            </select>
-        </div>
-        <button class="btn btn-primary" onclick="salvar()">Salvar Registro</button>
+        <div class="input-group"><label>Data Instalação</label><input type="date" id="dataInstalacao"></div>
+        <div class="input-group"><label>Status</label><select id="status"><option value="pendente">Pendente</option><option value="instalado">Instalado</option><option value="nao">Não</option></select></div>
+        <button class="btn btn-primary" onclick="salvar()">Salvar</button>
     </div>
     <button class="btn btn-secondary" onclick="abrir('menu')">Cancelar</button>
 </div>
 
 <div id="clientes" class="tela">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px">
-        <h2 style="margin:0">Carteira</h2>
-        <i data-lucide="search" size="20" color="var(--text-muted)"></i>
-    </div>
-    <input id="busca" placeholder="Filtrar por nome..." onkeyup="buscar()" style="margin-bottom:20px">
+    <h2>Carteira</h2>
+    <input id="busca" placeholder="Buscar..." onkeyup="buscar()" style="margin-bottom:20px">
     <div id="listaClientes"></div>
-    <button class="btn btn-secondary" onclick="abrir('menu')" style="margin-top: 20px;">Voltar</button>
+    <button class="btn btn-secondary" onclick="abrir('menu')">Voltar</button>
 </div>
 
 <div id="comissao" class="tela">
-    <h2>Minhas Metas</h2>
+    <h2>Performance</h2>
     
-    <div class="card stat-grid" style="background: rgba(139, 92, 246, 0.05); border: 1px dashed var(--primary);">
-        <div>
-            <label style="font-size:12px;">Meta: Vendas (Qtd)</label>
-            <input type="number" id="confMetaQtd" onchange="atualizarConfig()" style="padding:10px;">
-        </div>
-        <div>
-            <label style="font-size:12px;">Meta: R$ Ganho</label>
-            <input type="number" id="confMetaVal" onchange="atualizarConfig()" style="padding:10px;">
-        </div>
+    <div class="card stat-grid">
+        <div><label>Meta Qtd</label><input type="number" id="confMetaQtd" onchange="atualizarConfig()"></div>
+        <div><label>Meta R$</label><input type="number" id="confMetaVal" onchange="atualizarConfig()"></div>
     </div>
 
     <div class="card">
-        <div style="display:flex; justify-content:space-between">
-            <span class="stat-label">Progresso de Instalações</span>
-            <span id="metaQtdTxt" class="stat-label" style="color:#fff; font-weight: 700;">0/0</span>
-        </div>
-        <div class="progress-container">
-            <div id="progressoQtd" class="progress-bar"></div>
-        </div>
+        <span class="stat-label">Progresso Qtd</span> <span id="metaQtdTxt" style="float:right">0/0</span>
+        <div class="progress-container"><div id="progressoQtd" class="progress-bar"></div></div>
         
-        <div style="display:flex; justify-content:space-between; margin-top:25px;">
-            <span class="stat-label">Ganho Acumulado</span>
-            <span id="metaValTxt" class="stat-label" style="color:var(--success); font-weight: 700;">R$ 0 / R$ 0</span>
-        </div>
-        <div class="progress-container">
-            <div id="progressoVal" class="progress-bar progress-bar-money"></div>
-        </div>
+        <span class="stat-label">Progresso R$</span> <span id="metaValTxt" style="float:right">R$ 0/0</span>
+        <div class="progress-container"><div id="progressoVal" class="progress-bar progress-bar-money"></div></div>
         
-        <span id="totalComissao" style="font-size:32px; font-weight:700; color: var(--success); display: block; margin-top: 10px;">R$ 0.00</span>
-        <div id="faltaDinheiro" style="font-size: 14px; color: var(--warning); margin-top: 5px; font-weight: 600;"></div>
-        <p style="font-size: 12px; color: var(--text-muted); margin-top: 15px;">*Toda venda inclui R$ 4,00 fixos + comissão de faixa.</p>
+        <span id="totalComissao" style="font-size:32px; font-weight:700; color: var(--success); display:block">R$ 0.00</span>
+        <div id="faltaDinheiro" style="font-size:14px; margin-top:5px; font-weight:600;"></div>
+    </div>
+
+    <div class="card">
+        <h3 style="margin-top:0">Simulador de Faixas</h3>
+        <p style="font-size:12px; color:var(--text-muted)">Veja quanto ganharia se a venda fosse hoje:</p>
+        <input id="valorSim" type="number" placeholder="Valor total da venda (Ex: 150)" onkeyup="simular()">
+        <div id="resultadoSim" style="margin-top:15px; background:rgba(0,0,0,0.2); border-radius:12px; padding:10px;"></div>
     </div>
 
     <button class="btn btn-secondary" onclick="abrir('menu')">Voltar</button>
@@ -265,222 +191,117 @@
     function abrir(id){
         document.querySelectorAll(".tela").forEach(t=>t.classList.remove("ativa"));
         document.getElementById(id).classList.add("ativa");
-        
         if(id==="menu") checarLembretes();
         if(id==="clientes") renderClientes(clientes);
         if(id==="dashboard") renderDash();
         if(id==="comissao") renderComissao();
-        
-        if(id==="cadastro") {
-            valorTotalAtual = 0;
-            document.getElementById('vendaTotalText').innerText = "R$ 0.00";
-            ['nome','telefone','dataInstalacao','tvQtd','tvVal','intQtd','intVal','movQtd','movVal','fixQtd','fixVal'].forEach(id => document.getElementById(id).value = "");
-        }
         lucide.createIcons();
     }
 
-    /* --- SISTEMA DE LEMBRETES (NOVO) --- */
     function checarLembretes() {
-        const hojeObj = new Date();
-        // Ajuste de fuso horário local para garantir que pegue o dia correto do celular
-        const hoje = new Date(hojeObj.getTime() - (hojeObj.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
-        
+        const hoje = new Date().toISOString().split('T')[0];
         const agendados = clientes.filter(c => c.status === 'pendente' && c.dataAgendamento === hoje);
-        
         const alerta = document.getElementById('alertaAgendamento');
         if (agendados.length > 0) {
-            document.getElementById('textoAgendamento').innerText = `Você tem ${agendados.length} instalação(ões) agendada(s) para HOJE! Clique para ver.`;
+            document.getElementById('textoAgendamento').innerText = `Hoje você tem ${agendados.length} instalação(ões)!`;
             alerta.style.display = "flex";
-        } else {
-            alerta.style.display = "none";
-        }
-    }
-
-    function formatarData(dataStr) {
-        if(!dataStr) return '';
-        const partes = dataStr.split('-');
-        return `${partes[2]}/${partes[1]}/${partes[0]}`; // Retorna DD/MM/YYYY
+        } else alerta.style.display = "none";
     }
 
     function calcularTotalVenda() {
-        const calcularSubtotal = (prefix) => {
-            const qStr = document.getElementById(prefix + 'Qtd').value;
-            const vStr = document.getElementById(prefix + 'Val').value;
-            let q = parseInt(qStr) || 0;
-            let v = parseFloat(vStr) || 0;
-            if (v > 0 && qStr === "") q = 1; 
+        const calc = (p) => {
+            let q = parseInt(document.getElementById(p+'Qtd').value) || 0;
+            let v = parseFloat(document.getElementById(p+'Val').value) || 0;
+            if (v > 0 && !document.getElementById(p+'Qtd').value) q = 1;
             return q * v;
         };
-        valorTotalAtual = calcularSubtotal('tv') + calcularSubtotal('int') + calcularSubtotal('mov') + calcularSubtotal('fix');
+        valorTotalAtual = calc('tv') + calc('int') + calc('mov') + calc('fix');
         document.getElementById('vendaTotalText').innerText = `R$ ${valorTotalAtual.toFixed(2)}`;
     }
 
     function salvar(){
         const n = document.getElementById('nome').value;
-        const t = document.getElementById('telefone').value;
-        const s = document.getElementById('status').value;
-        const dataInst = document.getElementById('dataInstalacao').value; // Novo campo
-
-        if(!n) return toast("Preencha o nome do cliente!", "#ef4444");
-        if(valorTotalAtual <= 0) return toast("Adicione pelo menos um produto com valor!", "#ef4444");
-
-        const getValores = (prefix) => {
-            const qStr = document.getElementById(prefix + 'Qtd').value;
-            let q = parseInt(qStr) || 0;
-            let v = parseFloat(document.getElementById(prefix + 'Val').value) || 0;
-            if (v > 0 && qStr === "") q = 1;
-            return { q: q, v: v };
-        };
-
-        const produtos = { tv: getValores('tv'), net: getValores('int'), mov: getValores('mov'), fix: getValores('fix') };
-
+        if(!n || valorTotalAtual <= 0) return toast("Dados incompletos!", "#ef4444");
         clientes.push({
-            id: Date.now(),
-            nome: n,
-            telefone: t,
-            valor: valorTotalAtual,
-            produtos: produtos,
-            status: s,
-            dataAgendamento: dataInst
+            id: Date.now(), nome: n, telefone: document.getElementById('telefone').value,
+            valor: valorTotalAtual, status: document.getElementById('status').value,
+            dataAgendamento: document.getElementById('dataInstalacao').value
         });
-
-        salvarLocal();
-        toast("Venda registrada com sucesso!");
-        abrir('menu');
-    }
-
-    function renderBadgesProdutos(p) {
-        if(!p) return '';
-        let html = '';
-        if(p.tv?.q > 0) html += `<span class="prod-badge"><i data-lucide="tv" size="12"></i> ${p.tv.q}</span>`;
-        if(p.net?.q > 0) html += `<span class="prod-badge"><i data-lucide="wifi" size="12"></i> ${p.net.q}</span>`;
-        if(p.mov?.q > 0) html += `<span class="prod-badge"><i data-lucide="smartphone" size="12"></i> ${p.mov.q}</span>`;
-        if(p.fix?.q > 0) html += `<span class="prod-badge"><i data-lucide="phone" size="12"></i> ${p.fix.q}</span>`;
-        return html;
+        salvarLocal(); toast("Salvo!"); abrir('menu');
     }
 
     function renderClientes(lista){
         let html = "";
-        lista.slice().reverse().forEach((c) => {
-            const realIdx = clientes.findIndex(item => item.id === c.id);
-            const avisoData = c.dataAgendamento ? `<div style="font-size:12px; color:var(--warning); margin-top:5px;"><i data-lucide="calendar" size="12"></i> Agendado: ${formatarData(c.dataAgendamento)}</div>` : '';
-            
-            html += `
-            <div class="card" style="padding:16px">
-                <div style="display:flex; justify-content:space-between; align-items:start">
-                    <div>
-                        <span class="status-badge badge-${c.status}">${c.status}</span>
-                        <div style="font-weight:600; font-size: 16px; margin-top:10px">${c.nome}</div>
-                        <div style="font-size:13px; color:var(--text-muted); margin-top:2px">${c.telefone || "Sem telefone"}</div>
-                        ${avisoData}
-                        <div>${renderBadgesProdutos(c.produtos)}</div>
-                    </div>
-                    <div style="text-align:right">
-                        <div style="font-weight:700; font-size: 18px; color: var(--primary)">R$ ${c.valor.toFixed(2)}</div>
-                        <button onclick="excluir(${realIdx})" style="background:none; border:none; color:var(--danger); margin-top:15px; cursor:pointer; padding: 5px;"><i data-lucide="trash-2" size="18"></i></button>
-                    </div>
-                </div>
-                <select onchange="mudarStatus(${realIdx}, this.value)" style="margin-top:15px; padding:10px; font-size:13px; background: rgba(0,0,0,0.2)">
-                    <option ${c.status==="pendente"?"selected":""} value="pendente">Status: Pendente</option>
-                    <option ${c.status==="instalado"?"selected":""} value="instalado">Status: Instalado</option>
-                    <option ${c.status==="nao"?"selected":""} value="nao">Status: Não instalado</option>
+        lista.slice().reverse().forEach((c, idx) => {
+            const realIdx = clientes.findIndex(i => i.id === c.id);
+            html += `<div class="card">
+                <span class="status-badge badge-${c.status}">${c.status}</span>
+                <div style="font-weight:700; margin-top:10px">${c.nome} - R$ ${c.valor.toFixed(2)}</div>
+                <div style="font-size:12px; color:var(--text-muted)">${c.dataAgendamento || 'Sem data'}</div>
+                <button onclick="excluir(${realIdx})" style="background:none; border:none; color:var(--danger); float:right"><i data-lucide="trash-2" size="16"></i></button>
+                <select onchange="mudarStatus(${realIdx}, this.value)" style="margin-top:10px; padding:5px; font-size:12px">
+                    <option ${c.status==='pendente'?'selected':''} value="pendente">Pendente</option>
+                    <option ${c.status==='instalado'?'selected':''} value="instalado">Instalado</option>
                 </select>
             </div>`;
         });
-        document.getElementById('listaClientes').innerHTML = html || "<p style='text-align:center; color:var(--text-muted); padding: 20px 0;'>Nenhum cliente encontrado.</p>";
+        document.getElementById('listaClientes').innerHTML = html;
         lucide.createIcons();
     }
 
-    function renderDash(){
-        const total = clientes.length;
-        const inst = clientes.filter(c => c.status === "instalado");
-        const ticket = total > 0 ? clientes.reduce((acc, c) => acc + c.valor, 0) / total : 0;
-        const conv = total > 0 ? (inst.length / total * 100) : 0;
-        document.getElementById('dash-total').innerText = total;
-        document.getElementById('dash-inst').innerText = inst.length;
-        document.getElementById('dash-ticket').innerText = `R$ ${ticket.toFixed(0)}`;
-        document.getElementById('dash-conv').innerText = `${conv.toFixed(1)}%`;
-        
-        let previsao = 0;
-        inst.forEach(c => { previsao += calcularComissaoIndividual(c.valor, inst.length); });
-        document.getElementById('dash-previsao').innerText = `R$ ${previsao.toFixed(2)}`;
-    }
-
-    /* --- GESTÃO DE METAS (NOVO) --- */
     function atualizarConfig() {
-        const vQtd = parseInt(document.getElementById('confMetaQtd').value) || 1;
-        const vDin = parseFloat(document.getElementById('confMetaVal').value) || 1;
-        config.metaInst = vQtd;
-        config.metaDinheiro = vDin;
+        config.metaInst = parseInt(document.getElementById('confMetaQtd').value) || 1;
+        config.metaDinheiro = parseFloat(document.getElementById('confMetaVal').value) || 1;
         localStorage.setItem('controlComConfig', JSON.stringify(config));
-        renderComissao(); // Re-renderiza a tela para atualizar as barras em tempo real
-        toast("Metas atualizadas!");
+        renderComissao();
     }
 
     function renderComissao(){
-        // Preencher os inputs com as configurações salvas
         document.getElementById('confMetaQtd').value = config.metaInst;
         document.getElementById('confMetaVal').value = config.metaDinheiro;
-
         const inst = clientes.filter(c => c.status === "instalado");
-        const qtd = inst.length;
-        let ganhoTotal = 0;
-        inst.forEach(c => ganhoTotal += calcularComissaoIndividual(c.valor, qtd));
-
+        let ganhoTotal = 0; inst.forEach(c => ganhoTotal += calcCom(c.valor, inst.length));
         document.getElementById('totalComissao').innerText = `R$ ${ganhoTotal.toFixed(2)}`;
-        
-        // Progressão Instalações (QTD)
-        document.getElementById('metaQtdTxt').innerText = `${qtd}/${config.metaInst}`;
-        const pctQtd = Math.min((qtd / config.metaInst) * 100, 100);
-        document.getElementById('progressoQtd').style.width = `${pctQtd}%`;
-
-        // Progressão Dinheiro (R$)
-        document.getElementById('metaValTxt').innerText = `R$ ${ganhoTotal.toFixed(0)} / R$ ${config.metaDinheiro}`;
-        const pctVal = Math.min((ganhoTotal / config.metaDinheiro) * 100, 100);
-        document.getElementById('progressoVal').style.width = `${pctVal}%`;
-
-        // Mensagem de "Quanto Falta"
+        document.getElementById('metaQtdTxt').innerText = `${inst.length}/${config.metaInst}`;
+        document.getElementById('progressoQtd').style.width = `${(inst.length/config.metaInst)*100}%`;
+        document.getElementById('metaValTxt').innerText = `R$ ${ganhoTotal.toFixed(0)}/${config.metaDinheiro}`;
+        document.getElementById('progressoVal').style.width = `${(ganhoTotal/config.metaDinheiro)*100}%`;
         const falta = config.metaDinheiro - ganhoTotal;
-        if (falta > 0) {
-            document.getElementById('faltaDinheiro').innerText = `🔥 Faltam R$ ${falta.toFixed(2)} para bater sua meta financeira!`;
-            document.getElementById('faltaDinheiro').style.color = "var(--warning)";
-        } else {
-            document.getElementById('faltaDinheiro').innerText = `🎉 PARABÉNS! Você bateu sua meta financeira!`;
-            document.getElementById('faltaDinheiro').style.color = "var(--success)";
-        }
+        document.getElementById('faltaDinheiro').innerText = falta > 0 ? `Faltam R$ ${falta.toFixed(2)}` : "Meta batida! 🎉";
+        document.getElementById('faltaDinheiro').style.color = falta > 0 ? "var(--warning)" : "var(--success)";
     }
 
-    function calcularComissaoIndividual(valor, qtdTotal){
-        const f = faixa(valor);
-        const tab = tabela(qtdTotal);
-        let comissaoBase = 4;
-        let comissaoFaixa = (f === 0) ? 0 : tab[f-1];
-        return comissaoBase + comissaoFaixa;
+    function simular(){
+        const v = parseFloat(document.getElementById('valorSim').value);
+        if(!v) return document.getElementById('resultadoSim').innerHTML = "";
+        let html = "";
+        [8, 10, 12, 15].forEach(n => {
+            html += `<div style="display:flex; justify-content:space-between; padding:5px 0; font-size:13px">
+                <span>Com ${n} inst.</span><b>R$ ${calcCom(v, n).toFixed(2)}</b>
+            </div>`;
+        });
+        document.getElementById('resultadoSim').innerHTML = html;
     }
 
-    function faixa(v){ if(v<=90) return 0; if(v<120) return 1; if(v<150) return 2; if(v<180) return 3; if(v<200) return 4; return 5; }
-
-    function tabela(i){
-        if(i>=15) return [20, 28.8, 45, 67.5, 93.75];
-        if(i>=12) return [15, 21.6, 33.75, 50.63, 70.31];
-        if(i>=10) return [12, 17.28, 27, 40.5, 56.25];
-        if(i>=8) return [8, 11.52, 18, 27, 37.5];
-        return [0,0,0,0,0];
+    function calcCom(v, qtd){
+        const f = v<=90?0:v<120?1:v<150?2:v<180?3:v<200?4:5;
+        const t = qtd>=15?[20,28.8,45,67.5,93.75]:qtd>=12?[15,21.6,33.75,50.63,70.31]:qtd>=10?[12,17.28,27,40.5,56.25]:qtd>=8?[8,11.52,18,27,37.5]:[0,0,0,0,0];
+        return 4 + (f===0?0:t[f-1]);
     }
 
-    function toast(msg, color = "var(--success)"){
-        const t = document.getElementById('toast');
-        t.innerText = msg; t.style.background = color;
-        t.style.display = "block";
-        setTimeout(() => t.style.display = "none", 3000);
+    function renderDash(){
+        const inst = clientes.filter(c => c.status === "instalado");
+        document.getElementById('dash-total').innerText = clientes.length;
+        document.getElementById('dash-inst').innerText = inst.length;
+        let p = 0; inst.forEach(c => p += calcCom(c.valor, inst.length));
+        document.getElementById('dash-previsao').innerText = `R$ ${p.toFixed(2)}`;
     }
 
+    function toast(m, c="var(--success)"){ const t = document.getElementById('toast'); t.innerText=m; t.style.background=c; t.style.display="block"; setTimeout(()=>t.style.display="none", 2000); }
     function mudarStatus(i, s){ clientes[i].status = s; salvarLocal(); renderClientes(clientes); }
-    function excluir(i){ if(confirm("Tem certeza que deseja excluir?")){ clientes.splice(i, 1); salvarLocal(); renderClientes(clientes); } }
+    function excluir(i){ if(confirm("Excluir?")){ clientes.splice(i, 1); salvarLocal(); renderClientes(clientes); } }
     function salvarLocal(){ localStorage.setItem('controlComData', JSON.stringify(clientes)); }
-    function buscar(){ const termo = document.getElementById('busca').value.toLowerCase(); renderClientes(clientes.filter(c => c.nome.toLowerCase().includes(termo))); }
-    
-    // Inicia no Menu para checar lembretes ao carregar
+    function buscar(){ const t = document.getElementById('busca').value.toLowerCase(); renderClientes(clientes.filter(c => c.nome.toLowerCase().includes(t))); }
     abrir('entrada');
 </script>
 </body>

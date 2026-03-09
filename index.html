@@ -3,39 +3,40 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ControlComBL PRO</title>
+<title>ControlComBL</title>
 
 <style>
 
 body{
 margin:0;
-font-family:-apple-system,BlinkMacSystemFont;
-background:#121212;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI";
+background:linear-gradient(135deg,#0f172a,#020617);
 color:white;
 }
 
 .tela{
 display:none;
 padding:20px;
-padding-bottom:90px;
+padding-bottom:100px;
 max-width:500px;
 margin:auto;
+animation:fade .4s;
 }
 
-.ativa{
-display:block;
+.ativa{display:block;}
+
+@keyframes fade{
+from{opacity:0; transform:translateY(10px)}
+to{opacity:1}
 }
 
 .card{
-background:#1e1e1e;
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(10px);
 padding:20px;
 border-radius:16px;
 margin-bottom:15px;
-box-shadow:0 5px 15px rgba(0,0,0,0.4);
-}
-
-h1,h2{
-margin-top:0;
+box-shadow:0 10px 25px rgba(0,0,0,0.4);
 }
 
 input,select{
@@ -44,8 +45,7 @@ padding:12px;
 margin-top:10px;
 border-radius:10px;
 border:none;
-font-size:16px;
-background:#2a2a2a;
+background:#1e293b;
 color:white;
 }
 
@@ -56,7 +56,8 @@ margin-top:10px;
 border:none;
 border-radius:12px;
 font-size:16px;
-background:#4f8cff;
+cursor:pointer;
+background:linear-gradient(135deg,#3b82f6,#2563eb);
 color:white;
 }
 
@@ -65,20 +66,20 @@ position:fixed;
 bottom:0;
 left:0;
 width:100%;
-background:#1e1e1e;
+background:#020617;
 display:flex;
 justify-content:space-around;
-padding:10px 0;
-border-top:1px solid #333;
+padding:12px 0;
+border-top:1px solid #1e293b;
 }
 
 .menu button{
 background:none;
-font-size:14px;
+font-size:20px;
 }
 
 .produto{
-background:#2a2a2a;
+background:#1e293b;
 padding:10px;
 border-radius:10px;
 margin-top:10px;
@@ -92,20 +93,21 @@ display:inline-block;
 margin-right:6px;
 }
 
-.instalado{background:#30d158;}
-.pendente{background:#ffd60a;}
-.nao{background:#ff453a;}
+.instalado{background:#22c55e;}
+.pendente{background:#eab308;}
+.nao{background:#ef4444;}
 
 .barra{
 height:16px;
-background:#333;
+background:#1e293b;
 border-radius:10px;
 overflow:hidden;
+margin-top:10px;
 }
 
 #progresso{
 height:16px;
-background:#30d158;
+background:#22c55e;
 width:0%;
 }
 
@@ -114,28 +116,26 @@ width:0%;
 
 <body>
 
-<!-- DASHBOARD -->
-
-<div id="dashboard" class="tela ativa">
-
-<h2>Dashboard</h2>
-
-<div class="card" id="stats"></div>
-
+<div id="inicio" class="tela ativa">
+<h1>ControlComBL</h1>
+<div class="card">
+<p>Sistema de controle de vendas</p>
+<button onclick="abrir('dashboard')">Iniciar</button>
+</div>
 </div>
 
-<!-- NOVO CLIENTE -->
+<div id="dashboard" class="tela">
+<h2>Dashboard</h2>
+<div class="card" id="stats"></div>
+</div>
 
 <div id="novo" class="tela">
 
 <h2>Novo Cliente</h2>
 
 <div class="card">
-
 <input id="nome" placeholder="Nome do cliente">
-
 <input id="telefone" placeholder="Telefone">
-
 </div>
 
 <div class="card">
@@ -152,7 +152,6 @@ width:0%;
 </select>
 
 <input id="quantidade" type="number" placeholder="Quantidade">
-
 <input id="valor" type="number" placeholder="Valor unitário">
 
 <button onclick="addProduto()">Adicionar produto</button>
@@ -173,29 +172,23 @@ width:0%;
 
 </div>
 
-<!-- CLIENTES -->
-
 <div id="clientes" class="tela">
 
 <h2>Clientes</h2>
 
-<input id="busca" placeholder="Buscar cliente" onkeyup="buscar()">
+<input id="busca" placeholder="Buscar cliente">
 
 <div id="listaClientes"></div>
 
 </div>
-
-<!-- COMISSÕES -->
 
 <div id="comissao" class="tela">
 
 <h2>Comissões</h2>
 
 <div class="card">
-
 Instalações: <span id="inst"></span><br>
 Comissão total: R$ <span id="totalCom"></span>
-
 </div>
 
 <div class="card">
@@ -212,63 +205,50 @@ Meta mensal
 
 </div>
 
-<!-- MENU INFERIOR -->
-
 <div class="menu">
-
 <button onclick="abrir('dashboard')">📊</button>
 <button onclick="abrir('novo')">➕</button>
 <button onclick="abrir('clientes')">👥</button>
 <button onclick="abrir('comissao')">💰</button>
-
 </div>
 
 <script>
 
-let clientes=JSON.parse(localStorage.getItem("clientes"))||[]
-
-let produtosTemp=[]
+let clientes = JSON.parse(localStorage.getItem("clientes")) || []
+let produtosTemp = []
 
 function salvarLocal(){
-
 localStorage.setItem("clientes",JSON.stringify(clientes))
-
 }
 
 function abrir(id){
 
 document.querySelectorAll(".tela").forEach(t=>t.classList.remove("ativa"))
-
 document.getElementById(id).classList.add("ativa")
 
 if(id==="dashboard")renderDash()
-
 if(id==="clientes")renderClientes()
-
 if(id==="comissao")renderComissao()
 
 }
 
 function addProduto(){
 
-let tipo=tipoProduto.value
-let q=parseFloat(quantidade.value)
-let v=parseFloat(valor.value)
+let tipo=document.getElementById("tipoProduto").value
+let q=parseFloat(document.getElementById("quantidade").value)
+let v=parseFloat(document.getElementById("valor").value)
 
-if(!q||!v)return
+if(!q||!v){
+alert("Preencha quantidade e valor")
+return
+}
 
-produtosTemp.push({
-
-tipo:tipo,
-q:q,
-v:v
-
-})
+produtosTemp.push({tipo,q,v})
 
 renderProdutos()
 
-quantidade.value=""
-valor.value=""
+document.getElementById("quantidade").value=""
+document.getElementById("valor").value=""
 
 }
 
@@ -277,42 +257,42 @@ function renderProdutos(){
 let html=""
 
 produtosTemp.forEach(p=>{
-
-html+=`
-
-<div class="produto">
-
-${p.tipo} | ${p.q} x ${p.v}
-
-</div>
-
-`
-
+html+=`<div class="produto">${p.tipo} | ${p.q} x R$ ${p.v}</div>`
 })
 
-listaProdutos.innerHTML=html
+document.getElementById("listaProdutos").innerHTML=html
 
 }
 
 function salvarCliente(){
 
+let nome=document.getElementById("nome").value
+let telefone=document.getElementById("telefone").value
+let status=document.getElementById("status").value
+
+if(!nome){
+alert("Digite o nome")
+return
+}
+
 clientes.push({
-
-nome:nome.value,
-telefone:telefone.value,
-status:status.value,
-produtos:produtosTemp
-
+id:Date.now(),
+nome,
+telefone,
+status,
+produtos:[...produtosTemp]
 })
 
 produtosTemp=[]
 
-nome.value=""
-telefone.value=""
+document.getElementById("nome").value=""
+document.getElementById("telefone").value=""
 
 renderProdutos()
 
 salvarLocal()
+
+renderDash()
 
 alert("Cliente salvo")
 
@@ -323,9 +303,7 @@ function totalVenda(produtos){
 let total=0
 
 produtos.forEach(p=>{
-
 total+=p.q*p.v
-
 })
 
 return total
@@ -335,34 +313,29 @@ return total
 function renderDash(){
 
 let totalClientes=clientes.length
-
 let instalados=clientes.filter(c=>c.status==="instalado").length
 
 let totalVendas=0
 
 clientes.forEach(c=>{
-
 totalVendas+=totalVenda(c.produtos)
-
 })
 
-stats.innerHTML=`
+document.getElementById("stats").innerHTML=`
 
-Clientes: ${totalClientes}<br>
-
+Clientes cadastrados: ${totalClientes}<br>
 Instalações: ${instalados}<br>
-
 Total vendido: R$ ${totalVendas.toFixed(2)}
 
 `
 
 }
 
-function renderClientes(){
+function renderClientes(lista=clientes){
 
 let html=""
 
-clientes.forEach((c,i)=>{
+lista.forEach((c)=>{
 
 let total=totalVenda(c.produtos)
 
@@ -378,7 +351,7 @@ html+=`
 
 💰 R$ ${total.toFixed(2)}
 
-<button onclick="excluir(${i})">Excluir</button>
+<button onclick="excluir(${c.id})">Excluir</button>
 
 </div>
 
@@ -386,39 +359,32 @@ html+=`
 
 })
 
-listaClientes.innerHTML=html
+document.getElementById("listaClientes").innerHTML=html
 
 }
 
-function excluir(i){
+document.getElementById("busca").addEventListener("input",function(){
 
-clientes.splice(i,1)
+let termo=this.value.toLowerCase()
+
+let filtrados=clientes.filter(c=>
+(c.nome||"").toLowerCase().includes(termo) ||
+(c.telefone||"").toLowerCase().includes(termo)
+)
+
+renderClientes(filtrados)
+
+})
+
+function excluir(id){
+
+clientes=clientes.filter(c=>c.id!==id)
 
 salvarLocal()
 
 renderClientes()
 
-}
-
-function buscar(){
-
-let termo=busca.value.toLowerCase()
-
-let filtrados=clientes.filter(c=>
-
-c.nome.toLowerCase().includes(termo)
-
-)
-
-let html=""
-
-filtrados.forEach(c=>{
-
-html+=`<div class="card">${c.nome}</div>`
-
-})
-
-listaClientes.innerHTML=html
+renderDash()
 
 }
 
@@ -428,25 +394,22 @@ let instaladas=clientes.filter(c=>c.status==="instalado")
 
 let qtd=instaladas.length
 
-inst.innerText=qtd
+document.getElementById("inst").innerText=qtd
 
 let total=0
 
 instaladas.forEach(c=>{
-
 let venda=totalVenda(c.produtos)
-
 total+=venda*0.05
-
 })
 
-totalCom.innerText=total.toFixed(2)
+document.getElementById("totalCom").innerText=total.toFixed(2)
 
 let metaValor=15
 
-meta.innerText=qtd+" / "+metaValor
+document.getElementById("meta").innerText=qtd+" / "+metaValor
 
-progresso.style.width=(qtd/metaValor*100)+"%"
+document.getElementById("progresso").style.width=(qtd/metaValor*100)+"%"
 
 }
 

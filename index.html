@@ -1,469 +1,274 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>ControlComBL</title>
-
-<style>
-
-body{
-margin:0;
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI";
-background:#0f0f14;
-color:white;
-}
-
-.topo{
-padding:25px;
-background:linear-gradient(135deg,#8a05be,#6a00a3);
-border-bottom-left-radius:30px;
-border-bottom-right-radius:30px;
-}
-
-.titulo{
-font-size:22px;
-font-weight:bold;
-}
-
-.saldo{
-font-size:30px;
-margin-top:10px;
-}
-
-.tela{
-display:none;
-padding:20px;
-padding-bottom:100px;
-max-width:500px;
-margin:auto;
-}
-
-.ativa{display:block;}
-
-.card{
-background:#18181f;
-border-radius:18px;
-padding:18px;
-margin-bottom:15px;
-box-shadow:0 8px 20px rgba(0,0,0,0.4);
-}
-
-input,select{
-width:100%;
-padding:12px;
-border:none;
-border-radius:12px;
-background:#24242c;
-color:white;
-margin-top:10px;
-}
-
-button{
-width:100%;
-padding:14px;
-border:none;
-border-radius:14px;
-margin-top:10px;
-background:#8a05be;
-color:white;
-font-size:15px;
-}
-
-.menu{
-position:fixed;
-bottom:0;
-width:100%;
-background:#18181f;
-display:flex;
-justify-content:space-around;
-padding:10px 0;
-}
-
-.menu button{
-background:none;
-font-size:20px;
-}
-
-.produto{
-background:#24242c;
-padding:10px;
-border-radius:10px;
-margin-top:10px;
-}
-
-.status{
-width:10px;
-height:10px;
-border-radius:50%;
-display:inline-block;
-margin-right:5px;
-}
-
-.instalado{background:#22c55e;}
-.pendente{background:#eab308;}
-.nao{background:#ef4444;}
-
-.barra{
-height:12px;
-background:#24242c;
-border-radius:10px;
-overflow:hidden;
-margin-top:10px;
-}
-
-#progresso{
-height:12px;
-background:#8a05be;
-width:0%;
-}
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ControlComBL</title>
+    <style>
+        body{ margin:0; font-family:-apple-system,BlinkMacSystemFont; background:#1c1c1e; color:#fff; }
+        .tela{ display:none; padding:20px; max-width:500px; margin:auto; }
+        .ativa{ display:block; }
+        .card{ background:#2c2c2e; padding:20px; border-radius:14px; margin-bottom:15px; }
+        h1,h2{ text-align:center; }
+        button{ width:100%; padding:14px; margin-top:10px; border:none; border-radius:12px; font-size:17px; background:#0a84ff; color:white; cursor:pointer; }
+        input,select{ width:100%; padding:12px; margin-top:10px; border-radius:10px; border:none; font-size:16px; box-sizing: border-box; }
+        .status{ width:14px; height:14px; border-radius:50%; display:inline-block; margin-right:8px; }
+        .instalado{background:#30d158;}
+        .pendente{background:#ffd60a;}
+        .nao{background:#ff453a;}
+        .barra{ width:100%; height:18px; background:#444; border-radius:10px; overflow:hidden; margin-top:10px; }
+        #progresso{ height:18px; background:#30d158; width:0%; transition: 0.3s; }
+        .popup{ position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#30d158; padding:12px 20px; border-radius:10px; display:none; z-index: 100; }
+        hr { border: 0; border-top: 1px solid #444; margin: 15px 0; }
+    </style>
 </head>
-
 <body>
 
-<div id="dashboard" class="tela ativa">
+<div id="popup" class="popup"></div>
 
-<div class="topo">
-
-<div class="titulo">
-ControlComBL
+<div id="entrada" class="tela ativa">
+    <h1>ControlComBL</h1>
+    <div class="card">
+        <p style="text-align:center">Sistema de controle de vendas</p>
+        <button onclick="abrir('menu')">Entrar no app</button>
+    </div>
 </div>
 
-<div class="saldo">
-R$ <span id="totalCom">0</span>
+<div id="menu" class="tela">
+    <h2>Menu</h2>
+    <div class="card">
+        <button onclick="abrir('dashboard')">📊 Dashboard</button>
+        <button onclick="abrir('cadastro')">👤 Cadastrar Cliente</button>
+        <button onclick="abrir('clientes')">📋 Clientes</button>
+        <button onclick="abrir('vendas')">💳 Vendas</button>
+        <button onclick="abrir('comissao')">💰 Comissões</button>
+    </div>
+    <button style="background:#ff453a" onclick="abrir('entrada')">⬅ Sair</button>
 </div>
 
+<div id="dashboard" class="tela">
+    <h2>Dashboard</h2>
+    <div class="card" id="dash"></div>
+    <button onclick="abrir('menu')">⬅ Menu</button>
 </div>
 
-<div class="card" id="stats"></div>
-
+<div id="cadastro" class="tela">
+    <h2>Novo Cliente</h2>
+    <div class="card">
+        <input id="nome" placeholder="Nome">
+        <input id="telefone" placeholder="Telefone">
+        <input id="valor" type="number" placeholder="Valor da venda">
+        <select id="status">
+            <option value="pendente">Pendente</option>
+            <option value="instalado">Instalado</option>
+            <option value="nao">Não instalado</option>
+        </select>
+        <button onclick="salvar()">Salvar</button>
+    </div>
+    <button onclick="abrir('menu')">⬅ Menu</button>
 </div>
-
-
-<div id="novo" class="tela">
-
-<h2>Novo cliente</h2>
-
-<div class="card">
-
-<input id="nome" placeholder="Nome">
-<input id="telefone" placeholder="Telefone">
-
-</div>
-
-<div class="card">
-
-<h3>Produto</h3>
-
-<div id="listaProdutos"></div>
-
-<select id="tipoProduto">
-<option>Internet</option>
-<option>TV</option>
-<option>Móvel</option>
-<option>Fixo</option>
-</select>
-
-<input id="quantidade" type="number" placeholder="Quantidade">
-<input id="valor" type="number" placeholder="Valor unitário">
-
-<button onclick="addProduto()">Adicionar produto</button>
-
-</div>
-
-<div class="card">
-
-<select id="status">
-<option value="pendente">Pendente</option>
-<option value="instalado">Instalado</option>
-<option value="nao">Não instalado</option>
-</select>
-
-<button onclick="salvarCliente()">Salvar cliente</button>
-
-</div>
-
-</div>
-
 
 <div id="clientes" class="tela">
-
-<h2>Clientes</h2>
-
-<input id="busca" placeholder="Buscar">
-
-<div id="listaClientes"></div>
-
+    <h2>Clientes</h2>
+    <input id="busca" placeholder="Buscar cliente" onkeyup="buscar()">
+    <div class="card" id="listaClientes"></div>
+    <button onclick="abrir('menu')">⬅ Menu</button>
 </div>
 
+<div id="vendas" class="tela">
+    <h2>Vendas</h2>
+    <div class="card" id="listaVendas"></div>
+    <button onclick="abrir('menu')">⬅ Menu</button>
+</div>
 
 <div id="comissao" class="tela">
-
-<h2>Comissão</h2>
-
-<div class="card">
-
-Instalações: <span id="inst"></span>
-
-<div id="meta"></div>
-
-<div class="barra">
-<div id="progresso"></div>
+    <h2>Comissões</h2>
+    <div class="card">
+        Instalações: <span id="inst">0</span><br>
+        Comissão total: R$ <span id="total">0.00</span>
+    </div>
+    <div class="card">
+        Meta mensal: <span id="metaTxt">0 / 15</span>
+        <div class="barra"><div id="progresso"></div></div>
+    </div>
+    <div class="card">
+        <h3>Detalhes</h3>
+        <div id="detalhes"></div>
+    </div>
+    <div class="card">
+        <h3>Simulador</h3>
+        <input id="valorSim" type="number" placeholder="Valor da venda">
+        <button onclick="simular()">Simular</button>
+        <div id="resultadoSim" style="margin-top:10px"></div>
+    </div>
+    <button onclick="abrir('menu')">⬅ Menu</button>
 </div>
-
-</div>
-
-</div>
-
-
-<div class="menu">
-
-<button onclick="abrir('dashboard')">🏠</button>
-<button onclick="abrir('novo')">➕</button>
-<button onclick="abrir('clientes')">👥</button>
-<button onclick="abrir('comissao')">💰</button>
-
-</div>
-
 
 <script>
-
-let clientes=JSON.parse(localStorage.getItem("clientes"))||[]
-let produtosTemp=[]
-
-function salvarLocal(){
-localStorage.setItem("clientes",JSON.stringify(clientes))
-}
+let clientes = [];
 
 function abrir(id){
-
-document.querySelectorAll(".tela").forEach(t=>t.classList.remove("ativa"))
-document.getElementById(id).classList.add("ativa")
-
-renderDash()
-renderClientes()
-renderComissao()
-
+    document.querySelectorAll(".tela").forEach(t=>t.classList.remove("ativa"));
+    document.getElementById(id).classList.add("ativa");
+    
+    if(id==="clientes") renderClientes();
+    if(id==="dashboard") renderDash();
+    if(id==="vendas") renderVendas();
+    if(id==="comissao") renderComissao();
 }
 
-function addProduto(){
+function salvar(){
+    const nomeInput = document.getElementById('nome');
+    const telInput = document.getElementById('telefone');
+    const valorInput = document.getElementById('valor');
+    const statusInput = document.getElementById('status');
 
-let tipo=tipoProduto.value
-let q=parseFloat(quantidade.value)
-let v=parseFloat(valor.value)
+    if(!nomeInput.value || !valorInput.value) {
+        alert("Preencha nome e valor!");
+        return;
+    }
 
-if(!q||!v)return
+    clientes.push({
+        nome: nomeInput.value,
+        telefone: telInput.value,
+        valor: parseFloat(valorInput.value),
+        status: statusInput.value
+    });
 
-produtosTemp.push({tipo,q,v})
-
-renderProdutos()
-
-quantidade.value=""
-valor.value=""
-
+    mostrarPopup("Cliente cadastrado!");
+    nomeInput.value = "";
+    telInput.value = "";
+    valorInput.value = "";
 }
 
-function renderProdutos(){
-
-let html=""
-
-produtosTemp.forEach(p=>{
-
-html+=`<div class="produto">${p.tipo} | ${p.q} x ${p.v}</div>`
-
-})
-
-listaProdutos.innerHTML=html
-
+function renderClientes(){
+    let html = "";
+    clientes.forEach((c, i) => {
+        html += `
+        <div>
+            <span class="status ${c.status}"></span>
+            <b>${c.nome}</b><br>
+            📞 ${c.telefone}<br>
+            💰 R$ ${c.valor.toFixed(2)}
+            <select onchange="mudarStatus(${i}, this.value)">
+                <option ${c.status==="pendente"?"selected":""} value="pendente">Pendente</option>
+                <option ${c.status==="instalado"?"selected":""} value="instalado">Instalado</option>
+                <option ${c.status==="nao"?"selected":""} value="nao">Não instalado</option>
+            </select>
+            <button style="background:#ff453a; padding:8px; font-size:14px" onclick="excluir(${i})">Excluir</button>
+            <hr>
+        </div>`;
+    });
+    document.getElementById('listaClientes').innerHTML = html || "Nenhum cliente cadastrado.";
 }
 
-function salvarCliente(){
-
-clientes.push({
-id:Date.now(),
-nome:nome.value,
-telefone:telefone.value,
-status:status.value,
-produtos:[...produtosTemp]
-})
-
-produtosTemp=[]
-
-nome.value=""
-telefone.value=""
-
-renderProdutos()
-
-salvarLocal()
-
-renderDash()
-
+function renderVendas(){
+    let html = "";
+    clientes.forEach(c => {
+        html += `<b>${c.nome}</b><br>Valor: R$ ${c.valor.toFixed(2)}<br>Status: ${c.status}<hr>`;
+    });
+    document.getElementById('listaVendas').innerHTML = html || "Sem vendas registradas.";
 }
 
-function totalVenda(produtos){
-
-let total=0
-
-produtos.forEach(p=>{
-
-total+=p.q*p.v
-
-})
-
-return total
-
+function mudarStatus(i, s){
+    clientes[i].status = s;
+    renderClientes();
 }
 
-function calcularComissao(valor,instaladas){
-
-if(valor<=90)return 4
-
-let faixa=1
-
-if(valor<=119.99)faixa=1
-else if(valor<=149.99)faixa=2
-else if(valor<=179.99)faixa=3
-else if(valor<=199.99)faixa=4
-else faixa=5
-
-let tabela={
-
-8:[8,11.52,18,27,37.5],
-10:[12,17.28,27,40.5,56.25],
-12:[15,21.6,33.75,50.63,70.31],
-15:[20,28.8,45,67.5,93.75]
-
+function excluir(i){
+    if(confirm("Deseja excluir este cliente?")) {
+        clientes.splice(i, 1);
+        renderClientes();
+    }
 }
 
-let chave=8
+function buscar(){
+    let termo = normalizar(document.getElementById('busca').value);
+    let filtrados = clientes.filter(c => 
+        normalizar(c.nome).includes(termo) || normalizar(c.telefone).includes(termo)
+    );
+    
+    let html = "";
+    filtrados.forEach((c, i) => {
+        html += `<div><span class="status ${c.status}"></span> ${c.nome} - R$ ${c.valor}</div><hr>`;
+    });
+    document.getElementById('listaClientes').innerHTML = html;
+}
 
-if(instaladas>=15)chave=15
-else if(instaladas>=12)chave=12
-else if(instaladas>=10)chave=10
-else chave=8
-
-return tabela[chave][faixa-1]
-
+function normalizar(t){
+    return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
 }
 
 function renderDash(){
-
-let totalClientes=clientes.length
-
-let instalados=clientes.filter(c=>c.status==="instalado").length
-
-let total=0
-
-clientes.forEach(c=>{
-
-total+=totalVenda(c.produtos)
-
-})
-
-stats.innerHTML=`
-
-Clientes: ${totalClientes}<br>
-Instalações: ${instalados}<br>
-Total vendido: R$ ${total.toFixed(2)}
-
-`
-
+    let total = clientes.length;
+    let instalados = clientes.filter(c=>c.status==="instalado").length;
+    document.getElementById('dash').innerHTML = `
+        Clientes cadastrados: ${total}<br>
+        Instalações concluídas: ${instalados}
+    `;
 }
 
-function renderClientes(lista=clientes){
-
-let html=""
-
-lista.forEach(c=>{
-
-let total=totalVenda(c.produtos)
-
-html+=`
-
-<div class="card">
-
-<span class="status ${c.status}"></span>
-
-<b>${c.nome}</b><br>
-
-📞 ${c.telefone}<br>
-
-💰 R$ ${total.toFixed(2)}
-
-<button onclick="excluir(${c.id})">Excluir</button>
-
-</div>
-
-`
-
-})
-
-listaClientes.innerHTML=html
-
+function faixa(v){
+    if(v <= 90) return 0;
+    if(v < 120) return 1;
+    if(v < 150) return 2;
+    if(v < 180) return 3;
+    if(v < 200) return 4;
+    return 5;
 }
 
-busca.addEventListener("input",function(){
-
-let termo=this.value.toLowerCase()
-
-let filtrados=clientes.filter(c=>
-
-(c.nome||"").toLowerCase().includes(termo)||
-(c.telefone||"").toLowerCase().includes(termo)
-
-)
-
-renderClientes(filtrados)
-
-})
-
-function excluir(id){
-
-clientes=clientes.filter(c=>c.id!==id)
-
-salvarLocal()
-
-renderClientes()
-
-renderDash()
-
+function tabela(qtdInstalacoes){
+    if(qtdInstalacoes >= 15) return [20, 28.8, 45, 67.5, 93.75];
+    if(qtdInstalacoes >= 12) return [15, 21.6, 33.75, 50.63, 70.31];
+    if(qtdInstalacoes >= 10) return [12, 17.28, 27, 40.5, 56.25];
+    if(qtdInstalacoes >= 8)  return [8, 11.52, 18, 27, 37.5];
+    return [0, 0, 0, 0, 0];
 }
 
 function renderComissao(){
+    let instaladas = clientes.filter(c => c.status === "instalado");
+    let qtd = instaladas.length;
+    let tab = tabela(qtd);
+    let totalCom = 0;
+    let html = "";
 
-let instaladas=clientes.filter(c=>c.status==="instalado")
+    instaladas.forEach(c => {
+        let f = faixa(c.valor);
+        let com = (f === 0 || tab[f-1] === undefined) ? 4 : tab[f-1];
+        totalCom += com;
+        html += `${c.nome} → R$ ${com.toFixed(2)}<br>`;
+    });
 
-let qtd=instaladas.length
-
-inst.innerText=qtd
-
-let total=0
-
-instaladas.forEach(c=>{
-
-let venda=totalVenda(c.produtos)
-
-total+=calcularComissao(venda,qtd)
-
-})
-
-totalCom.innerText=total.toFixed(2)
-
-let metaValor=15
-
-meta.innerText=qtd+" / "+metaValor
-
-progresso.style.width=(qtd/metaValor*100)+"%"
-
+    document.getElementById('inst').innerText = qtd;
+    document.getElementById('total').innerText = totalCom.toFixed(2);
+    document.getElementById('detalhes').innerHTML = html || "Nenhuma instalação concluída.";
+    
+    let metaObjetivo = 15;
+    document.getElementById('metaTxt').innerText = `${qtd} / ${metaObjetivo}`;
+    document.getElementById('progresso').style.width = Math.min((qtd / metaObjetivo * 100), 100) + "%";
 }
 
-renderDash()
-renderClientes()
-renderComissao()
+function simular(){
+    let vSim = parseFloat(document.getElementById('valorSim').value);
+    if(isNaN(vSim)) return;
+    let niveis = [8, 10, 12, 15];
+    let html = "";
 
+    niveis.forEach(n => {
+        let tab = tabela(n);
+        let f = faixa(vSim);
+        let com = (f === 0 || tab[f-1] === undefined) ? 4 : tab[f-1];
+        html += `Com ${n} inst. → <b>R$ ${com.toFixed(2)}</b><br>`;
+    });
+    document.getElementById('resultadoSim').innerHTML = html;
+}
+
+function mostrarPopup(msg){
+    const el = document.getElementById('popup');
+    el.innerText = msg;
+    el.style.display = "block";
+    setTimeout(() => el.style.display = "none", 2500);
+}
 </script>
 
 </body>

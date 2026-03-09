@@ -125,11 +125,12 @@
         .btn-secondary { background: var(--border); color: white; margin-top: 10px; }
         .btn-secondary:active { background: #475569; transform: scale(0.98); }
 
-        /* Produtos Grid (Novo) */
+        /* Produtos Grid (Melhorado) */
         .prod-row {
-            display: flex;
+            display: grid;
+            grid-template-columns: 90px 70px 1fr;
+            gap: 8px;
             align-items: center;
-            gap: 10px;
             background: rgba(0,0,0,0.15);
             padding: 10px;
             border-radius: 12px;
@@ -137,9 +138,10 @@
             margin-bottom: 8px;
         }
         .prod-info {
-            display: flex; align-items: center; gap: 8px; width: 95px; font-size: 14px; font-weight: 600; color: var(--text);
+            display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--text);
         }
-        .prod-row input { padding: 10px; text-align: center; }
+        .prod-row input { padding: 12px 8px; text-align: center; font-size: 14px;}
+        
         .prod-badge {
             display: inline-flex; align-items: center; gap: 4px; background: var(--border); 
             padding: 4px 8px; border-radius: 8px; font-size: 11px; margin-right: 5px; margin-top: 8px; color: var(--text-muted);
@@ -280,31 +282,31 @@
             <label style="margin-bottom: 12px;">Produtos Adicionados</label>
             
             <div class="prod-row">
-                <div class="prod-info"><i data-lucide="tv" size="18" color="#a1a1aa"></i> TV</div>
+                <div class="prod-info"><i data-lucide="tv" size="16" color="#a1a1aa"></i> TV</div>
                 <input type="number" id="tvQtd" placeholder="Qtd" min="0" oninput="calcularTotalVenda()">
-                <input type="number" id="tvVal" placeholder="R$ Total" min="0" style="flex:1" oninput="calcularTotalVenda()">
+                <input type="number" id="tvVal" placeholder="R$ Unit." min="0" step="0.01" oninput="calcularTotalVenda()">
             </div>
             
             <div class="prod-row">
-                <div class="prod-info"><i data-lucide="wifi" size="18" color="#a1a1aa"></i> Internet</div>
+                <div class="prod-info"><i data-lucide="wifi" size="16" color="#a1a1aa"></i> Internet</div>
                 <input type="number" id="intQtd" placeholder="Qtd" min="0" oninput="calcularTotalVenda()">
-                <input type="number" id="intVal" placeholder="R$ Total" min="0" style="flex:1" oninput="calcularTotalVenda()">
+                <input type="number" id="intVal" placeholder="R$ Unit." min="0" step="0.01" oninput="calcularTotalVenda()">
             </div>
             
             <div class="prod-row">
-                <div class="prod-info"><i data-lucide="smartphone" size="18" color="#a1a1aa"></i> Móvel</div>
+                <div class="prod-info"><i data-lucide="smartphone" size="16" color="#a1a1aa"></i> Móvel</div>
                 <input type="number" id="movQtd" placeholder="Qtd" min="0" oninput="calcularTotalVenda()">
-                <input type="number" id="movVal" placeholder="R$ Total" min="0" style="flex:1" oninput="calcularTotalVenda()">
+                <input type="number" id="movVal" placeholder="R$ Unit." min="0" step="0.01" oninput="calcularTotalVenda()">
             </div>
             
             <div class="prod-row">
-                <div class="prod-info"><i data-lucide="phone" size="18" color="#a1a1aa"></i> Fixo</div>
+                <div class="prod-info"><i data-lucide="phone" size="16" color="#a1a1aa"></i> Fixo</div>
                 <input type="number" id="fixQtd" placeholder="Qtd" min="0" oninput="calcularTotalVenda()">
-                <input type="number" id="fixVal" placeholder="R$ Total" min="0" style="flex:1" oninput="calcularTotalVenda()">
+                <input type="number" id="fixVal" placeholder="R$ Unit." min="0" step="0.01" oninput="calcularTotalVenda()">
             </div>
             
             <div style="margin-top:20px; text-align:right; font-size:18px; font-weight:700; background: rgba(139, 92, 246, 0.1); padding: 15px; border-radius: 12px; border: 1px dashed var(--primary);">
-                Valor Total: <span id="vendaTotalText" style="color:var(--primary)">R$ 0.00</span>
+                Total da Venda: <span id="vendaTotalText" style="color:var(--primary)">R$ 0.00</span>
             </div>
         </div>
 
@@ -377,9 +379,22 @@
         lucide.createIcons();
     }
 
+    /* --- NOVA LÓGICA DE CÁLCULO DE PRODUTOS --- */
     function calcularTotalVenda() {
-        const getV = (id) => parseFloat(document.getElementById(id).value) || 0;
-        valorTotalAtual = getV('tvVal') + getV('intVal') + getV('movVal') + getV('fixVal');
+        const calcularSubtotal = (prefix) => {
+            const qStr = document.getElementById(prefix + 'Qtd').value;
+            const vStr = document.getElementById(prefix + 'Val').value;
+            
+            let q = parseInt(qStr) || 0;
+            let v = parseFloat(vStr) || 0;
+
+            // Inteligência: Se digitou o valor mas esqueceu a quantidade, assumimos que é 1
+            if (v > 0 && qStr === "") q = 1;
+            
+            return q * v;
+        };
+
+        valorTotalAtual = calcularSubtotal('tv') + calcularSubtotal('int') + calcularSubtotal('mov') + calcularSubtotal('fix');
         document.getElementById('vendaTotalText').innerText = `R$ ${valorTotalAtual.toFixed(2)}`;
     }
 
@@ -391,14 +406,19 @@
         if(!n) return toast("Preencha o nome do cliente!", "#ef4444");
         if(valorTotalAtual <= 0) return toast("Adicione pelo menos um produto com valor!", "#ef4444");
 
-        const getQ = (id) => parseInt(document.getElementById(id).value) || 0;
-        const getV = (id) => parseFloat(document.getElementById(id).value) || 0;
+        const getValores = (prefix) => {
+            const qStr = document.getElementById(prefix + 'Qtd').value;
+            let q = parseInt(qStr) || 0;
+            let v = parseFloat(document.getElementById(prefix + 'Val').value) || 0;
+            if (v > 0 && qStr === "") q = 1; // Mesma inteligência do cálculo
+            return { q: q, v: v };
+        };
 
         const produtos = {
-            tv: { q: getQ('tvQtd'), v: getV('tvVal') },
-            net: { q: getQ('intQtd'), v: getV('intVal') },
-            mov: { q: getQ('movQtd'), v: getV('movVal') },
-            fix: { q: getQ('fixQtd'), v: getV('fixVal') }
+            tv: getValores('tv'),
+            net: getValores('int'),
+            mov: getValores('mov'),
+            fix: getValores('fix')
         };
 
         clientes.push({
@@ -485,7 +505,6 @@
         document.getElementById('progresso').style.width = `${Math.min((qtd/15)*100, 100)}%`;
     }
 
-    /* --- NOVA REGRA DE COMISSÃO APLICADA AQUI --- */
     function calcularComissaoIndividual(valor, qtdTotal){
         const f = faixa(valor);
         const tab = tabela(qtdTotal);

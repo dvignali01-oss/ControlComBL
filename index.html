@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ControlComBL | Pro Intelligence</title>
     
-    <link rel="icon" type="image/png" href="icon-192.png">
-    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
 
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -26,12 +26,6 @@
             --danger: #ef4444;
             --text: #f8fafc;
             --text-muted: #94a3b8;
-            
-            /* Cores sutis para produtos */
-            --color-tv: rgba(59, 130, 246, 0.15);
-            --color-int: rgba(16, 185, 129, 0.15);
-            --color-mov: rgba(245, 158, 11, 0.15);
-            --color-fix: rgba(239, 68, 68, 0.15);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
@@ -129,22 +123,18 @@
         .btn-secondary { background: var(--border); color: var(--text); margin-top: 12px; }
         .btn-whatsapp { background: #25d366; color: white; margin-top: 15px; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3); }
 
-        /* Estilo customizado para as linhas de produto */
         .prod-row { 
             display: grid; 
-            grid-template-columns: 1fr 75px 90px; 
+            grid-template-columns: 100px 75px 1fr; 
             gap: 10px; 
             align-items: center; 
+            background: rgba(0,0,0,0.2); 
             padding: 12px; 
             border-radius: 14px; 
             border: 1px solid var(--border); 
             margin-bottom: 10px; 
         }
-        .prod-info { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: var(--text); }
-        .prod-tv { background: var(--color-tv); color: #60a5fa; }
-        .prod-int { background: var(--color-int); color: #34d399; }
-        .prod-mov { background: var(--color-mov); color: #fbbf24; }
-        .prod-fix { background: var(--color-fix); color: #f87171; }
+        .prod-info { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--text); }
         
         .status-badge { 
             font-size: 11px; 
@@ -273,25 +263,17 @@
         
         <div class="input-group">
             <label>Produtos</label>
-            <div class="prod-row prod-tv">
-                <div class="prod-info"><i data-lucide="tv" size="16"></i> TV</div>
-                <input type="number" id="tvQtd" placeholder="Qtd" oninput="calcularTotalVenda()">
-                <input type="number" id="tvVal" placeholder="R$" oninput="calcularTotalVenda()">
+            <div style="display: grid; grid-template-columns: 100px 75px 1fr; gap: 10px; align-items: center; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 14px; border: 1px solid var(--border); margin-bottom: 10px;">
+                <div style="font-size: 14px; font-weight: 600;">TV</div><input type="number" id="tvQtd" placeholder="Qtd" oninput="calcularTotalVenda()"><input type="number" id="tvVal" placeholder="R$" oninput="calcularTotalVenda()">
             </div>
-            <div class="prod-row prod-int">
-                <div class="prod-info"><i data-lucide="wifi" size="16"></i> NET</div>
-                <input type="number" id="intQtd" placeholder="Qtd" oninput="calcularTotalVenda()">
-                <input type="number" id="intVal" placeholder="R$" oninput="calcularTotalVenda()">
+            <div style="display: grid; grid-template-columns: 100px 75px 1fr; gap: 10px; align-items: center; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 14px; border: 1px solid var(--border); margin-bottom: 10px;">
+                <div style="font-size: 14px; font-weight: 600;">Net</div><input type="number" id="intQtd" placeholder="Qtd" oninput="calcularTotalVenda()"><input type="number" id="intVal" placeholder="R$" oninput="calcularTotalVenda()">
             </div>
-            <div class="prod-row prod-mov">
-                <div class="prod-info"><i data-lucide="smartphone" size="16"></i> MÓVEL</div>
-                <input type="number" id="movQtd" placeholder="Qtd" oninput="calcularTotalVenda()">
-                <input type="number" id="movVal" placeholder="R$" oninput="calcularTotalVenda()">
+            <div style="display: grid; grid-template-columns: 100px 75px 1fr; gap: 10px; align-items: center; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 14px; border: 1px solid var(--border); margin-bottom: 10px;">
+                <div style="font-size: 14px; font-weight: 600;">Móvel</div><input type="number" id="movQtd" placeholder="Qtd" oninput="calcularTotalVenda()"><input type="number" id="movVal" placeholder="R$" oninput="calcularTotalVenda()">
             </div>
-            <div class="prod-row prod-fix">
-                <div class="prod-info"><i data-lucide="phone" size="16"></i> FIXO</div>
-                <input type="number" id="fixQtd" placeholder="Qtd" oninput="calcularTotalVenda()">
-                <input type="number" id="fixVal" placeholder="R$" oninput="calcularTotalVenda()">
+            <div style="display: grid; grid-template-columns: 100px 75px 1fr; gap: 10px; align-items: center; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 14px; border: 1px solid var(--border); margin-bottom: 10px;">
+                <div style="font-size: 14px; font-weight: 600;">Fixo</div><input type="number" id="fixQtd" placeholder="Qtd" oninput="calcularTotalVenda()"><input type="number" id="fixVal" placeholder="R$" oninput="calcularTotalVenda()">
             </div>
             <div style="margin-top:15px; text-align:right; font-weight:800;">Total: <span id="vendaTotalText" style="color:var(--primary)">R$ 0.00</span></div>
         </div>

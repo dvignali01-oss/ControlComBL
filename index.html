@@ -5,20 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ControlComBL | Pro</title>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg: #09090b;
-            --card: #18181b;
-            --primary: #3b82f6;
-            --primary-hover: #2563eb;
-            --success: #22c55e;
-            --warning: #eab308;
+            /* Paleta Premium - Slate & Neon Violet */
+            --bg: #0f172a;
+            --card: #1e293b;
+            --primary: #8b5cf6;
+            --primary-hover: #7c3aed;
+            --success: #10b981;
+            --warning: #f59e0b;
             --danger: #ef4444;
-            --text: #f4f4f5;
-            --text-muted: #a1a1aa;
-            --border: #27272a;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --input-bg: #0f172a;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -33,24 +35,25 @@
 
         /* Header & Logo */
         .header {
-            padding: 30px 20px;
+            padding: 30px 20px 20px;
             text-align: center;
-            background: linear-gradient(180deg, #1d4ed822 0%, var(--bg) 100%);
+            background: linear-gradient(180deg, rgba(139, 92, 246, 0.15) 0%, var(--bg) 100%);
         }
 
         .logo-container {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
             margin-bottom: 5px;
         }
 
         .logo-icon {
-            background: var(--primary);
-            padding: 8px;
-            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), #d946ef);
+            padding: 10px;
+            border-radius: 14px;
             display: flex;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
         }
 
         /* Telas */
@@ -66,7 +69,7 @@
             padding: 20px;
             border-radius: 20px;
             margin-bottom: 15px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px -5px rgba(0,0,0,0.3);
         }
 
         .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
@@ -74,30 +77,33 @@
         .stat-card {
             background: var(--card);
             border: 1px solid var(--border);
-            padding: 15px;
+            padding: 16px;
             border-radius: 16px;
+            transition: transform 0.2s, border-color 0.2s;
         }
+        
+        button.stat-card:active { transform: scale(0.96); border-color: var(--primary); }
 
-        .stat-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-        .stat-value { font-size: 20px; font-weight: 700; margin-top: 5px; display: block; }
+        .stat-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500;}
+        .stat-value { font-size: 22px; font-weight: 700; margin-top: 6px; display: block; }
 
         /* Inputs & Buttons */
-        .input-group { margin-bottom: 15px; }
-        label { display: block; font-size: 14px; margin-bottom: 6px; color: var(--text-muted); }
+        .input-group { margin-bottom: 18px; }
+        label { display: block; font-size: 14px; margin-bottom: 8px; color: var(--text-muted); font-weight: 500;}
 
         input, select {
             width: 100%;
-            background: #09090b;
+            background: var(--input-bg);
             border: 1px solid var(--border);
             padding: 14px;
             border-radius: 12px;
             color: #fff;
-            font-size: 16px;
+            font-size: 15px;
             outline: none;
-            transition: border 0.2s;
+            transition: border 0.2s, box-shadow 0.2s;
         }
 
-        input:focus { border-color: var(--primary); }
+        input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2); }
 
         .btn {
             width: 100%;
@@ -114,9 +120,30 @@
             transition: 0.2s;
         }
 
-        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3); }
         .btn-primary:active { background: var(--primary-hover); transform: scale(0.98); }
         .btn-secondary { background: var(--border); color: white; margin-top: 10px; }
+        .btn-secondary:active { background: #475569; transform: scale(0.98); }
+
+        /* Produtos Grid (Novo) */
+        .prod-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0,0,0,0.15);
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 8px;
+        }
+        .prod-info {
+            display: flex; align-items: center; gap: 8px; width: 95px; font-size: 14px; font-weight: 600; color: var(--text);
+        }
+        .prod-row input { padding: 10px; text-align: center; }
+        .prod-badge {
+            display: inline-flex; align-items: center; gap: 4px; background: var(--border); 
+            padding: 4px 8px; border-radius: 8px; font-size: 11px; margin-right: 5px; margin-top: 8px; color: var(--text-muted);
+        }
 
         /* Listagem Clientes */
         .cliente-item {
@@ -129,18 +156,20 @@
 
         .status-badge {
             font-size: 11px;
-            padding: 4px 8px;
+            padding: 4px 10px;
             border-radius: 20px;
-            font-weight: 600;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
 
-        .badge-instalado { background: #22c55e22; color: #22c55e; }
-        .badge-pendente { background: #eab30822; color: #eab308; }
-        .badge-nao { background: #ef444422; color: #ef4444; }
+        .badge-instalado { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+        .badge-pendente { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .badge-nao { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
 
         /* Barra de Progresso */
-        .progress-container { background: #27272a; height: 10px; border-radius: 10px; margin: 15px 0; overflow: hidden; }
-        .progress-bar { height: 100%; background: var(--success); width: 0%; transition: 0.5s; }
+        .progress-container { background: var(--border); height: 12px; border-radius: 10px; margin: 15px 0; overflow: hidden; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), #d946ef); width: 0%; transition: 0.8s ease-out; }
 
         /* Toast Popup */
         #toast {
@@ -150,12 +179,13 @@
             transform: translateX(-50%);
             background: var(--success);
             color: white;
-            padding: 12px 25px;
+            padding: 14px 28px;
             border-radius: 30px;
             font-weight: 600;
             display: none;
             z-index: 1000;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.4);
+            animation: fadeIn 0.3s ease;
         }
     </style>
 </head>
@@ -165,17 +195,17 @@
 
 <div class="header">
     <div class="logo-container">
-        <div class="logo-icon"><i data-lucide="layers" size="24" color="white"></i></div>
-        <h1 style="margin:0; font-size: 22px; letter-spacing: -1px;">ControlCom<span style="color:var(--primary)">BL</span></h1>
+        <div class="logo-icon"><i data-lucide="layers" size="26" color="white"></i></div>
+        <h1 style="margin:0; font-size: 24px; letter-spacing: -1px; font-weight: 700;">ControlCom<span style="color:var(--primary)">BL</span></h1>
     </div>
-    <p style="color: var(--text-muted); font-size: 14px; margin-top: 5px;">Sales Performance System</p>
+    <p style="color: var(--text-muted); font-size: 14px; margin-top: 5px;">Sales Performance System Pro</p>
 </div>
 
 <div id="entrada" class="tela ativa">
-    <div class="card" style="text-align: center; margin-top: 40px;">
-        <i data-lucide="shield-check" size="48" color="#3b82f6" style="margin-bottom: 15px;"></i>
-        <h2>Bem-vindo de volta</h2>
-        <p style="color:var(--text-muted)">Gerencie suas vendas e comissões com precisão profissional.</p>
+    <div class="card" style="text-align: center; margin-top: 40px; padding: 40px 20px;">
+        <i data-lucide="shield-check" size="56" color="var(--primary)" style="margin-bottom: 20px; filter: drop-shadow(0 0 10px rgba(139,92,246,0.5));"></i>
+        <h2 style="margin-bottom: 10px;">Bem-vindo de volta</h2>
+        <p style="color:var(--text-muted); margin-bottom: 30px; line-height: 1.5;">Gerencie suas vendas, produtos e comissões com precisão profissional.</p>
         <button class="btn btn-primary" onclick="abrir('menu')">
             Acessar Painel <i data-lucide="arrow-right" size="18"></i>
         </button>
@@ -184,21 +214,21 @@
 
 <div id="menu" class="tela">
     <div class="stat-grid">
-        <button class="stat-card" onclick="abrir('dashboard')" style="text-align:left; cursor:pointer">
-            <i data-lucide="pie-chart" color="#3b82f6"></i>
-            <span class="stat-value" style="font-size:16px; margin-top:10px">Dashboard</span>
+        <button class="stat-card" onclick="abrir('dashboard')" style="text-align:left; cursor:pointer; border: none; outline:none; width: 100%;">
+            <i data-lucide="pie-chart" color="var(--primary)"></i>
+            <span class="stat-value" style="font-size:16px; margin-top:10px; color: var(--text)">Dashboard</span>
         </button>
-        <button class="stat-card" onclick="abrir('cadastro')" style="text-align:left; cursor:pointer">
-            <i data-lucide="user-plus" color="#22c55e"></i>
-            <span class="stat-value" style="font-size:16px; margin-top:10px">Novo Cliente</span>
+        <button class="stat-card" onclick="abrir('cadastro')" style="text-align:left; cursor:pointer; border: none; outline:none; width: 100%;">
+            <i data-lucide="user-plus" color="var(--success)"></i>
+            <span class="stat-value" style="font-size:16px; margin-top:10px; color: var(--text)">Nova Venda</span>
         </button>
-        <button class="stat-card" onclick="abrir('clientes')" style="text-align:left; cursor:pointer">
-            <i data-lucide="users" color="#eab308"></i>
-            <span class="stat-value" style="font-size:16px; margin-top:10px">Listagem</span>
+        <button class="stat-card" onclick="abrir('clientes')" style="text-align:left; cursor:pointer; border: none; outline:none; width: 100%;">
+            <i data-lucide="users" color="var(--warning)"></i>
+            <span class="stat-value" style="font-size:16px; margin-top:10px; color: var(--text)">Carteira</span>
         </button>
-        <button class="stat-card" onclick="abrir('comissao')" style="text-align:left; cursor:pointer">
-            <i data-lucide="dollar-sign" color="#a855f7"></i>
-            <span class="stat-value" style="font-size:16px; margin-top:10px">Ganhos</span>
+        <button class="stat-card" onclick="abrir('comissao')" style="text-align:left; cursor:pointer; border: none; outline:none; width: 100%;">
+            <i data-lucide="dollar-sign" color="#d946ef"></i>
+            <span class="stat-value" style="font-size:16px; margin-top:10px; color: var(--text)">Meus Ganhos</span>
         </button>
     </div>
     <button class="btn btn-secondary" onclick="abrir('entrada')">Sair do sistema</button>
@@ -226,29 +256,58 @@
         </div>
     </div>
 
-    <div class="card">
+    <div class="card" style="border-left: 4px solid var(--primary);">
         <span class="stat-label">Previsão de Recebimento</span>
-        <span id="dash-previsao" class="stat-value" style="color:var(--primary); font-size: 28px;">R$ 0.00</span>
+        <span id="dash-previsao" class="stat-value" style="color:var(--primary); font-size: 32px;">R$ 0.00</span>
     </div>
 
     <button class="btn btn-secondary" onclick="abrir('menu')">Voltar ao Menu</button>
 </div>
 
 <div id="cadastro" class="tela">
-    <h2>Cadastrar Cliente</h2>
+    <h2>Nova Venda</h2>
     <div class="card">
         <div class="input-group">
-            <label>Nome Completo</label>
+            <label>Nome do Cliente</label>
             <input id="nome" placeholder="Ex: João Silva">
         </div>
         <div class="input-group">
             <label>WhatsApp / Telefone</label>
             <input id="telefone" type="tel" placeholder="(00) 00000-0000">
         </div>
+        
         <div class="input-group">
-            <label>Valor da Venda (R$)</label>
-            <input id="valor" type="number" placeholder="150.00">
+            <label style="margin-bottom: 12px;">Produtos Adicionados</label>
+            
+            <div class="prod-row">
+                <div class="prod-info"><i data-lucide="tv" size="18" color="#a1a1aa"></i> TV</div>
+                <input type="number" id="tvQtd" placeholder="Qtd" min="0" oninput="calcularTotalVenda()">
+                <input type="number" id="tvVal" placeholder="R$ Total" min="0" style="flex:1" oninput="calcularTotalVenda()">
+            </div>
+            
+            <div class="prod-row">
+                <div class="prod-info"><i data-lucide="wifi" size="18" color="#a1a1aa"></i> Internet</div>
+                <input type="number" id="intQtd" placeholder="Qtd" min="0" oninput="calcularTotalVenda()">
+                <input type="number" id="intVal" placeholder="R$ Total" min="0" style="flex:1" oninput="calcularTotalVenda()">
+            </div>
+            
+            <div class="prod-row">
+                <div class="prod-info"><i data-lucide="smartphone" size="18" color="#a1a1aa"></i> Móvel</div>
+                <input type="number" id="movQtd" placeholder="Qtd" min="0" oninput="calcularTotalVenda()">
+                <input type="number" id="movVal" placeholder="R$ Total" min="0" style="flex:1" oninput="calcularTotalVenda()">
+            </div>
+            
+            <div class="prod-row">
+                <div class="prod-info"><i data-lucide="phone" size="18" color="#a1a1aa"></i> Fixo</div>
+                <input type="number" id="fixQtd" placeholder="Qtd" min="0" oninput="calcularTotalVenda()">
+                <input type="number" id="fixVal" placeholder="R$ Total" min="0" style="flex:1" oninput="calcularTotalVenda()">
+            </div>
+            
+            <div style="margin-top:20px; text-align:right; font-size:18px; font-weight:700; background: rgba(139, 92, 246, 0.1); padding: 15px; border-radius: 12px; border: 1px dashed var(--primary);">
+                Valor Total: <span id="vendaTotalText" style="color:var(--primary)">R$ 0.00</span>
+            </div>
         </div>
+
         <div class="input-group">
             <label>Status Inicial</label>
             <select id="status">
@@ -264,13 +323,13 @@
 
 <div id="clientes" class="tela">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px">
-        <h2 style="margin:0">Clientes</h2>
-        <i data-lucide="search" size="20" color="#a1a1aa"></i>
+        <h2 style="margin:0">Carteira</h2>
+        <i data-lucide="search" size="20" color="var(--text-muted)"></i>
     </div>
     <input id="busca" placeholder="Filtrar por nome..." onkeyup="buscar()" style="margin-bottom:20px">
     
     <div id="listaClientes"></div>
-    <button class="btn btn-secondary" onclick="abrir('menu')">Voltar</button>
+    <button class="btn btn-secondary" onclick="abrir('menu')" style="margin-top: 20px;">Voltar</button>
 </div>
 
 <div id="comissao" class="tela">
@@ -278,83 +337,124 @@
     <div class="card">
         <div style="display:flex; justify-content:space-between">
             <span class="stat-label">Meta: 15 Instalações</span>
-            <span id="metaTxt" class="stat-label" style="color:#fff">0/15</span>
+            <span id="metaTxt" class="stat-label" style="color:#fff; font-weight: 700;">0/15</span>
         </div>
         <div class="progress-container">
             <div id="progresso" class="progress-bar"></div>
         </div>
-        <span id="totalComissao" style="font-size:24px; font-weight:700">R$ 0.00</span>
+        <span id="totalComissao" style="font-size:32px; font-weight:700; color: var(--success); display: block; margin-top: 10px;">R$ 0.00</span>
+        <p style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">*Toda venda inclui R$ 4,00 fixos + comissão de faixa.</p>
     </div>
 
     <div class="card">
-        <h3>Simulador de Escala</h3>
-        <p style="font-size:12px; color:var(--text-muted)">Veja quanto ganharia com esse valor em diferentes faixas:</p>
-        <input id="valorSim" type="number" placeholder="Valor da venda" onkeyup="simular()">
-        <div id="resultadoSim" style="margin-top:15px"></div>
+        <h3 style="margin-top: 0;">Simulador de Escala</h3>
+        <p style="font-size:13px; color:var(--text-muted); line-height: 1.4; margin-bottom: 15px;">Simule um valor de venda abaixo para ver a comissão projetada (já com os R$ 4 fixos inclusos):</p>
+        <input id="valorSim" type="number" placeholder="Valor total da venda (Ex: 150)" onkeyup="simular()">
+        <div id="resultadoSim" style="margin-top:15px; background: rgba(0,0,0,0.2); border-radius: 12px; padding: 10px;"></div>
     </div>
     <button class="btn btn-secondary" onclick="abrir('menu')">Voltar</button>
 </div>
 
 <script>
     let clientes = JSON.parse(localStorage.getItem('controlComData')) || [];
+    let valorTotalAtual = 0;
 
     function abrir(id){
         document.querySelectorAll(".tela").forEach(t=>t.classList.remove("ativa"));
         document.getElementById(id).classList.add("ativa");
         
-        if(id==="clientes") renderClientes();
+        if(id==="clientes") renderClientes(clientes);
         if(id==="dashboard") renderDash();
         if(id==="comissao") renderComissao();
+        
+        // Limpar form ao abrir cadastro
+        if(id==="cadastro") {
+            valorTotalAtual = 0;
+            document.getElementById('vendaTotalText').innerText = "R$ 0.00";
+            ['tvQtd','tvVal','intQtd','intVal','movQtd','movVal','fixQtd','fixVal'].forEach(id => document.getElementById(id).value = "");
+        }
+        
         lucide.createIcons();
     }
 
-    function salvar(){
-        const n = document.getElementById('nome'), t = document.getElementById('telefone'), 
-              v = document.getElementById('valor'), s = document.getElementById('status');
+    function calcularTotalVenda() {
+        const getV = (id) => parseFloat(document.getElementById(id).value) || 0;
+        valorTotalAtual = getV('tvVal') + getV('intVal') + getV('movVal') + getV('fixVal');
+        document.getElementById('vendaTotalText').innerText = `R$ ${valorTotalAtual.toFixed(2)}`;
+    }
 
-        if(!n.value || !v.value) return toast("Preencha os campos obrigatórios!", "#ef4444");
+    function salvar(){
+        const n = document.getElementById('nome').value;
+        const t = document.getElementById('telefone').value;
+        const s = document.getElementById('status').value;
+
+        if(!n) return toast("Preencha o nome do cliente!", "#ef4444");
+        if(valorTotalAtual <= 0) return toast("Adicione pelo menos um produto com valor!", "#ef4444");
+
+        const getQ = (id) => parseInt(document.getElementById(id).value) || 0;
+        const getV = (id) => parseFloat(document.getElementById(id).value) || 0;
+
+        const produtos = {
+            tv: { q: getQ('tvQtd'), v: getV('tvVal') },
+            net: { q: getQ('intQtd'), v: getV('intVal') },
+            mov: { q: getQ('movQtd'), v: getV('movVal') },
+            fix: { q: getQ('fixQtd'), v: getV('fixVal') }
+        };
 
         clientes.push({
             id: Date.now(),
-            nome: n.value,
-            telefone: t.value,
-            valor: parseFloat(v.value),
-            status: s.value
+            nome: n,
+            telefone: t,
+            valor: valorTotalAtual,
+            produtos: produtos,
+            status: s
         });
 
         salvarLocal();
-        toast("Registro salvo com sucesso!");
-        n.value = ""; t.value = ""; v.value = "";
+        toast("Venda registrada com sucesso!");
+        document.getElementById('nome').value = ""; 
+        document.getElementById('telefone').value = "";
         abrir('menu');
     }
 
-    function renderClientes(){
+    function renderBadgesProdutos(p) {
+        if(!p) return '';
+        let html = '';
+        if(p.tv?.q > 0) html += `<span class="prod-badge"><i data-lucide="tv" size="12"></i> ${p.tv.q}</span>`;
+        if(p.net?.q > 0) html += `<span class="prod-badge"><i data-lucide="wifi" size="12"></i> ${p.net.q}</span>`;
+        if(p.mov?.q > 0) html += `<span class="prod-badge"><i data-lucide="smartphone" size="12"></i> ${p.mov.q}</span>`;
+        if(p.fix?.q > 0) html += `<span class="prod-badge"><i data-lucide="phone" size="12"></i> ${p.fix.q}</span>`;
+        return html;
+    }
+
+    function renderClientes(lista){
         let html = "";
-        clientes.slice().reverse().forEach((c, i) => {
+        lista.slice().reverse().forEach((c) => {
             const realIdx = clientes.findIndex(item => item.id === c.id);
             html += `
-            <div class="card" style="padding:15px">
+            <div class="card" style="padding:16px">
                 <div style="display:flex; justify-content:space-between; align-items:start">
                     <div>
-                        <span class="status-badge badge-${c.status}">${c.status.toUpperCase()}</span>
-                        <div style="font-weight:600; margin-top:8px">${c.nome}</div>
-                        <div style="font-size:13px; color:var(--text-muted)">${c.telefone}</div>
+                        <span class="status-badge badge-${c.status}">${c.status}</span>
+                        <div style="font-weight:600; font-size: 16px; margin-top:10px">${c.nome}</div>
+                        <div style="font-size:13px; color:var(--text-muted); margin-top:2px">${c.telefone || "Sem telefone"}</div>
+                        <div>${renderBadgesProdutos(c.produtos)}</div>
                     </div>
                     <div style="text-align:right">
-                        <div style="font-weight:700">R$ ${c.valor.toFixed(2)}</div>
-                        <button onclick="excluir(${realIdx})" style="background:none; border:none; color:var(--danger); margin-top:10px; cursor:pointer">
-                            <i data-lucide="trash-2" size="16"></i>
+                        <div style="font-weight:700; font-size: 18px; color: var(--primary)">R$ ${c.valor.toFixed(2)}</div>
+                        <button onclick="excluir(${realIdx})" style="background:none; border:none; color:var(--danger); margin-top:15px; cursor:pointer; padding: 5px;">
+                            <i data-lucide="trash-2" size="18"></i>
                         </button>
                     </div>
                 </div>
-                <select onchange="mudarStatus(${realIdx}, this.value)" style="margin-top:10px; padding:8px; font-size:13px">
-                    <option ${c.status==="pendente"?"selected":""} value="pendente">Pendente</option>
-                    <option ${c.status==="instalado"?"selected":""} value="instalado">Instalado</option>
-                    <option ${c.status==="nao"?"selected":""} value="nao">Não instalado</option>
+                <select onchange="mudarStatus(${realIdx}, this.value)" style="margin-top:15px; padding:10px; font-size:13px; background: rgba(0,0,0,0.2)">
+                    <option ${c.status==="pendente"?"selected":""} value="pendente">Status: Pendente</option>
+                    <option ${c.status==="instalado"?"selected":""} value="instalado">Status: Instalado</option>
+                    <option ${c.status==="nao"?"selected":""} value="nao">Status: Não instalado</option>
                 </select>
             </div>`;
         });
-        document.getElementById('listaClientes').innerHTML = html || "<p style='text-align:center; color:var(--text-muted)'>Nenhum cliente.</p>";
+        document.getElementById('listaClientes').innerHTML = html || "<p style='text-align:center; color:var(--text-muted); padding: 20px 0;'>Nenhum cliente encontrado.</p>";
         lucide.createIcons();
     }
 
@@ -369,7 +469,6 @@
         document.getElementById('dash-ticket').innerText = `R$ ${ticket.toFixed(0)}`;
         document.getElementById('dash-conv').innerText = `${conv.toFixed(1)}%`;
         
-        // Cálculo de previsão (baseado na tabela de 15+ instalações para ser otimista)
         let previsao = 0;
         inst.forEach(c => { previsao += calcularComissaoIndividual(c.valor, inst.length); });
         document.getElementById('dash-previsao').innerText = `R$ ${previsao.toFixed(2)}`;
@@ -386,10 +485,15 @@
         document.getElementById('progresso').style.width = `${Math.min((qtd/15)*100, 100)}%`;
     }
 
+    /* --- NOVA REGRA DE COMISSÃO APLICADA AQUI --- */
     function calcularComissaoIndividual(valor, qtdTotal){
         const f = faixa(valor);
         const tab = tabela(qtdTotal);
-        return (f === 0) ? 4 : tab[f-1];
+        
+        let comissaoBase = 4; // R$ 4 garantidos para toda venda
+        let comissaoFaixa = (f === 0) ? 0 : tab[f-1]; // Comissão por tabela/faixa
+        
+        return comissaoBase + comissaoFaixa;
     }
 
     function faixa(v){
@@ -407,43 +511,38 @@
 
     function simular(){
         const v = parseFloat(document.getElementById('valorSim').value);
-        if(!v) return;
+        if(!v) {
+            document.getElementById('resultadoSim').innerHTML = "";
+            return;
+        }
         let html = "";
         [8, 10, 12, 15].forEach(n => {
             const com = calcularComissaoIndividual(v, n);
-            html += `<div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:14px">
-                        <span>Nível ${n} inst.</span>
-                        <span style="color:var(--success); font-weight:600">R$ ${com.toFixed(2)}</span>
+            html += `<div style="display:flex; justify-content:space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size:14px">
+                        <span>Se tiver <b style="color:var(--text)">${n} inst.</b> no mês</span>
+                        <span style="color:var(--success); font-weight:700">R$ ${com.toFixed(2)}</span>
                      </div>`;
         });
         document.getElementById('resultadoSim').innerHTML = html;
     }
 
-    function toast(msg, color = "#22c55e"){
+    function toast(msg, color = "var(--success)"){
         const t = document.getElementById('toast');
         t.innerText = msg; t.style.background = color;
         t.style.display = "block";
-        setTimeout(() => t.style.display = "none", 2500);
+        setTimeout(() => t.style.display = "none", 3000);
     }
 
-    function mudarStatus(i, s){ clientes[i].status = s; salvarLocal(); renderClientes(); }
-    function excluir(i){ if(confirm("Excluir registro?")){ clientes.splice(i, 1); salvarLocal(); renderClientes(); } }
+    function mudarStatus(i, s){ clientes[i].status = s; salvarLocal(); renderClientes(clientes); }
+    function excluir(i){ if(confirm("Tem certeza que deseja excluir esta venda?")){ clientes.splice(i, 1); salvarLocal(); renderClientes(clientes); } }
     function salvarLocal(){ localStorage.setItem('controlComData', JSON.stringify(clientes)); }
+    
     function buscar(){
         const termo = document.getElementById('busca').value.toLowerCase();
         const filtrados = clientes.filter(c => c.nome.toLowerCase().includes(termo));
-        // Lógica de renderização simplificada para busca
-        renderClientesFiltrados(filtrados);
+        renderClientes(filtrados);
     }
     
-    function renderClientesFiltrados(lista){
-        let html = "";
-        lista.forEach((c) => {
-            html += `<div class="card"><span class="status-badge badge-${c.status}">${c.status}</span> <b>${c.nome}</b></div>`;
-        });
-        document.getElementById('listaClientes').innerHTML = html;
-    }
-
     // Inicialização
     lucide.createIcons();
 </script>

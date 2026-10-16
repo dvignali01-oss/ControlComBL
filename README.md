@@ -1,4 +1,4 @@
-# ControlComBL
+
 ControlComBL — Controle de Vendas e Comissões
 
 Sobre o projeto
